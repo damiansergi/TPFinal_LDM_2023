@@ -1,21 +1,20 @@
-/***************************************************************************//**
-  @file     App.c
-  @brief    Application functions
-  @author   Nicolás Magliola
- ******************************************************************************/
+/***************************************************************************/ /**
+   @file     App.c
+   @brief    Application functions
+   @author   Nicolás Magliola
+  ******************************************************************************/
 
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
-#include "board.h"
 #include "gpio.h"
-
+#include "board.h"
+#include "uart.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
-
 
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
@@ -23,6 +22,11 @@
 
 static void delayLoop(uint32_t veces);
 
+static uart_cfg_t uartConfig = {
+    .IRQEnabled = true,
+    .oddParity = true,
+    .baudrate = 9600,
+    .uartMode = TXRX};
 
 /*******************************************************************************
  *******************************************************************************
@@ -31,18 +35,18 @@ static void delayLoop(uint32_t veces);
  ******************************************************************************/
 
 /* Función que se llama 1 vez, al comienzo del programa */
-void App_Init (void)
+void App_Init(void)
 {
     gpioMode(PIN_LED_BLUE, OUTPUT);
+    uartInit(0, uartConfig);
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
-void App_Run (void)
+void App_Run(void)
 {
     delayLoop(4000000UL);
     gpioToggle(PIN_LED_BLUE);
 }
-
 
 /*******************************************************************************
  *******************************************************************************
@@ -52,9 +56,9 @@ void App_Run (void)
 
 static void delayLoop(uint32_t veces)
 {
-    while (veces--);
+    while (veces--)
+        ;
 }
-
 
 /*******************************************************************************
  ******************************************************************************/

@@ -28,7 +28,8 @@ enum { PA, PB, PC, PD, PE };
 #define PORTNUM2PIN(p,n)    (((p)<<5) + (n))
 #define PIN2PORT(p)         (((p)>>5) & 0x07)
 #define PIN2NUM(p)          ((p) & 0x1F)
-
+#define PORT2ADDR(x) ((PORT_Type*)(PORTA_BASE + (((x)<<12u) & 0x0000F000u)))
+#define PORT2GPIOADDR(x) ((GPIO_Type*)(GPIOA_BASE + (((x) << 6u) & 0x000001C0u)))
 
 // Modes
 #ifndef INPUT
@@ -36,6 +37,7 @@ enum { PA, PB, PC, PD, PE };
 #define OUTPUT              1
 #define INPUT_PULLUP        2
 #define INPUT_PULLDOWN      3
+#define FILTER_ENABLE		4
 #endif // INPUT
 
 
@@ -46,11 +48,24 @@ enum { PA, PB, PC, PD, PE };
 #endif // LOW
 
 
+// IRQ modes
+enum {
+    GPIO_IRQ_MODE_DISABLE = 0,
+    GPIO_IRQ_MODE_RISING_EDGE = 0b1001,
+    GPIO_IRQ_MODE_FALLING_EDGE = 0b1010,
+    GPIO_IRQ_MODE_BOTH_EDGES = 0b1011,
+
+    GPIO_IRQ_CANT_MODES
+};
+
+
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
 typedef uint8_t pin_t;
+
+typedef void (*pinIrqFun_t)(void);
 
 
 /*******************************************************************************
@@ -67,6 +82,15 @@ typedef uint8_t pin_t;
  * @param mode INPUT, OUTPUT, INPUT_PULLUP or INPUT_PULLDOWN.
  */
 void gpioMode (pin_t pin, uint8_t mode);
+
+/**
+ * @brief Configures how the pin reacts when an IRQ event ocurrs
+ * @param pin the pin whose IRQ mode you wish to set (according PORTNUM2PIN)
+ * @param irqMode disable, risingEdge, fallingEdge or bothEdges
+ * @param irqFun function to call on pin event
+ * @return Registration succeed
+ */
+bool gpioIRQ (pin_t pin, uint8_t irqMode, pinIrqFun_t irqFun);
 
 /**
  * @brief Write a HIGH or a LOW value to a digital pin

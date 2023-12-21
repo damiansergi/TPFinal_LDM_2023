@@ -96,41 +96,41 @@ Discarded input sections
  .debug_macro   0x00000000       0x48 ./SDK/CMSIS/system_MK64F12.o
  .debug_macro   0x00000000     0xe07b ./SDK/CMSIS/system_MK64F12.o
  .debug_macro   0x00000000     0x122b ./SDK/CMSIS/system_MK64F12.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .group         0x00000000        0xc C:/labo/Reproductor_MP3/source/gpio.o
- .text          0x00000000        0x0 C:/labo/Reproductor_MP3/source/gpio.o
- .data          0x00000000        0x0 C:/labo/Reproductor_MP3/source/gpio.o
- .bss           0x00000000        0x0 C:/labo/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .group         0x00000000        0xc C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .text          0x00000000        0x0 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .data          0x00000000        0x0 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .bss           0x00000000        0x0 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
  .text.gpioWrite
-                0x00000000       0x5c C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000000       0x5c C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
  .text.gpioRead
-                0x00000000       0x68 C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000      0xa5a C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000      0x34e C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x22 C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x3a C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x10 C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x5c C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x1c C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x22 C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0xdf C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000      0xecf C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x48 C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000     0xe07b C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000     0x122b C:/labo/Reproductor_MP3/source/gpio.o
- .debug_macro   0x00000000       0x16 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000000       0x68 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000      0xa5a C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000      0x34e C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x22 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x3a C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x10 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x5c C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x1c C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x22 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0xdf C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000      0xecf C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x48 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000     0xe07b C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000     0x122b C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x00000000       0x16 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 Memory Configuration
 
@@ -149,7 +149,7 @@ LOAD ./SDK/startup/main.o
 LOAD ./SDK/startup/semihost_hardfault.o
 LOAD ./SDK/startup/startup_mk64f12.o
 LOAD ./SDK/CMSIS/system_MK64F12.o
-LOAD C:/labo/Reproductor_MP3/source/gpio.o
+LOAD C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 START GROUP
 LOAD d:/programas/mcuxpressoide_10.2.0_759/ide/tools/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libcr_c.a
 LOAD d:/programas/mcuxpressoide_10.2.0_759/ide/tools/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/hard\libcr_eabihelpers.a
@@ -325,10 +325,10 @@ END GROUP
                 0x00000584       0x3c ./SDK/CMSIS/system_MK64F12.o
                 0x00000584                SystemInit
  .text.gpioMode
-                0x000005c0       0x98 C:/labo/Reproductor_MP3/source/gpio.o
+                0x000005c0       0x98 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
                 0x000005c0                gpioMode
  .text.gpioToggle
-                0x00000658       0x48 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000658       0x48 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
                 0x00000658                gpioToggle
  .text.App_Init
                 0x000006a0       0x10 ./source/App.o
@@ -602,15 +602,15 @@ END GROUP
                 0x000009c6        0xe ./SDK/CMSIS/system_MK64F12.o
                 0x000009c6                SystemInitHook
  .text.parsePin
-                0x000009d4       0x42 C:/labo/Reproductor_MP3/source/gpio.o
+                0x000009d4       0x42 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
  *(SORT_BY_ALIGNMENT(.rodata) SORT_BY_ALIGNMENT(.rodata.*) SORT_BY_ALIGNMENT(.constdata) SORT_BY_ALIGNMENT(.constdata.*))
  *fill*         0x00000a16        0x2 ff
  .rodata.portPtrList
-                0x00000a18       0x14 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000a18       0x14 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
  .rodata.gpioPtrList
-                0x00000a2c       0x14 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000a2c       0x14 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
  .rodata.mode2pcr
-                0x00000a40       0x10 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000a40       0x10 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
                 0x00000a50                . = ALIGN (0x8)
 
 .glue_7         0x00000a50        0x0
@@ -752,7 +752,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_info    0x00000814       0x3b ./SDK/startup/semihost_hardfault.o
  .debug_info    0x0000084f      0x8b0 ./SDK/startup/startup_mk64f12.o
  .debug_info    0x000010ff      0x5fc ./SDK/CMSIS/system_MK64F12.o
- .debug_info    0x000016fb      0x48c C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_info    0x000016fb      0x48c C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_abbrev   0x00000000      0x674
  .debug_abbrev  0x00000000       0x93 ./source/App.o
@@ -761,7 +761,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_abbrev  0x00000248       0x2f ./SDK/startup/semihost_hardfault.o
  .debug_abbrev  0x00000277      0x15c ./SDK/startup/startup_mk64f12.o
  .debug_abbrev  0x000003d3      0x13f ./SDK/CMSIS/system_MK64F12.o
- .debug_abbrev  0x00000512      0x162 C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_abbrev  0x00000512      0x162 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_aranges  0x00000000      0x440
  .debug_aranges
@@ -777,7 +777,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_aranges
                 0x000003d0       0x30 ./SDK/CMSIS/system_MK64F12.o
  .debug_aranges
-                0x00000400       0x40 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000400       0x40 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_ranges   0x00000000      0x400
  .debug_ranges  0x00000000       0x20 ./source/App.o
@@ -786,7 +786,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_ranges  0x00000050       0x10 ./SDK/startup/semihost_hardfault.o
  .debug_ranges  0x00000060      0x320 ./SDK/startup/startup_mk64f12.o
  .debug_ranges  0x00000380       0x20 ./SDK/CMSIS/system_MK64F12.o
- .debug_ranges  0x000003a0       0x60 C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_ranges  0x000003a0       0x60 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_macro    0x00000000    0x114a6
  .debug_macro   0x00000000       0x4b ./source/App.o
@@ -810,7 +810,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_macro   0x00011317       0x11 ./SDK/startup/semihost_hardfault.o
  .debug_macro   0x00011328       0x29 ./SDK/startup/startup_mk64f12.o
  .debug_macro   0x00011351       0x80 ./SDK/CMSIS/system_MK64F12.o
- .debug_macro   0x000113d1       0xd5 C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_macro   0x000113d1       0xd5 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_line     0x00000000      0xf3c
  .debug_line    0x00000000       0xfd ./source/App.o
@@ -819,7 +819,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_line    0x00000452       0x59 ./SDK/startup/semihost_hardfault.o
  .debug_line    0x000004ab      0x6d8 ./SDK/startup/startup_mk64f12.o
  .debug_line    0x00000b83      0x1cd ./SDK/CMSIS/system_MK64F12.o
- .debug_line    0x00000d50      0x1ec C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_line    0x00000d50      0x1ec C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_str      0x00000000    0x77d3f
  .debug_str     0x00000000     0x37c8 ./source/App.o
@@ -834,7 +834,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
                                0x3576 (size before relaxing)
  .debug_str     0x00077a34       0x62 ./SDK/CMSIS/system_MK64F12.o
                               0x770dd (size before relaxing)
- .debug_str     0x00077a96      0x2a9 C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_str     0x00077a96      0x2a9 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
                               0x772d6 (size before relaxing)
 
 .comment        0x00000000       0x7e
@@ -845,7 +845,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .comment       0x0000007e       0x7f ./SDK/startup/semihost_hardfault.o
  .comment       0x0000007e       0x7f ./SDK/startup/startup_mk64f12.o
  .comment       0x0000007e       0x7f ./SDK/CMSIS/system_MK64F12.o
- .comment       0x0000007e       0x7f C:/labo/Reproductor_MP3/source/gpio.o
+ .comment       0x0000007e       0x7f C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .ARM.attributes
                 0x00000000       0x39
@@ -862,7 +862,7 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .ARM.attributes
                 0x0000011d       0x39 ./SDK/CMSIS/system_MK64F12.o
  .ARM.attributes
-                0x00000156       0x39 C:/labo/Reproductor_MP3/source/gpio.o
+                0x00000156       0x39 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o
 
 .debug_frame    0x00000000      0xb6c
  .debug_frame   0x00000000       0x70 ./source/App.o
@@ -871,4 +871,4 @@ OUTPUT(Reproductor_MP3.axf elf32-littlearm)
  .debug_frame   0x0000010c       0x20 ./SDK/startup/semihost_hardfault.o
  .debug_frame   0x0000012c      0x904 ./SDK/startup/startup_mk64f12.o
  .debug_frame   0x00000a30       0x74 ./SDK/CMSIS/system_MK64F12.o
- .debug_frame   0x00000aa4       0xc8 C:/labo/Reproductor_MP3/source/gpio.o
+ .debug_frame   0x00000aa4       0xc8 C:/labo/TPFinal_LDM_2023/Reproductor_MP3/source/gpio.o

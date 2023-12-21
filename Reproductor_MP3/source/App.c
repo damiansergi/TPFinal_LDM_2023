@@ -11,6 +11,8 @@
 #include "gpio.h"
 #include "board.h"
 #include "uart.h"
+#include "fsm.h"      /*FSM engine (interprete)*/
+#include "fsmtable.h" /*FSM Table*/
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -27,6 +29,8 @@ static uart_cfg_t uartConfig = {
     .oddParity = true,
     .baudrate = 9600,
     .uartMode = TXRX};
+
+STATE *p2state = NULL; /*Used to store FSM state*/
 
 /*******************************************************************************
  *******************************************************************************
@@ -46,6 +50,13 @@ void App_Run(void)
 {
     delayLoop(4000000UL);
     gpioToggle(PIN_LED_BLUE);
+
+    /*
+    p2state=FSM_GetInitState();// Inicializo la FSM con el estado inicial
+    while(is_new_event()){  //Si hay evento
+        p2state=fsm(p2state,evento);      //Se lo paso a la maquina de estados
+    }
+    */
 }
 
 /*******************************************************************************

@@ -5,6 +5,6 @@ Diagrama general del proyecto
 
 ![TPF_LM_General](https://github.com/damiansergi/TPFinal_LDM_2023/assets/72510783/3f9ae8ab-2386-4acc-baf5-6577c1924fdc)
 
-Diagrama de drivers y funciones
+Diagrama de drivers
 
-![TPF_LM_Drivers](https://github.com/damiansergi/TPFinal_LDM_2023/assets/72510783/0ae41066-be40-458f-a783-08d9df4bcf77)
+![TPF_LM_Drivers](https://github.com/damiansergi/TPFinal_LDM_2023/assets/72510783/804e7b97-85e8-4dbd-8acc-4b98a9fec452)

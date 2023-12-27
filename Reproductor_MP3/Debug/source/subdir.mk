@@ -7,6 +7,8 @@ C_SRCS += \
 ../source/App.c \
 ../source/PIT.c \
 ../source/Queue.c \
+../source/fsm.c \
+../source/fsmtable.c \
 ../source/gpio.c \
 ../source/uart.c 
 
@@ -14,6 +16,8 @@ OBJS += \
 ./source/App.o \
 ./source/PIT.o \
 ./source/Queue.o \
+./source/fsm.o \
+./source/fsmtable.o \
 ./source/gpio.o \
 ./source/uart.o 
 
@@ -21,6 +25,8 @@ C_DEPS += \
 ./source/App.d \
 ./source/PIT.d \
 ./source/Queue.d \
+./source/fsm.d \
+./source/fsmtable.d \
 ./source/gpio.d \
 ./source/uart.d 
 

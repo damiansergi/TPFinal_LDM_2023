@@ -44,9 +44,11 @@ float PWM_GetDC();
 void PWM_SetTickPerPeriod(uint16_t);
 uint16_t PWM_GetTickPerPeriod();
 
-void PWM_GenWaveform(uint16_t *waveform, uint32_t wave_length, uint32_t waveTable_offset);
 void PWM_SetWaveformOffset(uint32_t waveTable_offset);
 uint32_t PWM_GetWaveformOffset();
+
+void PWM_GenWaveform(uint16_t *waveform, uint32_t wave_length, uint32_t waveTable_offset);
+
 /*******************************************************************************
  ******************************************************************************/
 

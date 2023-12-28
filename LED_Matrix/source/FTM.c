@@ -49,6 +49,8 @@ typedef enum
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
 
+static void (*FTM_Interruption)(void) = NULL;
+
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
@@ -232,13 +234,23 @@ void FTM_GetInputCaptureChannelSource(FTM_t ftm, FTM_InputCaptureSource_t source
 		break;
 	}
 }
+
+void FTM_SetInterruptionCallback(void (*interruption)(void))
+{
+	FTM_Interruption = interruption;
+}
+
 /*******************************************************************************
  *******************************************************************************
 						LOCAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
+
 void FTM0_IRQHandler(void)
 {
-
+	if (FTM_Interruption != NULL)
+	{
+		FTM_Interruption();
+	}
 	return;
 }

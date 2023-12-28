@@ -147,7 +147,7 @@ void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t 
 	DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
 	DMA_SetDestAddrOffset(DMA_CH0, 0);
 
-	DMA_SetSourceLastAddrOffset(DMA_CH0, -2*(int32_t)(waveform_lenght - waveform_offset));
+	DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
 	DMA_SetDestLastAddrOffset(DMA_CH0, 0);
 
 	DMA_SetSourceTransfSize(DMA_CH0, DMA_TransSize_16Bit);
@@ -167,6 +167,7 @@ void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t 
 	FTM_ClearOverflowFlag(FTM0);
 	FTM_StartClock(FTM0);
 }
+
 void PWM_SetWaveformOffset(uint32_t waveTable_offset)
 {
 	waveform_offset = waveTable_offset;
@@ -181,7 +182,7 @@ void PWM_SetWaveformOffset(uint32_t waveTable_offset)
 	DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
 	DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1 - newCount);
 	DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
-	DMA_SetSourceLastAddrOffset(DMA_CH0, -2*(int32_t)(waveform_lenght - waveform_offset));
+	DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
 	FTM_StartClock(FTM0);
 	// DMA_StartTransfer(DMA_CH0);
 }

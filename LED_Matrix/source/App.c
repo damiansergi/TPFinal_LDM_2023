@@ -10,6 +10,7 @@
 
 #include "gpio.h"
 #include "board.h"
+#include "LEDMatrix.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -28,14 +29,23 @@
 /* Función que se llama 1 vez, al comienzo del programa */
 void App_Init(void)
 {
-    gpioMode(PIN_LED_BLUE, OUTPUT);
+	initLEDMatrix();
+    color_t colorcito = {.r = 255, .g = 255, .b = 255};
+    changeColor(0, 0, colorcito);
+    changeColor(1, 1, colorcito);
+    changeColor(2, 2, colorcito);
+
+//	for(int i = 0; i < 8; i++){
+//		for(int j = 0; j < 8; j++){
+//			changeColor(i, j, colorcito);
+//		}
+//	}
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
 void App_Run(void)
 {
-    delayLoop(4000000UL);
-    gpioToggle(PIN_LED_BLUE);
+
 }
 
 /*******************************************************************************

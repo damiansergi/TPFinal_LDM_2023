@@ -124,6 +124,7 @@ void FTM_SetCounter(FTM_t, FTMChannel_t, FTMData_t);
 FTMData_t FTM_GetCounter(FTM_t, FTMChannel_t);
 
 void FTM_SetInterruptMode(FTM_t, FTMChannel_t, bool);
+void FTM_SetInterruptionCallback(void (*interruption)(void));
 bool FTM_IsInterruptPending(FTM_t, FTMChannel_t);
 void FTM_ClearInterruptFlag(FTM_t, FTMChannel_t);
 

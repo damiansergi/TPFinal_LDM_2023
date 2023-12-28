@@ -24,8 +24,8 @@ void initPIT()
 	NVIC_EnableIRQ(PIT2_IRQn);
 	NVIC_EnableIRQ(PIT3_IRQn);
 
-	gpioMode(PORTNUM2PIN(PC, 7), OUTPUT);
-	gpioMode(PORTNUM2PIN(PC, 0), OUTPUT);
+	//	gpioMode(PORTNUM2PIN(PC, 7), OUTPUT);
+	//	gpioMode(PORTNUM2PIN(PC, 0), OUTPUT);
 	// NVIC_SetPriority(PIT0_IRQn, 2); // 0: Max prioridad, 15: Menor prioridad
 	// NVIC_SetPriority(PIT1_IRQn, 5);
 	// NVIC_SetPriority(PIT2_IRQn, 5);
@@ -99,20 +99,16 @@ uint8_t getTimerState(uint8_t id)
 
 void PIT0_IRQHandler(void)
 {
-	gpioWrite(PORTNUM2PIN(PC, 0), true);
 	PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF(1);
 	timer[0].callback();
 	NVIC_ClearPendingIRQ(PIT0_IRQn);
-	gpioWrite(PORTNUM2PIN(PC, 0), false);
 }
 
 void PIT1_IRQHandler(void)
 {
-	gpioWrite(PORTNUM2PIN(PC, 7), true);
 	PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF(1);
 	timer[1].callback();
 	NVIC_ClearPendingIRQ(PIT1_IRQn);
-	gpioWrite(PORTNUM2PIN(PC, 7), false);
 }
 
 void PIT2_IRQHandler(void)

@@ -7,7 +7,6 @@
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
-#include "LEDMatrix.h"
 #include <stdbool.h>
 #include <vumeter.h>
 
@@ -17,7 +16,6 @@
 
 #define ON (true)
 #define OFF (false)
-#define MAXLEVEL (ROWS)
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
@@ -34,6 +32,7 @@
 
 static void blinkBar(uint8_t barID, float ms);
 static void stopBlinkBar(uint8_t barID);
+static void turnOnBar(uint8_t barID);
 
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
@@ -47,13 +46,22 @@ static const float blinkTime = 500000; // 0.5s
 
 static bool state = ON;
 static uint8_t bandSelected = 0;
-static uint8_t bandLevel[COLS] = {MAXLEVEL/2};
+static uint8_t bandLevel[COLS] = {0};
 
 /*******************************************************************************
  *******************************************************************************
 						GLOBAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
+
+void initVumeter(){
+	initLEDMatrix();
+
+	for(int i = 0; i < COLS; i++){
+		bandLevel[i] = ROWS/2;
+		turnOnBar(i);
+	}
+}
 
 void vumeterOn(){
 	state = ON;
@@ -72,12 +80,13 @@ void setLevel(uint8_t level){
 	if(level < 0){
 		level = 0;
 	}
-	else if(level >= COLS){
-		level = COLS-1;
+	else if(level > MAXLEVEL){
+		level = MAXLEVEL;
 	}
 
+	stopBlinkBar(bandSelected);
 	bandLevel[bandSelected] = level;
-	selectBand(bandSelected);
+	blinkBar(bandSelected, blinkTime);
 }
 
 void selectBand(uint8_t barID){
@@ -94,8 +103,9 @@ void selectBand(uint8_t barID){
 	}
 
 	stopBlinkBar(bandSelected);
-	blinkBar(barID, blinkTime);
+	turnOnBar(bandSelected);
 	bandSelected = barID;
+	blinkBar(bandSelected, blinkTime);
 }
 
 /*******************************************************************************
@@ -104,8 +114,14 @@ void selectBand(uint8_t barID){
  *******************************************************************************
  ******************************************************************************/
 
+static void turnOnBar(uint8_t barID){
+	for(int i = 0; i < bandLevel[barID]; i++){
+		turnOn(i, barID);
+	}
+}
+
 static void stopBlinkBar(uint8_t barID){
-	for(int i = 0; i < ROWS; i++){
+	for(int i = 0; i < bandLevel[barID]; i++){
 		stopBlink(i, barID);
 	}
 }

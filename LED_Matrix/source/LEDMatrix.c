@@ -10,6 +10,7 @@
 #define T0H (20)
 #define T1H (40)
 #define TREFRESH (2772) //44ticks * 1.25us = 55us
+
 #define RGBBITS (24)
 #define NUMOFLEDS (ROWS*COLS)
 
@@ -46,7 +47,7 @@ static void toggle();
 
 void initLEDMatrix()
 {
-	color_t defaultColor = {.r = 5, .g = 5, .b = 5};
+	color_t defaultColor = {.r = 1, .g = 1, .b = 1};
 
 	for(int i = 0; i < ROWS; i++){
 		for(int j = 0; j < COLS; j++){

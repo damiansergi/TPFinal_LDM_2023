@@ -10,7 +10,7 @@
 
 #include "gpio.h"
 #include "board.h"
-#include "LEDMatrix.h"
+#include "vumeter.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -32,31 +32,27 @@ static void delay();
 /* Función que se llama 1 vez, al comienzo del programa */
 void App_Init(void)
 {
-	color_t amarillo = {.r = 0, .g = 10, .b= 0, };
-
-	initLEDMatrix();
-	changeColor(0, 0, amarillo);
-	changeColor(1, 1, amarillo);
-	changeColor(2, 2, amarillo);
-	changeColor(2, 5, amarillo);
-	blink(0, 0, 500000);
-	blink(1, 1, 500000);
-	blink(2, 2, 500000);
-	blink(2, 5, 500000);
-	blink(2, 7, 500000);
-	blink(3, 3, 500000);
+	initVumeter();
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
 void App_Run(void)
 {
 
-	color_t amarillo = {.r = 0, .g = 0, .b= 60 };
+	uint8_t level = 0;
+
+	for(int i = 5; i < 8; i++){
+		selectBand(i);
+		delay();
+		setLevel(MAXLEVEL);
+		delay();
+	}
+
 
 }
 
 static void delay(){
-	uint32_t time = 800000;
+	uint32_t time = 20000000;
 	while(time--);
 }
 

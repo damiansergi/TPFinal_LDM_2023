@@ -129,11 +129,12 @@ uint16_t PWM_GetTickPerPeriod()
 	return ticksPerPeriod;
 }
 
-void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset)
+void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset, void (*callback)(void))
 {
 	waveform = waveform_pointer;
 	waveform_lenght = wave_length;
 	waveform_offset = waveTable_offset;
+
 	FTM_StopClock(FTM0);
 	FTM_DmaMode(FTM0, FTM_CH_0, true);
 	FTM_SetInterruptMode(FTM0, FTM_CH_0, true);
@@ -161,8 +162,9 @@ void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t 
 	DMA_SetEnableRequest(DMA_CH0, true);
 
 	DMAMUX_ConfigChannel(DMA_CH0, true, false, kDmaRequestMux0FTM0Channel0);
-	DMA_SetChannelInterrupt(DMA_CH0, true, 0);
+	DMA_SetChannelInterrupt(DMA_CH0, true, callback);
 	DMA_StartTransfer(DMA_CH0);
+
 	FTM_ClearInterruptFlag(FTM0, FTM_CH_0);
 	FTM_ClearOverflowFlag(FTM0);
 	FTM_StartClock(FTM0);

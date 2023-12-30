@@ -1,8 +1,8 @@
-/***************************************************************************//**
-  @file     pit.h
-  @brief    pit driver
-  @author   Grupo 3
- ******************************************************************************/
+/***************************************************************************/ /**
+   @file     pit.h
+   @brief    pit driver
+   @author   Grupo 3
+  ******************************************************************************/
 
 #ifndef _PIT_H_
 #define _PIT_H_
@@ -19,16 +19,17 @@
  ******************************************************************************/
 
 #define MAXTIMERS (4)
-#define MAXCOUNT ((float)(4294967296/__CORE_CLOCK__/2))
+#define MAXCOUNT ((float)(4294967296 / __CORE_CLOCK__ / 2))
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-enum states{
-	FREE,
-	IDLE,
-	RUNNING
+enum states
+{
+  FREE,
+  IDLE,
+  RUNNING
 };
 
 /*******************************************************************************
@@ -50,7 +51,6 @@ void initPIT();
  * @brief Initialize a new timer
  * @param time in us when callback will be called
  * @param funcallback callback function when timer's count ends
- * @param mode ONESHOT when function must be called once or PERIODIC
  * @return id of timer where new timer was allocated. Return MAXTIMERS if allocation failed
  */
 uint8_t createTimer(float time, void (*funcallback)(void));

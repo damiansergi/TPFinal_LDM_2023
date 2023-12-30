@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#define ROWS (8)
+#define COLS (8)
+
 typedef struct
 {
     uint8_t g;
@@ -23,6 +26,12 @@ void initLEDMatrix();
  * @return void
  */
 void turnOn(uint8_t row, uint8_t col);
+
+/**
+ * @brief Turn on all leds. If the led already is turned on, does nothing.
+ * @return void
+ */
+void turnOnAll();
 
 /**
  * @brief Turn off the specified led. If the led already is turned off, does nothing.
@@ -48,7 +57,7 @@ void changeColor(uint8_t row, uint8_t col, color_t color);
  * @param interval time interval between led state change
  * @return void
  */
-void blink(uint8_t row, uint8_t col, uint16_t interval);
+void blink(uint8_t row, uint8_t col, float ms);
 
 /**
  * @brief Stop led to blink

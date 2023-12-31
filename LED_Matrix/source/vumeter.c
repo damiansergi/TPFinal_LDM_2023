@@ -130,11 +130,11 @@ void selectBar(bar barID){
 		state = OFF;
 	}
 
-	if(barID < b100Hz){
-		barID = b100Hz;
+	if(barID < b34Hz){
+		barID = b34Hz;
 	}
-	else if(barID > b16KHz){
-		barID = b16KHz;
+	else if(barID > b14K2Hz){
+		barID = b14K2Hz;
 	}
 
 	stopBlinkBar(bandSelected);

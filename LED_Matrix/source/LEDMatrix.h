@@ -28,7 +28,10 @@
 typedef union
 {
 	uint32_t hex;
-	struct{uint8_t b, g, r, bright;};
+	struct
+	{
+		uint8_t b, g, r, bright;
+	};
 } color_t;
 
 /**

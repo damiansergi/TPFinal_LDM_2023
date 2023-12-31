@@ -9,15 +9,15 @@
 #define TICKSPERPERIOD (63) // 50MHz * 1.25us
 #define T0H (20)
 #define T1H (40)
-#define TREFRESH (2772) //44ticks * 1.25us = 55us
+#define TREFRESH (2772) // 44ticks * 1.25us = 55us
 
 #define RGBBITS (24)
-#define NUMOFLEDS (ROWS*COLS)
+#define NUMOFLEDS (ROWS * COLS)
 
-#define REFRESHRATE (50000.0f) // 500ms
+#define REFRESHRATE (41666.0f)		  // 24Hz
 #define DEFAULTBLINKTIME (1000000.0f) // 1s
 
-#define SCALECOLOR(color, b) ((int)((color)*(b)/100))
+#define SCALECOLOR(color, b) ((int)((color) * (b) / 100))
 #define ON (1)
 #define OFF (0)
 
@@ -28,15 +28,16 @@ typedef enum
 	G,
 } states;
 
-typedef struct{
+typedef struct
+{
 	color_t color;
-    uint8_t onoff : 1;
-    uint8_t blink : 1;
-}LED_t;
+	uint8_t onoff : 1;
+	uint8_t blink : 1;
+} LED_t;
 
 static LED_t LEDMatrix[NUMOFLEDS] = {0};
-static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 2] = {0}; //Agregamos un pulso mas para enviar el ultimo?
-static uint8_t brightness = MAXBRIGHTNESS/6;
+static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 2] = {0};
+static uint8_t brightness = MAXBRIGHTNESS / 6;
 static uint8_t refreshTimerID = 0;
 static uint8_t blinkTimerID = 0;
 
@@ -51,8 +52,10 @@ void initLEDMatrix()
 	defaultColor.hex = BLACK;
 	defaultColor.bright = brightness;
 
-	for(int i = 0; i < ROWS; i++){
-		for(int j = 0; j < COLS; j++){
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLS; j++)
+		{
 			changeColor(i, j, defaultColor);
 		}
 	}
@@ -61,7 +64,7 @@ void initLEDMatrix()
 	initPIT();
 	PWM_Init();
 	PWM_SetTickPerPeriod(TICKSPERPERIOD);
-	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS + 2, sizeof(uint8_t), onRefreshEnded); //Por que 16 bits no y 8 si? Es necesario 16 bits?
+	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS + 2, 1, onRefreshEnded);
 
 	refreshTimerID = createTimer(REFRESHRATE, refresh);
 	blinkTimerID = createTimer(DEFAULTBLINKTIME, toggle);
@@ -81,7 +84,8 @@ void turnOff(uint8_t row, uint8_t col)
 	update();
 }
 
-void turnOnAll(){
+void turnOnAll()
+{
 	for (int i = 0; i < NUMOFLEDS; i++)
 	{
 		LEDMatrix[i].onoff = ON;
@@ -89,11 +93,14 @@ void turnOnAll(){
 	update();
 }
 
-void changeBrightness(uint8_t percentage){
-	if(percentage > MAXBRIGHTNESS){
+void changeBrightness(uint8_t percentage)
+{
+	if (percentage > MAXBRIGHTNESS)
+	{
 		percentage = MAXBRIGHTNESS;
 	}
-	else if(percentage <= MINBRIGHTNESS){
+	else if (percentage <= MINBRIGHTNESS)
+	{
 		percentage = MINBRIGHTNESS;
 	}
 
@@ -106,17 +113,18 @@ void changeColor(uint8_t row, uint8_t col, color_t color)
 	update();
 }
 
-void blink(uint8_t row, uint8_t col, float ms){
+void blink(uint8_t row, uint8_t col, float ms)
+{
 	LEDMatrix[row * 8 + col].blink = ON;
 	LEDMatrix[row * 8 + col].onoff = ON;
 	configTimerTime(blinkTimerID, ms);
 }
 
-void stopBlink(uint8_t row, uint8_t col){
+void stopBlink(uint8_t row, uint8_t col)
+{
 	LEDMatrix[row * 8 + col].blink = OFF;
 	LEDMatrix[row * 8 + col].onoff = OFF;
 }
-
 
 /*******************************************************************************
  *******************************************************************************
@@ -124,14 +132,18 @@ void stopBlink(uint8_t row, uint8_t col){
  *******************************************************************************
  ******************************************************************************/
 
-static void toggle(){
+static void toggle()
+{
 	for (int i = 0; i < NUMOFLEDS; i++)
 	{
-		if(LEDMatrix[i].blink == ON){
-			if(LEDMatrix[i].onoff == ON){
+		if (LEDMatrix[i].blink == ON)
+		{
+			if (LEDMatrix[i].onoff == ON)
+			{
 				LEDMatrix[i].onoff = OFF;
 			}
-			else{
+			else
+			{
 				LEDMatrix[i].onoff = ON;
 			}
 		}
@@ -160,7 +172,7 @@ static void update()
 	{
 		for (int j = 0; j < RGBBITS; j++)
 		{
-			if(LEDMatrix[i].onoff == ON)
+			if (LEDMatrix[i].onoff == ON)
 			{
 				switch (currColor)
 				{
@@ -207,7 +219,8 @@ static void update()
 					break;
 				}
 			}
-			else{
+			else
+			{
 				bit = 0;
 			}
 

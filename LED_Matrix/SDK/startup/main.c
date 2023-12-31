@@ -1,7 +1,7 @@
 /***************************************************************************//**
   @file     main.c
   @brief    FW main
-  @author   Nicolás Magliola
+  @author   Grupo 3
  ******************************************************************************/
 
 #include "hardware.h"
@@ -13,7 +13,7 @@ void App_Run (void);
 int main (void)
 {
 
-	hw_Init();
+ 	hw_Init();
     hw_DisableInterrupts();
     App_Init(); /* Program-specific setup */
     hw_EnableInterrupts();

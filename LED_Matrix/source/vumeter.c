@@ -8,7 +8,7 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 #include <stdbool.h>
-#include <vumeter.h>
+#include "vumeter.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -30,9 +30,9 @@
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
 
-static void blinkBar(uint8_t barID, float ms);
-static void stopBlinkBar(uint8_t barID);
-static void turnOnBar(uint8_t barID);
+static void blinkBar(bar barID, float ms);
+static void stopBlinkBar(bar barID);
+static void turnOnBar(bar barID);
 
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
@@ -45,7 +45,7 @@ static const float blinkTime = 500000; // 0.5s
  ******************************************************************************/
 
 static bool state = ON;
-static uint8_t bandSelected = 0;
+static bar bandSelected = 0;
 static uint8_t bandLevel[COLS] = {0};
 
 /*******************************************************************************
@@ -55,12 +55,43 @@ static uint8_t bandLevel[COLS] = {0};
  ******************************************************************************/
 
 void initVumeter(){
+
+	color_t aux;
+
 	initLEDMatrix();
 
 	for(int i = 0; i < COLS; i++){
 		bandLevel[i] = ROWS/2;
 		turnOnBar(i);
 	}
+
+	for(int i = 0; i < COLS; i++){
+		for(int j = 0; j < ROWS; j++){
+			switch(j){
+				case 0:
+				case 1:
+				case 2:
+					aux.hex = YELLOW;
+					changeColor(j, i, aux);
+					break;
+
+				case 3:
+				case 4:
+				case 5:
+					aux.hex = RED;
+					changeColor(j, i, aux);
+					break;
+
+				case 6:
+				case 7:
+					aux.hex = PURPLE;
+					changeColor(j, i, aux);
+					break;
+			}
+		}
+	}
+
+	vumeterOn();
 }
 
 void vumeterOn(){
@@ -69,6 +100,10 @@ void vumeterOn(){
 
 void vumeterOff(){
 	state = OFF;
+}
+
+void adjustBrightness(uint8_t bright){
+	changeBrightness(bright);
 }
 
 void setLevel(uint8_t level){
@@ -89,17 +124,17 @@ void setLevel(uint8_t level){
 	blinkBar(bandSelected, blinkTime);
 }
 
-void selectBand(uint8_t barID){
+void selectBar(bar barID){
 
 	if(state == ON){
 		state = OFF;
 	}
 
-	if(barID < 0){
-		barID = 0;
+	if(barID < b100Hz){
+		barID = b100Hz;
 	}
-	else if(barID >= ROWS){
-		barID = ROWS-1;
+	else if(barID > b16KHz){
+		barID = b16KHz;
 	}
 
 	stopBlinkBar(bandSelected);
@@ -114,19 +149,19 @@ void selectBand(uint8_t barID){
  *******************************************************************************
  ******************************************************************************/
 
-static void turnOnBar(uint8_t barID){
+static void turnOnBar(bar barID){
 	for(int i = 0; i < bandLevel[barID]; i++){
 		turnOn(i, barID);
 	}
 }
 
-static void stopBlinkBar(uint8_t barID){
+static void stopBlinkBar(bar barID){
 	for(int i = 0; i < bandLevel[barID]; i++){
 		stopBlink(i, barID);
 	}
 }
 
-static void blinkBar(uint8_t barID, float ms){
+static void blinkBar(bar barID, float ms){
 	for(int i = 0; i < bandLevel[barID]; i++){
 		blink(i, barID, ms);
 	}

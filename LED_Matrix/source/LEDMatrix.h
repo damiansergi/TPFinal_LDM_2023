@@ -3,14 +3,32 @@
 
 #include <stdint.h>
 
+/*
+ * Sobre la biblioteca: Para utilizar la matriz primero debe seleccionarse un color para el LED. Por defecto
+ * los LEDs comienzan sin color. Luego, debe prenderse el respectivo LED o, en su defecto, utilizar la funcion
+ * turnOnAll para encender todos.
+ */
+
 #define ROWS (8)
 #define COLS (8)
+#define MINBRIGHTNESS (1)
+#define MAXBRIGHTNESS (100)
 
-typedef struct
+#define RED (0xFF0000)
+#define BLUE (0x0000FF)
+#define GREEN (0x00FF00)
+#define WHITE (0xFFFFFF)
+#define ORANGE (0xFF6E00)
+#define PINK (0xE60066)
+#define PURPLE (0xFF99FF)
+#define CYAN (0x00FFFF)
+#define YELLOW (0xFFFF00)
+#define BLACK (0x000000)
+
+typedef union
 {
-    uint8_t g;
-    uint8_t r;
-    uint8_t b;
+	uint32_t hex;
+	struct{uint8_t b, g, r, bright;};
 } color_t;
 
 /**
@@ -40,6 +58,13 @@ void turnOnAll();
  * @return void
  */
 void turnOff(uint8_t row, uint8_t col);
+
+/**
+ * @brief Change leds brightness
+ * @param percentage The percentage from 1 to 100 that indicates desire brightness
+ * @return void
+ */
+void changeBrightness(uint8_t percentage);
 
 /**
  * @brief Change the specified led color

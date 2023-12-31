@@ -1,8 +1,8 @@
 
 #include "LEDMatrix.h"
 #include "PWM.h"
-#include "FTM.h"
 #include "PIT.h"
+#include "FTM.h"
 #include "MK64F12.h"
 #include "config.h"
 
@@ -14,7 +14,7 @@
 #define RGBBITS (24)
 #define NUMOFLEDS (ROWS*COLS)
 
-#define REFRESHRATE (100000.0f) // 100ms
+#define REFRESHRATE (50000.0f) // 500ms
 #define DEFAULTBLINKTIME (1000000.0f) // 1s
 
 #define SCALECOLOR(color, b) ((int)((color)*(b)/100))
@@ -23,9 +23,9 @@
 
 typedef enum
 {
-	RED,
-	BLUE,
-	GREEN,
+	R,
+	B,
+	G,
 } states;
 
 typedef struct{
@@ -35,10 +35,10 @@ typedef struct{
 }LED_t;
 
 static LED_t LEDMatrix[NUMOFLEDS] = {0};
-static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS] = {0};
+static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 2] = {0}; //Agregamos un pulso mas para enviar el ultimo?
+static uint8_t brightness = MAXBRIGHTNESS/6;
 static uint8_t refreshTimerID = 0;
 static uint8_t blinkTimerID = 0;
-static float blinkInterval = DEFAULTBLINKTIME;
 
 static void update();
 static void refresh();
@@ -47,7 +47,9 @@ static void toggle();
 
 void initLEDMatrix()
 {
-	color_t defaultColor = {.r = 1, .g = 1, .b = 1};
+	color_t defaultColor;
+	defaultColor.hex = BLACK;
+	defaultColor.bright = brightness;
 
 	for(int i = 0; i < ROWS; i++){
 		for(int j = 0; j < COLS; j++){
@@ -59,7 +61,7 @@ void initLEDMatrix()
 	initPIT();
 	PWM_Init();
 	PWM_SetTickPerPeriod(TICKSPERPERIOD);
-	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS, sizeof(uint8_t), onRefreshEnded); //Por que 16 bits no y 8 si? Es necesario 16 bits?
+	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS + 2, sizeof(uint8_t), onRefreshEnded); //Por que 16 bits no y 8 si? Es necesario 16 bits?
 
 	refreshTimerID = createTimer(REFRESHRATE, refresh);
 	blinkTimerID = createTimer(DEFAULTBLINKTIME, toggle);
@@ -85,6 +87,17 @@ void turnOnAll(){
 		LEDMatrix[i].onoff = ON;
 	}
 	update();
+}
+
+void changeBrightness(uint8_t percentage){
+	if(percentage > MAXBRIGHTNESS){
+		percentage = MAXBRIGHTNESS;
+	}
+	else if(percentage <= MINBRIGHTNESS){
+		percentage = MINBRIGHTNESS;
+	}
+
+	brightness = percentage;
 }
 
 void changeColor(uint8_t row, uint8_t col, color_t color)
@@ -139,8 +152,9 @@ static void onRefreshEnded()
 static void update()
 {
 	int currBit = 7;
-	states currColor = GREEN;
+	states currColor = G;
 	uint8_t bit = 0;
+	uint8_t tempColor;
 
 	for (int i = 0; i < NUMOFLEDS; i++)
 	{
@@ -150,11 +164,12 @@ static void update()
 			{
 				switch (currColor)
 				{
-				case GREEN:
-					bit = (LEDMatrix[i].color.g >> currBit) & (0x1);
+				case G:
+					tempColor = SCALECOLOR(LEDMatrix[i].color.g, brightness);
+					bit = (tempColor >> currBit) & (0x1);
 					if (currBit <= 0)
 					{
-						currColor = RED;
+						currColor = R;
 						currBit = 7;
 					}
 					else
@@ -163,11 +178,12 @@ static void update()
 					}
 					break;
 
-				case RED:
-					bit = (LEDMatrix[i].color.r >> currBit) & (0x1);
+				case R:
+					tempColor = SCALECOLOR(LEDMatrix[i].color.r, brightness);
+					bit = (tempColor >> currBit) & (0x1);
 					if (currBit <= 0)
 					{
-						currColor = BLUE;
+						currColor = B;
 						currBit = 7;
 					}
 					else
@@ -176,11 +192,12 @@ static void update()
 					}
 					break;
 
-				case BLUE:
-					bit = (LEDMatrix[i].color.b >> currBit) & (0x1);
+				case B:
+					tempColor = SCALECOLOR(LEDMatrix[i].color.b, brightness);
+					bit = (tempColor >> currBit) & (0x1);
 					if (currBit <= 0)
 					{
-						currColor = GREEN;
+						currColor = G;
 						currBit = 7;
 					}
 					else
@@ -204,4 +221,7 @@ static void update()
 			}
 		}
 	}
+
+	PWMLEDMatrix[NUMOFLEDS * RGBBITS] = T0H;
+	PWMLEDMatrix[NUMOFLEDS * RGBBITS + 1] = T0H;
 }

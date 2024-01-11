@@ -22,6 +22,7 @@
 #include "UI/button.h"
 #include "UI/encoder.h"
 #include "UI/display.h"
+#include "UI/eventQueue.h"
 
 
 /*******************************************************************************
@@ -71,15 +72,19 @@ void App_Init(void)
     initEncoder();
     initDisplay();
 
+    p2state=FSM_GetInitState();// Inicializo la FSM con el estado inicial
+
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
 void App_Run(void)
 {
+	/*	DISPLAY TEST
+
 	char * msg1 = "Hola, como andas?";
 	char * msg2 = "Todo bn y vos?";
-	char * msg3 = "Que carajo te importa, la concha de tu madre";
-	char * msg4 = "sos un enfermo";
+	char * msg3 = "123456789abcdefgh";
+	char * msg4 = "sos un maquina";
 	char msg5 = '\0';
 	char * msg6 = "toma pinia";
 
@@ -94,7 +99,7 @@ void App_Run(void)
 
 	delayLoop(90000000UL);
 
-	DisplayWrite(msg3, 45, 0);
+	DisplayWrite(msg3, 18, 0);
 	DisplayWrite(msg4, 15, 1);
 
 	delayLoop(180000000UL);
@@ -103,6 +108,14 @@ void App_Run(void)
 	DisplayWrite(&msg5, 1, 1);
 
 	delayLoop(90000000UL);
+
+	*/
+
+	event_t nextEvent = getNextEvent();
+	if (nextEvent != None){
+
+		p2state = fsm(p2state,nextEvent);      //Se lo paso a la maquina de estados
+	}
 }
 
 /*******************************************************************************

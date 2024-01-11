@@ -100,6 +100,9 @@ uint8_t DisplayWrite(char * msg, uint8_t cant, uint8_t line);
 //Y cada REFRESHTIME por una interrupcion de systick periodica se escribe el display
 //Line=0 escribe en la linea de arriba y Line=1 escribe en la de abajo
 //Automaticamente si la cantidad es mayor a 16 entonces va a activar la marquesina movible
+//La cual solo está activa en la parte de arriba de momento
+
+
 
 //Funciones secundarias
 void DisplayClear();

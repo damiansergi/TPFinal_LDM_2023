@@ -157,6 +157,98 @@ void initDisplay() {
 
 	DisplayHome();
 
+
+	/*
+	 *
+	 * EXPERIMENTAL Repito el código de arriba para ver si ahora no da error al inicializarse
+	 *
+	 */
+
+	_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
+
+	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
+	// according to datasheet, we need at least 40ms after power rises above 2.7V
+	// before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
+
+	DelayInit(20000000UL);
+
+	// Now we pull both RS and R/W low to begin commands
+	word_msg = 0;
+	WriteDriverByteIIC(&word_msg);	// reset expanderand turn backlight off (Bit 8 =1)
+	DelayInit(2000000UL);
+
+	//put the LCD into 4 bit mode
+	// this is according to the hitachi HD44780 datasheet
+	// figure 24, pg 46
+
+	 // we start in 8bit mode, try to set 4 bit mode
+	word_msg = 0x03 << 4;
+	WriteDriverByteIIC(&word_msg);
+	DelayInit(2000000UL); // wait min 4.1ms
+
+    // second try
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL); // wait min 4.1ms
+
+    // third go!
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+    // finally, set to 4-bit interface
+    word_msg = 0x02 << 4;
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+
+	// Esta es la secuencia de inicializacion que uso nico, funciona
+	word_msg = 0x02;
+	WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+    word_msg = 0x28;	//Function Set
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+    word_msg = 0x0C;	//DisplayON
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+    word_msg = 0x06;	//Incremento a la derecha el cursor luego de usarlo
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+    word_msg = 0x01;	//Clear del display
+    WriteDriverByteIIC(&word_msg);
+    DelayInit(2000000UL);
+
+
+	// set # lines, font size, etc.
+	command(LCD_FUNCTIONSET | _displayfunction);
+
+	// turn the display on with no cursor or blinking default
+	_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
+	DisplayDisplay();
+
+	// clear it off
+	DisplayClear();
+
+	// Initialize to default text direction (for roman languages)
+	_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
+
+	// set the entry mode
+	command(LCD_ENTRYMODESET | _displaymode);
+
+	DisplayHome();
+
+
+	/*
+	 *
+	 * EXPERIMENTAL: fin
+	 *
+	 */
+
+
+
 	displayTimer = createTimer_SYS(REFRESHTIME, DisplayPeriodicISR, PERIODIC);
 	startTimer_SYS(displayTimer);
 }

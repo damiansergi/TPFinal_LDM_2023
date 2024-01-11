@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "..\Queue.h"
 #include "..\board.h"
+#include "eventQueue.h"
 
 #define SW_ACTIVE LOW
 #define ROT_ACTIVE LOW
@@ -52,6 +53,7 @@ static void RCHA_CB(void)
 	if (gpioRead(RCHB_PIN))
 	{
 		gpioToggle(PIN_LED_GREEN);
+		putEvent(EncoderLeft);
 	}
 
 	ignoreEnc = true;
@@ -67,6 +69,7 @@ static void RCHB_CB(void)
 	if (gpioRead(RCHA_PIN))
 	{
 		gpioToggle(PIN_LED_BLUE);
+		putEvent(EncoderRight);
 	}
 
 	ignoreEnc = true;

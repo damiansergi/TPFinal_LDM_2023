@@ -13,6 +13,7 @@
 #include "..\gpio.h"
 #include "..\board.h"
 #include "..\timer.h"
+#include "eventQueue.h"
 #include "uart.h"
 
 /*******************************************************************************
@@ -126,7 +127,7 @@ void button1_ISR(void){
 
 		lastButtonState = state;
 
-		//buttonPressed event
+		putEvent(ButtonCross);
 
 		//DEBUG
 		gpioToggle(PIN_LED_BLUE);
@@ -151,7 +152,7 @@ void button2_ISR(void){
 
 		lastButtonState = state;
 
-		//buttonPressed event
+		putEvent(ButtonPoint);
 
 		//DEBUG
 		gpioToggle(PIN_LED_RED);
@@ -176,7 +177,7 @@ void button3_ISR(void){
 
 		lastButtonState = state;
 
-		//buttonPressed event
+		putEvent(ButtonLine);
 
 		//DEBUG
 		gpioToggle(PIN_LED_GREEN);
@@ -201,7 +202,7 @@ void buttonEncoder_ISR(void){
 
 			lastButtonState = state;
 
-			//buttonPressed event
+			putEvent(EncoderClick);
 
 			//DEBUG
 			gpioToggle(PIN_LED_RED);

@@ -2,7 +2,8 @@
 #include "fsm.h"
 
 
-STATE* fsm(STATE *p_tabla_estado,BYTE evento_actual)
+
+STATE* fsm(STATE *p_tabla_estado,event_t evento_actual)
 {
 
    	while (p_tabla_estado -> evento != evento_actual		//Recorre las tablas de estado

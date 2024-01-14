@@ -127,7 +127,7 @@ void button1_ISR(void){
 
 		lastButtonState = state;
 
-		putEvent(ButtonCross);
+		putEvent(ButtonLine);
 
 		//DEBUG
 		gpioToggle(PIN_LED_BLUE);
@@ -177,7 +177,7 @@ void button3_ISR(void){
 
 		lastButtonState = state;
 
-		putEvent(ButtonLine);
+		putEvent(ButtonCross);
 
 		//DEBUG
 		gpioToggle(PIN_LED_GREEN);

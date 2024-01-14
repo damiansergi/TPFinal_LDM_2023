@@ -3,13 +3,18 @@
 #include "fsm.h"
 #include "fsmtable.h"
 #include "UI/display.h"
+#include "UI/privateSTDIO.h"
 
-
-//Lo correcto con esto quizás seria llamar a funciones propias de cada libreria
-//Esto queda como un concepto de que es lo que hay que hacer, después lo discutimos
-uint8_t volumeLevel;
-uint8_t eqLevel;
+//En estas variables voy a guardar lo seleccionado por la UI en cada caso, y en cada rutina
+// de accion al cambiar a alguna de estas voy a llamar a una funcion de ustedes que tiene que responder
+// haciendo los cambios necesarios, y si lo precisasen guardando el numero al cual cambió la variable
+uint8_t volumeLevel = 15;
 uint8_t songSelected;
+bool pause = true;
+uint8_t eqLevel;
+#define EQCANT 3	//TODO: Esto deberia estar en el header del eq
+char * eqBands [EQCANT]= {"jazz", "rock", "classic"};//TODO: Esto deberia estar en el header del eq
+
 
 
 /*Foward Declarations*/
@@ -106,58 +111,127 @@ static void do_nothing(void){
 }
 static void goToRepFromOff(void){
 
-	char buffer[MAXLETTERS];
-	//snprintf(buffer, MAXLETTERS, "song: %d", songSelected); Por alguna razon sprintf no funciona...
-	//Me obliga a hardcodear cada letra, o  tendre que crear mi propio sprintf mas sencillo
-	DisplayWrite(buffer, 8, 0);
+	char buffer[MAXLETTERS] = {0};	//Previsional, imprimo 1,2,etc en vez del nombre de la cancion
+	volNumPrinter(buffer, songSelected);
+	DisplayWrite(buffer, 16, 0);
 
+	char buffer2[16] = {0};
+	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
 
 }
 static void goToRepFromVol(void){
 
+	char buffer[MAXLETTERS] = {0};	//Previsional, imprimo 1,2,etc en vez del nombre de la cancion
+	volNumPrinter(buffer, songSelected);
+	DisplayWrite(buffer, 16, 0);
+
+	char buffer2[16] = {0};
+	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
 
 }
 static void goToRepFromEq(void){
 
+	char buffer[MAXLETTERS] = {0};	//Previsional, imprimo 1,2,etc en vez del nombre de la cancion
+	volNumPrinter(buffer, songSelected);
+	DisplayWrite(buffer, 16, 0);
+
+	char buffer2[16] = {0};
+	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
 
 }
 static void playPauseSong(void){
 
-
+	pause = false;
+	char buffer2[16] = {0};
+	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
 }
 static void changeSongLeft(void){
 
+	if (songSelected > 1){
+		songSelected--;
+		char buffer[MAXLETTERS] = {0};	//Previsional, imprimo 1,2,etc en vez del nombre de la cancion
+		volNumPrinter(buffer, songSelected);
+		DisplayWrite(buffer, 16, 0);
+	}
 
 }
 static void changeSongRight(void){
 
+	if (songSelected < 255){
+		songSelected++;
+		char buffer[MAXLETTERS] = {0};	//Previsional, imprimo 1,2,etc en vez del nombre de la cancion
+		volNumPrinter(buffer, songSelected);
+		DisplayWrite(buffer, 16, 0);
+	}
 
 }
 static void goToVolume(void){
 
+	char * buffer = "    VOLUMEN     ";
+	DisplayWrite(buffer, 16, 0);
+	char buffer2[16] = {0};
+	volNumPrinter(buffer2, volumeLevel);
+	DisplayWrite(buffer2, 16, 1);
 
 }
 static void changeVolumeRight(void){
+
+	if (volumeLevel < 29){
+		volumeLevel++;
+		char buffer2[16] = {0};
+		volNumPrinter(buffer2, volumeLevel);
+		DisplayWrite(buffer2, 16, 1);
+	}
 
 
 }
 static void changeVolumeLeft(void){
 
-
+	if (volumeLevel > 0){
+		volumeLevel--;
+		char buffer2[16] = {0};
+		volNumPrinter(buffer2, volumeLevel);
+		DisplayWrite(buffer2, 16, 1);
+	}
 }
 static void goToEq(void){
 
+	char * buffer = "       EQ       ";
+	DisplayWrite(buffer, 16, 0);
+	char buffer2[16] = {0};
+	eqStringPrinter(buffer2, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
 
 }
 static void changeEqRight(void){
+
+	if (eqLevel < (EQCANT-1)){
+		eqLevel++;
+		char buffer2[16] = {0};
+		eqStringPrinter(buffer2, eqBands[eqLevel]);
+		DisplayWrite(buffer2, 16, 1);
+	}
 
 
 }
 static void changeEqLeft(void){
 
+	if (eqLevel > 0){
+		eqLevel--;
+		char buffer2[16] = {0};
+		eqStringPrinter(buffer2, eqBands[eqLevel]);
+		DisplayWrite(buffer2, 16, 1);
+	}
 
 }
 static void turnOff(void){
 
-
+	char*buffer = "    APAGADO     ";
+	DisplayWrite(buffer, 16, 0);
+	bufferClean(buffer);
+	DisplayWrite(buffer, 16, 1);
 }

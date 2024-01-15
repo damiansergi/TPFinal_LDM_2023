@@ -9,6 +9,7 @@
  ******************************************************************************/
 
 #include "FIR.h"
+#include "BPFIilters.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -21,8 +22,6 @@
 /*******************************************************************************
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
-
-static float fir_impulse_response[FIR_FILTER_LENGTH] = {};
 
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
@@ -58,7 +57,7 @@ void FIRFIlter_Init(FIRFIlter *fir)
     fir->out = 0.0f;
 }
 
-float FIRFilter_Update(FIRFIlter *fir, float inp)
+float FIRFilter_Update(FIRFIlter *fir, float inp, float *fir_impulse_response)
 {
     //Store latest sample in buffer
     fir->buf[fir->bufIndex] = inp;
@@ -74,7 +73,6 @@ float FIRFilter_Update(FIRFIlter *fir, float inp)
     fir->out = 0.0f;
 
     uint8_t sumIndex = fir->bufIndex;
-
     uint8_t n;
     for(n = 0; n < FIR_FILTER_LENGTH; n++)
     {
@@ -88,7 +86,12 @@ float FIRFilter_Update(FIRFIlter *fir, float inp)
             sumIndex = FIR_FILTER_LENGTH-1;
         }
 
+        //Multiply impulse response with shifted sample and add to output
+        fir->out += fir_impulse_response[n] * fir->buf[sumIndex];
     }
+
+    //Return filtered output
+    return fir->out;
 }
 
 /*******************************************************************************

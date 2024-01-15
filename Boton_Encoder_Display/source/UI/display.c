@@ -59,16 +59,16 @@ static uint8_t _displayfunction;
 static uint8_t _displaycontrol;
 static uint8_t _displaymode;
 
-static char upperLine[MAXLETTERS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+static char upperLine[MAXLETTERS] = {' ', ' ', ' ', ' ', 'A', 'P', 'A', 'G', 'A', 'D', 'O', ' ', ' ', ' ', ' ', ' ', '\0', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '\0', '\0'};
 
-static char lowerLine[MAXLETTERS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+static char lowerLine[MAXLETTERS] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '\0', '\0'};
 
 static uint8_t offsetCursor = 0; //Este es el cursor que se mueve dentro de la palabra
-static uint8_t upperCharCant = MAXLETTERS;
+static uint8_t upperCharCant = 16;
 
 uint8_t displayTimer = 0;
 

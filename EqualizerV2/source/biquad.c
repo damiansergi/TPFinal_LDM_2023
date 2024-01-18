@@ -119,6 +119,7 @@ float computeFilters(float x)
   return output;
 }
 
+// Cambiar funcion para recibir un vector de ganancias para no tener que poner un indice de filtro
 void setGain(uint8_t filterID, uint8_t value) // value in dB
 {
   t[filterID] = value;

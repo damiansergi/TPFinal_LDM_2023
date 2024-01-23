@@ -29,11 +29,10 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_trig.h>
 
-#include "error.h"
-
-#include "bessel_amp_phase.h"
-#include "bessel_temme.h"
-#include "bessel.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_amp_phase.h>
+#include <gsl/specfunc/bessel_temme.h>
+#include <gsl/specfunc/error.h>
 
 #define CubeRoot2_  1.25992104989487316476721060728
 

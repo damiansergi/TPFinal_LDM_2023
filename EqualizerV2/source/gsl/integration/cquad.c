@@ -24,7 +24,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_integration.h>
 
-#include "cquad_const.c"
+#include <gsl/integration/cquad_const.c>
 
 
 /* Allocates a workspace for the given maximum number of intervals.

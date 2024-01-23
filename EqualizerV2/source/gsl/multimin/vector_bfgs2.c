@@ -30,8 +30,8 @@
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_blas.h>
 
-#include "linear_minimize.c"
-#include "linear_wrapper.c"
+#include <gsl/multimin/linear_minimize.c>
+#include <gsl/multimin/linear_wrapper.c>
 
 typedef struct
 {

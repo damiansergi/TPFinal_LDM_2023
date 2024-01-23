@@ -32,10 +32,9 @@
 #include <gsl/gsl_sf_exp.h>
 #include <gsl/gsl_sf_erf.h>
 
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
 
 #define LogRootPi_  0.57236494292470008706
 
@@ -431,7 +430,7 @@ int gsl_sf_hazard_e(double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_erfc(double x)
 {

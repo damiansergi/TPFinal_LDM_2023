@@ -33,9 +33,9 @@
 #include <gsl/gsl_complex_math.h>
 
 #define BASE_DOUBLE
-#include "templates_on.h"
-#include "test_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/complex/test_source.c>
+#include <gsl/templates_off.h>
 #undef BASE_DOUBLE
 
 int

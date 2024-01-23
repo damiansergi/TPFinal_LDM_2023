@@ -28,7 +28,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_errno.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 /*
  * This module contains routines related to the Cholesky decomposition

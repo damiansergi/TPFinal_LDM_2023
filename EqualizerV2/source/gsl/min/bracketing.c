@@ -25,7 +25,7 @@
 #include <gsl/gsl_min.h>
 #include <gsl/gsl_machine.h>
 
-#include "min.h"
+#include <gsl/min/min.h>
 
 int 
 gsl_min_find_bracket(gsl_function *f,double *x_minimum,double * f_minimum,

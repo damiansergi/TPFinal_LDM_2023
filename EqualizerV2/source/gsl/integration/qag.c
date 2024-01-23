@@ -23,10 +23,10 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "initialise.c"
-#include "set_initial.c"
-#include "qpsrt.c"
-#include "util.c"
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/qpsrt.c>
+#include <gsl/integration/set_initial.c>
+#include <gsl/integration/util.c>
 
 static int
 qag (const gsl_function *f,

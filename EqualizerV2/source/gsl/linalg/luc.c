@@ -31,7 +31,7 @@
 #include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_linalg.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 static int LU_decomp_L2 (gsl_matrix_complex * A, gsl_vector_uint * ipiv);
 static int LU_decomp_L3 (gsl_matrix_complex * A, gsl_vector_uint * ipiv);

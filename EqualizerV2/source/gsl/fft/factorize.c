@@ -18,10 +18,10 @@
  */
 
 #include <config.h>
+#include <gsl/fft/factorize.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_fft_complex.h>
 
-#include "factorize.h"
 
 static int
 fft_complex_factorize (const size_t n,

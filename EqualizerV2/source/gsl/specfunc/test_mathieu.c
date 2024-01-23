@@ -21,7 +21,7 @@
 
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_sf.h>
-#include "test_sf.h"
+#include <gsl/specfunc/test_sf.h>
 
 #define NVAL 100
 

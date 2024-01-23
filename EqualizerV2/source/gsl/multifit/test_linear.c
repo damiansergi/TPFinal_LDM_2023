@@ -61,12 +61,12 @@ test_random_vector_noise(const gsl_rng *r, gsl_vector *y)
     }
 }
 
-#include "test_longley.c"
-#include "test_filip.c"
-#include "test_pontius.c"
-#include "test_estimator.c"
-#include "test_reg.c"
-#include "test_shaw.c"
+#include <gsl/multifit/test_longley.c>
+#include <gsl/multifit/test_filip.c>
+#include <gsl/multifit/test_pontius.c>
+#include <gsl/multifit/test_estimator.c>
+#include <gsl/multifit/test_reg.c>
+#include <gsl/multifit/test_shaw.c>
 
 /* test linear regression */
 

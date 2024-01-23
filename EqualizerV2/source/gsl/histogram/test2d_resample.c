@@ -24,7 +24,7 @@
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "urand.c"
+#include <gsl/histogram/urand.c>
 
 void
 test2d_resample (void)

@@ -36,7 +36,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_permutation.h>
 
-#include "common.c"
+#include <gsl/multilarge_nlinear/common.c>
 
 typedef struct
 {

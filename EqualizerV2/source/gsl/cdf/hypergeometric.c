@@ -41,13 +41,13 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_randist.h>
 
-#include "error.h"
 
 static double
 lower_tail (const unsigned int k, const unsigned int n1,

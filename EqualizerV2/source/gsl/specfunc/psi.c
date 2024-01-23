@@ -28,13 +28,12 @@
 #include <gsl/gsl_sf_zeta.h>
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_complex_math.h>
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 #include <stdio.h>
 
-#include "error.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -833,7 +832,7 @@ gsl_sf_complex_psi_e(
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_psi_int(const int n)
 {

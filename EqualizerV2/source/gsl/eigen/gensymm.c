@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <config.h>
+#include <gsl/eigen/recurse.h>
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
@@ -27,7 +28,6 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
-#include "recurse.h"
 
 /*
  * This module computes the eigenvalues of a real generalized

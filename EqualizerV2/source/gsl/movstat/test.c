@@ -78,15 +78,15 @@ test_noisy_sine(const double sigma, gsl_vector * x, gsl_rng * r)
   return GSL_SUCCESS;
 }
 
-#include "test_mad.c"
-#include "test_mean.c"
-#include "test_median.c"
-#include "test_minmax.c"
-#include "test_Qn.c"
-#include "test_qqr.c"
-#include "test_sum.c"
-#include "test_Sn.c"
-#include "test_variance.c"
+#include <gsl/movstat/test_mad.c>
+#include <gsl/movstat/test_mean.c>
+#include <gsl/movstat/test_median.c>
+#include <gsl/movstat/test_minmax.c>
+#include <gsl/movstat/test_Qn.c>
+#include <gsl/movstat/test_qqr.c>
+#include <gsl/movstat/test_sum.c>
+#include <gsl/movstat/test_Sn.c>
+#include <gsl/movstat/test_variance.c>
 
 int
 main()

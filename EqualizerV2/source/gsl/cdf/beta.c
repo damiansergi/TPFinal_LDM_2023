@@ -18,12 +18,12 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/beta_inc.c>
 #include <math.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_math.h>
 
-#include "beta_inc.c"
 
 double
 gsl_cdf_beta_P (const double x, const double a, const double b)

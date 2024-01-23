@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "compare.h"
+#include <gsl/fft/compare.h>
 
 int
 FUNCTION(compare_complex,results) (const char *name_a, const BASE a[],

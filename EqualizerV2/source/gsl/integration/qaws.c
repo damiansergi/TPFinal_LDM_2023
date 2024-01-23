@@ -24,11 +24,11 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "initialise.c"
-#include "append.c"
-#include "qpsrt.c"
-#include "util.c"
-#include "qc25s.c"
+#include <gsl/integration/append.c>
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/qc25s.c>
+#include <gsl/integration/qpsrt.c>
+#include <gsl/integration/util.c>
 
 int
 gsl_integration_qaws (gsl_function * f,

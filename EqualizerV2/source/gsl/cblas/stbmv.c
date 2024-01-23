@@ -1,7 +1,7 @@
+#include <gsl/cblas/cblas.h>
+#include <gsl/cblas/error_cblas_l2.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cblas.h>
-#include "cblas.h"
-#include "error_cblas_l2.h"
 
 void
 cblas_stbmv (const enum CBLAS_ORDER order, const enum CBLAS_UPLO Uplo,
@@ -10,6 +10,6 @@ cblas_stbmv (const enum CBLAS_ORDER order, const enum CBLAS_UPLO Uplo,
              float *X, const int incX)
 {
 #define BASE float
-#include "source_tbmv_r.h"
+#include <gsl/cblas/source_tbmv_r.h>
 #undef BASE
 }

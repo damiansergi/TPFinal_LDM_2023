@@ -34,8 +34,8 @@
 
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test_linear.c"
-#include "test_nonlinear.c"
+#include <gsl/multifit/test_linear.c>
+#include <gsl/multifit/test_nonlinear.c>
 
 int
 main (void)

@@ -33,9 +33,9 @@
 /* Fortran-style matrix elements */
 #define FMAT(m,i,j,n) ((m)[((i)-1)*(n) + ((j)-1)])
 
-#include "companion.c"
-#include "balance.c"
-#include "qr.c"
+#include <gsl/poly/companion.c>
+#include <gsl/poly/balance.c>
+#include <gsl/poly/qr.c>
 
 int
 gsl_poly_complex_solve (const double *a, size_t n,

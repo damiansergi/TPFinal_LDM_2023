@@ -30,7 +30,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test_fdf.c"
+#include <gsl/multilarge_nlinear/test_fdf.c>
 
 static void
 test_proc(const gsl_multilarge_nlinear_trs *trs,

@@ -35,7 +35,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_blas.h>
 
-#include "common.c"
+#include <gsl/multilarge_nlinear/common.c>
 
 typedef struct
 {

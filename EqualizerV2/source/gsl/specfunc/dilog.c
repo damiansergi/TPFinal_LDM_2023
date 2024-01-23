@@ -654,7 +654,7 @@ gsl_sf_complex_spence_xy_e(
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_dilog(const double x)
 {

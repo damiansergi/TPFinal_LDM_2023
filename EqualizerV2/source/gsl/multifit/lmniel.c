@@ -53,7 +53,7 @@ typedef struct
   double tau;                /* initial scale factor for mu */
 } lmniel_state_t;
 
-#include "lmmisc.c"
+#include <gsl/multifit/lmmisc.c>
 
 #define LM_ONE_THIRD         (0.333333333333333)
 

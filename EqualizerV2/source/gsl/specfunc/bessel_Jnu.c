@@ -25,11 +25,10 @@
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_sf_sincos_pi.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_olver.h"
-#include "bessel_temme.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/bessel_temme.h>
+#include <gsl/specfunc/error.h>
 
 
 /* Evaluate at large enough nu to apply asymptotic
@@ -204,7 +203,7 @@ gsl_sf_bessel_Jnu_e(const double nu, const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Jnu(const double nu, const double x)
 {

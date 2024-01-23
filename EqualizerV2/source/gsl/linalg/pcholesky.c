@@ -37,7 +37,7 @@
 #include <gsl/gsl_permutation.h>
 #include <gsl/gsl_permute_vector.h>
 
-#include "cholesky_common.c"
+#include <gsl/linalg/cholesky_common.c>
 
 static double cholesky_LDLT_norm1(const gsl_matrix * LDLT, const gsl_permutation * p,
                                   gsl_vector * work);

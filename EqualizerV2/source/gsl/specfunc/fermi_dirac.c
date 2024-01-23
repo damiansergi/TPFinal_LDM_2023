@@ -29,10 +29,9 @@
 #include <gsl/gsl_sf_zeta.h>
 #include <gsl/gsl_sf_fermi_dirac.h>
 
-#include "error.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 #define locEPS  (1000.0*GSL_DBL_EPSILON)
 
@@ -1585,7 +1584,7 @@ int gsl_sf_fermi_dirac_inc_0_e(const double x, const double b, gsl_sf_result * r
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_fermi_dirac_m1(const double x)
 {

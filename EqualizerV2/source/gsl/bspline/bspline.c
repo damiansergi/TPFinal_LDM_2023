@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <gsl/bspline/bspline.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_bspline.h>
 
@@ -36,7 +37,6 @@
  *
  */
 
-#include "bspline.h"
 
 /*
 gsl_bspline_alloc()

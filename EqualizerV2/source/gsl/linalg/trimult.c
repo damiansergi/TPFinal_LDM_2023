@@ -28,7 +28,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 static int triangular_multsymm_L2(CBLAS_UPLO_t Uplo, gsl_matrix * T);
 static int triangular_multsymm_L3(CBLAS_UPLO_t Uplo, gsl_matrix * T);

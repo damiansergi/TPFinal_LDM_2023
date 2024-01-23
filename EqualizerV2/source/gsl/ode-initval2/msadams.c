@@ -49,7 +49,7 @@
 #include <gsl/gsl_odeiv2.h>
 #include <gsl/gsl_blas.h>
 
-#include "odeiv_util.h"
+#include <gsl/ode-initval2/odeiv_util.h>
 
 /* Maximum order of Adams methods */
 #define MSADAMS_MAX_ORD 12

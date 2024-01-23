@@ -25,7 +25,7 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_exp.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /* Evaluate the continued fraction for exprel.
  * [Abramowitz+Stegun, 4.2.41]
@@ -581,7 +581,7 @@ gsl_sf_exp_err_e10_e(const double x, const double dx, gsl_sf_result_e10 * result
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_exp(const double x)
 {

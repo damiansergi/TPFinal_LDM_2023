@@ -28,7 +28,7 @@
 
 #include <gsl/gsl_linalg.h>
 
-#include "apply_givens.c"
+#include <gsl/linalg/apply_givens.c>
 
 /* Note: The standard in numerical linear algebra is to solve A x = b
  * resp. ||A x - b||_2 -> min by QR-decompositions where x, b are

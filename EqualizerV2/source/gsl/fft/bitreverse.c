@@ -18,10 +18,10 @@
  */
 
 #include <config.h>
+#include <gsl/fft/bitreverse.h>
+#include <gsl/fft/complex_internal.h>
 #include <gsl/gsl_fft.h>
 
-#include "complex_internal.h"
-#include "bitreverse.h"
 
 static int 
 FUNCTION(fft_complex,bitreverse_order) (BASE data[], 

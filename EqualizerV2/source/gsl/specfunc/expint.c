@@ -26,11 +26,10 @@
 #include <gsl/gsl_sf_expint.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -538,7 +537,7 @@ static double recurse_En(int n, double x, double E1)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_expint_E1(const double x)
 {

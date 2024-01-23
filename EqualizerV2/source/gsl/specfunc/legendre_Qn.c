@@ -28,7 +28,7 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_legendre.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /* Evaluate f_{ell+1}/f_ell
  * f_ell := Q^{b}_{a+ell}(x)
@@ -348,7 +348,7 @@ gsl_sf_legendre_Ql_e(const int l, const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_legendre_Q0(const double x)
 {

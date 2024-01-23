@@ -26,7 +26,7 @@
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test_funcs.h"
+#include <gsl/multimin/test_funcs.h>
 
 unsigned int fcount, gcount;
 

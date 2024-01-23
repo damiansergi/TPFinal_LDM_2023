@@ -29,7 +29,7 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_legendre.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 
 
@@ -744,7 +744,7 @@ gsl_sf_legendre_array_size(const int lmax, const int m)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_legendre_P1(const double x)
 {

@@ -22,7 +22,7 @@
 #include <config.h>
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_sf.h>
-#include "test_sf.h"
+#include <gsl/specfunc/test_sf.h>
 
 static double J[100];
 static double Y[100];

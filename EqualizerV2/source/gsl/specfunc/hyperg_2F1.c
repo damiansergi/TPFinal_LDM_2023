@@ -29,7 +29,7 @@
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_sf_hyperg.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 #define locEPS (1000.0*GSL_DBL_EPSILON)
 
@@ -941,7 +941,7 @@ gsl_sf_hyperg_2F1_conj_renorm_e(const double aR, const double aI, const double c
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_hyperg_2F1(double a, double b, double c, double x)
 {

@@ -28,7 +28,7 @@
 #include <gsl/gsl_permute_vector.h>
 #include <gsl/gsl_linalg.h>
 
-#include "apply_givens.c"
+#include <gsl/linalg/apply_givens.c>
 
 /* The purpose of this package is to speed up QR-decomposition for
    large matrices.  Because QR-decomposition is column oriented, but

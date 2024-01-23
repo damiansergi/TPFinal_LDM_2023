@@ -26,9 +26,8 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel_olver.h"
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/error.h>
 
 /* For Chebyshev expansions of the roots as functions of nu,
  * see [G. Nemeth, Mathematical Approximation of Special Functions].
@@ -1201,7 +1200,7 @@ gsl_sf_bessel_zero_Jnu_e(double nu, unsigned int s, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_zero_J0(unsigned int s)
 {

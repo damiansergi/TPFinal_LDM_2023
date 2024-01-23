@@ -29,7 +29,7 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_expint.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /* The dominant part,
  * D(a,x) := x^a e^(-x) / Gamma(a+1)
@@ -703,7 +703,7 @@ gsl_sf_gamma_inc_e(const double a, const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_gamma_inc_P(const double a, const double x)
 {

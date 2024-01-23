@@ -31,8 +31,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include "odeiv_util.h"
-#include "step_utils.c"
+#include <gsl/ode-initval2/odeiv_util.h>
+#include <gsl/ode-initval2/step_utils.c>
 
 typedef struct
 {

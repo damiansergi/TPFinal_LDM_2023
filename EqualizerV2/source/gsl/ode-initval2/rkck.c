@@ -30,8 +30,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include "odeiv_util.h"
-#include "step_utils.c"
+#include <gsl/ode-initval2/odeiv_util.h>
+#include <gsl/ode-initval2/step_utils.c>
 
 /* Cash-Karp constants */
 static const double ah[] = { 1.0 / 5.0, 0.3, 3.0 / 5.0, 1.0, 7.0 / 8.0 };

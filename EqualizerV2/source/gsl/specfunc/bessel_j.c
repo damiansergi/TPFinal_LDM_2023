@@ -26,10 +26,9 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_olver.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -377,7 +376,7 @@ int gsl_sf_bessel_jl_steed_array(const int lmax, const double x, double * jl_x)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_j0(const double x)
 {

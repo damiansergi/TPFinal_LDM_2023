@@ -30,15 +30,15 @@ qagp (const gsl_function *f,
       double *result, double *abserr,
       gsl_integration_rule * q);
 
-#include "initialise.c"
-#include "qpsrt.c"
-#include "util.c"
-#include "append.c"
-#include "reset.c"
-#include "qelg.c"
-#include "qpsrt2.c"
-#include "ptsort.c"
-#include "positivity.c"
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/qpsrt.c>
+#include <gsl/integration/util.c>
+#include <gsl/integration/append.c>
+#include <gsl/integration/reset.c>
+#include <gsl/integration/qelg.c>
+#include <gsl/integration/qpsrt2.c>
+#include <gsl/integration/ptsort.c>
+#include <gsl/integration/positivity.c>
 
 int
 gsl_integration_qagp (const gsl_function *f,

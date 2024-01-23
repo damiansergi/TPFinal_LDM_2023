@@ -40,7 +40,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 static double cholesky_norm1(const gsl_matrix * LLT, gsl_vector * work);
 static int cholesky_Ainv(CBLAS_TRANSPOSE_t TransA, gsl_vector * x, void * params);

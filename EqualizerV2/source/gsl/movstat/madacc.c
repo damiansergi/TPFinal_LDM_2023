@@ -33,7 +33,7 @@
 typedef double madacc_type_t;
 typedef madacc_type_t ringbuf_type_t;
 
-#include "ringbuf.c"
+#include <gsl/movstat/ringbuf.c>
 
 typedef struct
 {

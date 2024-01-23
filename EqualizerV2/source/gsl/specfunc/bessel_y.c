@@ -27,10 +27,9 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_olver.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -267,7 +266,7 @@ int gsl_sf_bessel_yl_array(const int lmax, const double x, double * result_array
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_y0(const double x)
 {

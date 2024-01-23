@@ -24,7 +24,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_bessel.h>
-#include "bessel_amp_phase.h"
+#include <gsl/specfunc/bessel_amp_phase.h>
 
 /* chebyshev expansions for amplitude and phase
    functions used in bessel evaluations

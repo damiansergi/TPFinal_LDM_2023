@@ -28,7 +28,7 @@
 #include <gsl/gsl_ieee_utils.h>
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_sf.h>
-#include "test_sf.h"
+#include <gsl/specfunc/test_sf.h>
 
 /* Any double precision number bigger than this is automatically an even integer. */
 #define BIGDBL (2.0 / GSL_DBL_EPSILON)

@@ -23,7 +23,7 @@
 #define _BESSEL_AMP_PHASE_H_
 
 
-#include "chebyshev.h"
+#include <gsl/specfunc/chebyshev.h>
 
 extern const cheb_series _gsl_sf_bessel_amp_phase_bm0_cs;
 extern const cheb_series _gsl_sf_bessel_amp_phase_bth0_cs;

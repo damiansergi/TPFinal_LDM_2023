@@ -60,10 +60,10 @@ random_vector(gsl_vector * v, gsl_rng * r)
     }
 }
 
-#include "test_impulse.c"
-#include "test_gaussian.c"
-#include "test_median.c"
-#include "test_rmedian.c"
+#include <gsl/filter/test_impulse.c>
+#include <gsl/filter/test_gaussian.c>
+#include <gsl/filter/test_median.c>
+#include <gsl/filter/test_rmedian.c>
 
 int
 main()

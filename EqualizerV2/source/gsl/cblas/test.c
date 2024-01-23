@@ -18,20 +18,20 @@
  */
 
 #include <config.h>
+#include <gsl/cblas/tests.h>
 #include <stdlib.h>
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_ieee_utils.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cblas.h>
 
-#include "tests.h"
 
 int 
 main (void)
 {
   gsl_ieee_env_setup ();
 
-#include "tests.c"
+#include <gsl/cblas/tests.c>
 
   exit (gsl_test_summary());
 }

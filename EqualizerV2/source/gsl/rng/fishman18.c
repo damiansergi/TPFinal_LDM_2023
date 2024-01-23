@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
 
-#include "schrage.c"
+#include <gsl/rng/schrage.c>
 
 #define AA           62089911UL
 #define MM           0x7fffffffUL       /* 2 ^ 31 - 1 */

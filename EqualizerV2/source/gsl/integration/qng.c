@@ -24,8 +24,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "err.c"
-#include "qng.h"
+#include <gsl/integration/err.c>
+#include <gsl/integration/qng.h>
 
 int
 gsl_integration_qng (const gsl_function *f,

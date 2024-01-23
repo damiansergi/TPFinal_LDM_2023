@@ -38,8 +38,8 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_hermite.h>
 
-#include "error.h"
-#include "eval.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/eval.h>
 
 #define pow2(n) (gsl_sf_pow_int(2,n))
 #define RND(x)  ((double) ((x >= 0) ? (int) (x + 0.5) : (int) (x - 0.5)))

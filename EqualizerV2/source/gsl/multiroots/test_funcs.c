@@ -23,7 +23,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multiroots.h>
 
-#include "test_funcs.h"
+#include <gsl/multiroots/test_funcs.h>
 
 /* For information on testing see the following paper,
 

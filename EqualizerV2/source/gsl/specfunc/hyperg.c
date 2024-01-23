@@ -28,8 +28,8 @@
 #include <gsl/gsl_sf_exp.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
-#include "hyperg.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/hyperg.h>
 
 #define SUM_LARGE  (1.0e-5*GSL_DBL_MAX)
 

@@ -24,7 +24,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_gegenbauer.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /* See: [Thompson, Atlas for Computing Mathematical Functions] */
 
@@ -171,7 +171,7 @@ gsl_sf_gegenpoly_array(int nmax, double lambda, double x, double * result_array)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_gegenpoly_1(double lambda, double x)
 {

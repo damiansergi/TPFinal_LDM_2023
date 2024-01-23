@@ -27,7 +27,7 @@
 
 typedef double ringbuf_type_t;
 
-#include "ringbuf.c"
+#include <gsl/movstat/ringbuf.c>
 
 typedef struct
 {

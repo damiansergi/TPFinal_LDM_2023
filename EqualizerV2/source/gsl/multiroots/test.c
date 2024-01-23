@@ -26,7 +26,7 @@
 
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test_funcs.h"
+#include <gsl/multiroots/test_funcs.h>
 int test_fdf (const char * desc, gsl_multiroot_function_fdf * function, initpt_function initpt, double factor, const gsl_multiroot_fdfsolver_type * T);
 int test_f (const char * desc, gsl_multiroot_function_fdf * fdf, initpt_function initpt, double factor, const gsl_multiroot_fsolver_type * T);
 

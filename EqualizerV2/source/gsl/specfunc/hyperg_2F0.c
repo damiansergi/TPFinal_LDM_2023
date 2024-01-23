@@ -24,8 +24,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_hyperg.h>
 
-#include "error.h"
-#include "hyperg.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/hyperg.h>
 
 int
 gsl_sf_hyperg_2F0_e(const double a, const double b, const double x, gsl_sf_result * result)
@@ -55,7 +55,7 @@ gsl_sf_hyperg_2F0_e(const double a, const double b, const double x, gsl_sf_resul
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_hyperg_2F0(const double a, const double b, const double x)
 {

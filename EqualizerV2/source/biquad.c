@@ -8,9 +8,9 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
+#include <gsl/matrix/gsl_matrix.h>
 #include "biquad.h"
 #include <math.h>
-#include "gsl-2.7.1/matrix/gsl_matrix.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE

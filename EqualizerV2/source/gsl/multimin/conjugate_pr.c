@@ -25,7 +25,7 @@
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_blas.h>
 
-#include "directional_minimize.c"
+#include <gsl/multimin/directional_minimize.c>
 
 typedef struct
 {

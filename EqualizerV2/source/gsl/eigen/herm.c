@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <gsl/eigen/qrstep.c>
 #include <stdlib.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_vector.h>
@@ -31,7 +32,6 @@
 
    See Golub & Van Loan, "Matrix Computations" (3rd ed), Section 8.3 */
 
-#include "qrstep.c"
 
 gsl_eigen_herm_workspace * 
 gsl_eigen_herm_alloc (const size_t n)

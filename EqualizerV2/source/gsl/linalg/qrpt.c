@@ -28,7 +28,7 @@
 
 #include <gsl/gsl_linalg.h>
 
-#include "apply_givens.c"
+#include <gsl/linalg/apply_givens.c>
 
 /* Factorise a general M x N matrix A into
  *

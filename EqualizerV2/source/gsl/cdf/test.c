@@ -53,7 +53,7 @@ void test_tdistinv (void);
 void test_betainv (void);
 void test_finv (void);
 
-#include "test_auto.c"
+#include <gsl/cdf/test_auto.c>
 
 struct range { unsigned int min; unsigned int max; } ;
 double test_binomial_pdf (unsigned int n);

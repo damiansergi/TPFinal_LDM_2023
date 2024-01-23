@@ -33,8 +33,8 @@
 #include <gsl/gsl_sf_hyperg.h>
 #include <gsl/gsl_sf_legendre.h>
 
-#include "error.h"
-#include "legendre.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/legendre.h>
 
 #define Root_2OverPi_  0.797884560802865355879892
 #define locEPS         (1000.0*GSL_DBL_EPSILON)
@@ -1341,7 +1341,7 @@ int gsl_sf_conicalP_cyl_reg_e(const int m, const double lambda,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_conicalP_0(const double lambda, const double x)
 {

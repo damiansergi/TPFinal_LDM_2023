@@ -22,7 +22,7 @@
 #include <config.h>
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_sf.h>
-#include "test_sf.h"
+#include <gsl/specfunc/test_sf.h>
 
 #define PRINT(n) printf("%22.18g  %22.18g  %22.18g  %22.18g\n", F[n], Fp[n], G[n], Gp[n])
 

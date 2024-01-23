@@ -28,10 +28,9 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_zeta.h>
 
-#include "error.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 #define LogTwoPi_  1.8378770664093454835606594728111235279723
 
@@ -1012,7 +1011,7 @@ int gsl_sf_eta_e(const double s, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_zeta(const double s)
 {

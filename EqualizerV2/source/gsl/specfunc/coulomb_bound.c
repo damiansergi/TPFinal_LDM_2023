@@ -28,8 +28,8 @@
 #include <gsl/gsl_sf_laguerre.h>
 #include <gsl/gsl_sf_coulomb.h>
 
-#include "error.h"
-#include "check.h"
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 /* normalization for hydrogenic wave functions */
 static
@@ -106,7 +106,7 @@ gsl_sf_hydrogenicR_e(const int n, const int l,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_hydrogenicR_1(const double Z, const double r)
 {

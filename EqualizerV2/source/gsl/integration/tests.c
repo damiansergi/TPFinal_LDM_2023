@@ -21,7 +21,7 @@
 #include <math.h>
 #include <gsl/gsl_math.h>
 
-#include "tests.h"
+#include <gsl/integration/tests.h>
 
 /* These are the test functions from table 4.1 of the QUADPACK book */
 

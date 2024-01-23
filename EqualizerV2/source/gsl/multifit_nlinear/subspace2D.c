@@ -136,7 +136,7 @@ typedef struct
   gsl_multifit_nlinear_parameters params;
 } subspace2D_state_t;
 
-#include "common.c"
+#include <gsl/multifit_nlinear/common.c>
 
 static void * subspace2D_alloc (const void * params, const size_t n, const size_t p);
 static void subspace2D_free(void *vstate);

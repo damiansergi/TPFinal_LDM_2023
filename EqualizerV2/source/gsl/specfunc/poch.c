@@ -29,7 +29,7 @@
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 static const double bern[21] = {
    0.0   /* no element 0 */,  
@@ -447,7 +447,7 @@ gsl_sf_pochrel_e(const double a, const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_lnpoch(const double a, const double x)
 {

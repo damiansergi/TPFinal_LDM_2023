@@ -26,9 +26,8 @@
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -227,7 +226,7 @@ gsl_sf_bessel_Kn_array(const int nmin, const int nmax, const double x, double * 
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Kn_scaled(const int n, const double x)
 {

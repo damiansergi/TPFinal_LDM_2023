@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <config.h>
+#include <gsl/eigen/recurse.h>
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
@@ -29,7 +30,6 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 
-#include "recurse.h"
 
 /*
  * This module computes the eigenvalues of a complex generalized

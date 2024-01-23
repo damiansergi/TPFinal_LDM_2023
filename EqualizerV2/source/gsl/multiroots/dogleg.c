@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "enorm.c"
+#include <gsl/multiroots/enorm.c>
 
 static void compute_diag (const gsl_matrix * J, gsl_vector * diag);
 static void update_diag (const gsl_matrix * J, gsl_vector * diag);

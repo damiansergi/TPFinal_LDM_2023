@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <gsl/fft/real_pass.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -25,7 +26,6 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_fft_real.h>
 
-#include "real_pass.h"
 
 int
 FUNCTION(gsl_fft_real,transform) (BASE data[], const size_t stride, const size_t n,

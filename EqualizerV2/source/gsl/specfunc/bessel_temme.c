@@ -27,10 +27,10 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_mode.h>
-#include "bessel_temme.h"
-
 #include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/bessel_temme.h>
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
 
 /* nu = (x+1)/4, -1<x<1, 1/(2nu)(1/Gamma[1-nu]-1/Gamma[1+nu]) */
 static double g1_dat[14] = {

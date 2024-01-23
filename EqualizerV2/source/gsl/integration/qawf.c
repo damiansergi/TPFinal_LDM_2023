@@ -24,9 +24,9 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "initialise.c"
-#include "append.c"
-#include "qelg.c"
+#include <gsl/integration/append.c>
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/qelg.c>
 
 int
 gsl_integration_qawf (gsl_function * f,

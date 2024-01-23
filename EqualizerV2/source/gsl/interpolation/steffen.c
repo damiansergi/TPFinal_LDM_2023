@@ -37,8 +37,8 @@
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
-#include "integ_eval.h"
 #include <gsl/gsl_interp.h>
+#include <gsl/interpolation/integ_eval.h>
 
 typedef struct
 {

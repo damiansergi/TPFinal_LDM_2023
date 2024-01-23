@@ -21,7 +21,7 @@
 #include <float.h>
 #include <math.h>
 #include <gsl/gsl_integration.h>
-#include "err.c"
+#include <gsl/integration/err.c>
 
 void
 gsl_integration_qk (const int n, 

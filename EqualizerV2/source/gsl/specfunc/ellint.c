@@ -25,7 +25,7 @@
 #include <gsl/gsl_precision.h>
 #include <gsl/gsl_sf_ellint.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -588,7 +588,7 @@ gsl_sf_ellint_Pcomp_e(double k, double n, gsl_mode_t mode, gsl_sf_result * resul
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_ellint_Kcomp(double k, gsl_mode_t mode)
 {

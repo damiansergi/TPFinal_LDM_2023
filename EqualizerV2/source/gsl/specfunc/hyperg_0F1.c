@@ -27,7 +27,7 @@
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_sf_hyperg.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 #define locEPS  (1000.0*GSL_DBL_EPSILON)
 
@@ -170,7 +170,7 @@ gsl_sf_hyperg_0F1_e(double c, double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_hyperg_0F1(const double c, const double x)
 {

@@ -22,7 +22,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_histogram.h>
 
-#include "find.c"
+#include <gsl/histogram/find.c>
 
 double
 gsl_histogram_pdf_sample (const gsl_histogram_pdf * p, double r)

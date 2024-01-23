@@ -20,7 +20,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_min.h>
 
-#include "test.h"
+#include <gsl/min/test.h>
 
 gsl_function create_function (double (*f)(double, void *)) 
 {

@@ -30,8 +30,8 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_hyperg.h>
 
-#include "error.h"
-#include "hyperg.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/hyperg.h>
 
 #define INT_THRESHOLD (1000.0*GSL_DBL_EPSILON)
 
@@ -1774,7 +1774,7 @@ gsl_sf_hyperg_U_e(const double a, const double b, const double x, gsl_sf_result 
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_hyperg_U_int(const int a, const int b, const double x)
 {

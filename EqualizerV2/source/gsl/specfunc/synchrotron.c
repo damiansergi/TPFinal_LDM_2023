@@ -26,10 +26,9 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_synchrotron.h>
 
-#include "error.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 static double synchrotron1_data[13] = {
   30.364682982501076273,
@@ -272,7 +271,7 @@ int gsl_sf_synchrotron_2_e(const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_synchrotron_1(const double x)
 {

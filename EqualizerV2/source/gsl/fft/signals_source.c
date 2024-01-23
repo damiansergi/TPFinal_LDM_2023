@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "signals.h"
+#include <gsl/fft/signals.h>
 
 int
 FUNCTION(fft_signal,complex_pulse) (const size_t k,

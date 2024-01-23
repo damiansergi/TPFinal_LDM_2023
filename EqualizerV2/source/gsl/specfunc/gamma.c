@@ -28,11 +28,10 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 #define LogRootTwoPi_  0.9189385332046727418
 
@@ -1627,7 +1626,7 @@ int gsl_sf_choose_e(unsigned int n, unsigned int m, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_fact(const unsigned int n)
 {

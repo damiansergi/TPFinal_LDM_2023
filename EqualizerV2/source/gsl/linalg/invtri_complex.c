@@ -30,7 +30,7 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 static int complex_tri_invert_L2(CBLAS_UPLO_t Uplo, CBLAS_DIAG_t Diag, gsl_matrix_complex * T);
 static int complex_tri_invert_L3(CBLAS_UPLO_t Uplo, CBLAS_DIAG_t Diag, gsl_matrix_complex * T);

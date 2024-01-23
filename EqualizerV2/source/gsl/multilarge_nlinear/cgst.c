@@ -62,7 +62,7 @@ typedef struct
   size_t cgmaxit;            /* maximum CG iterations */
 } cgst_state_t;
 
-#include "common.c"
+#include <gsl/multilarge_nlinear/common.c>
 
 static void * cgst_alloc (const void * params, const size_t n, const size_t p);
 static void cgst_free(void *vstate);

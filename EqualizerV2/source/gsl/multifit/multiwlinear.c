@@ -25,7 +25,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
 
-#include "linear_common.c"
+#include <gsl/multifit/linear_common.c>
 
 int
 gsl_multifit_wlinear (const gsl_matrix * X,

@@ -19,7 +19,7 @@
 
 #include <gsl/gsl_permute_vector_double.h>
 
-#include "qrsolv.c"
+#include <gsl/multifit/qrsolv.c>
 
 static size_t
 count_nsing (const gsl_matrix * r)

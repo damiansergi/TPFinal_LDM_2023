@@ -23,10 +23,10 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_pow_int.h>
-#include "bessel.h"
-#include "bessel_amp_phase.h"
-#include "bessel_olver.h"
 #include <gsl/gsl_sf_bessel.h>
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_amp_phase.h>
+#include <gsl/specfunc/bessel_olver.h>
 
 
 
@@ -191,7 +191,7 @@ gsl_sf_bessel_Jn_array(int nmin, int nmax, double x, double * result_array)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Jn(const int n, const double x)
 {

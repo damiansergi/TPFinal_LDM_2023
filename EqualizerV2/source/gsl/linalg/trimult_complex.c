@@ -30,7 +30,7 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 
-#include "recurse.h"
+#include <gsl/linalg/recurse.h>
 
 static int triangular_multherm_L2(CBLAS_UPLO_t Uplo, gsl_matrix_complex * T);
 static int triangular_multherm_L3(CBLAS_UPLO_t Uplo, gsl_matrix_complex * T);

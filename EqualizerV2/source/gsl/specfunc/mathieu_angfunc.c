@@ -352,7 +352,7 @@ int gsl_sf_mathieu_se_array(int nmin, int nmax, double qq, double zz,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"                                                           
+#include <gsl/specfunc/eval.h>                                                           
 
 double gsl_sf_mathieu_ce(int order, double qq, double zz)
 {

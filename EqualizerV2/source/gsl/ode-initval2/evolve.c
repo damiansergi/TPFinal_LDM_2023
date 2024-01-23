@@ -26,7 +26,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include "odeiv_util.h"
+#include <gsl/ode-initval2/odeiv_util.h>
 
 gsl_odeiv2_evolve *
 gsl_odeiv2_evolve_alloc (size_t dim)

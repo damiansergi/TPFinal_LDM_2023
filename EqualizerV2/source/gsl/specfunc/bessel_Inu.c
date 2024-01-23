@@ -26,10 +26,9 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_temme.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_temme.h>
+#include <gsl/specfunc/error.h>
 
 
 /*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/
@@ -108,7 +107,7 @@ gsl_sf_bessel_Inu_e(double nu, double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Inu_scaled(double nu, double x)
 {

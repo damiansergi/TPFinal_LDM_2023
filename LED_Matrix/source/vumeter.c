@@ -91,6 +91,7 @@ void initVumeter(){
 		}
 	}
 
+	adjustBrightness(2);
 	vumeterOn();
 }
 

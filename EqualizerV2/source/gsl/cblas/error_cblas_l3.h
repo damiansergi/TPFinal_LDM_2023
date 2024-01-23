@@ -19,8 +19,8 @@
 
 #ifndef __ERROR_CBLAS_L3_H__
 #define __ERROR_CBLAS_L3_H__
+#include <gsl/cblas/error_cblas.h>
 #include <gsl/gsl_math.h>
-#include "error_cblas.h"
 
 /*
  * =============================================================================

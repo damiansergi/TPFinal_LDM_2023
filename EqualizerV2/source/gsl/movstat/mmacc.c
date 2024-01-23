@@ -37,8 +37,8 @@
 typedef double mmacc_type_t;
 typedef mmacc_type_t ringbuf_type_t;
 
-#include "deque.c"
-#include "ringbuf.c"
+#include <gsl/movstat/deque.c>
+#include <gsl/movstat/ringbuf.c>
 
 typedef struct
 {

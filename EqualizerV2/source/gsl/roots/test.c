@@ -25,8 +25,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "roots.h"
-#include "test.h"
+#include <gsl/roots/roots.h>
+#include <gsl/roots/test.h>
 
 /* stopping parameters */
 const double EPSREL = (10 * GSL_DBL_EPSILON);

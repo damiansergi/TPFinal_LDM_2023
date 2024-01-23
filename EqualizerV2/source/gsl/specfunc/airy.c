@@ -25,11 +25,10 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_airy.h>
 
-#include "error.h"
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval_mode.c"
+#include <gsl/specfunc/cheb_eval_mode.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -844,7 +843,7 @@ gsl_sf_airy_Bi_scaled_e(const double x, gsl_mode_t mode, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_airy_Ai(const double x, gsl_mode_t mode)
 {

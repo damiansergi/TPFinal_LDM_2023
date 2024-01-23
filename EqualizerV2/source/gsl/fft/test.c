@@ -40,30 +40,30 @@
 void my_error_handler (const char *reason, const char *file,
                        int line, int err);
 
-#include "complex_internal.h"
+#include <gsl/fft/complex_internal.h>
 
 /* Usage: test [n]
    Exercise the fft routines for length n. By default n runs from 1 to 100.
    The exit status indicates success or failure. */
 
 #define BASE_DOUBLE
-#include "templates_on.h"
-#include "compare_source.c"
-#include "bitreverse.c"
-#include "test_complex_source.c"
-#include "test_real_source.c"
-#include "test_trap_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/fft/compare_source.c>
+#include <gsl/fft/bitreverse.c>
+#include <gsl/fft/test_complex_source.c>
+#include <gsl/fft/test_real_source.c>
+#include <gsl/fft/test_trap_source.c>
+#include <gsl/templates_off.h>
 #undef  BASE_DOUBLE
 
 #define BASE_FLOAT
-#include "templates_on.h"
-#include "compare_source.c"
-#include "bitreverse.c"
-#include "test_complex_source.c"
-#include "test_real_source.c"
-#include "test_trap_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/fft/compare_source.c>
+#include <gsl/fft/bitreverse.c>
+#include <gsl/fft/test_complex_source.c>
+#include <gsl/fft/test_real_source.c>
+#include <gsl/fft/test_trap_source.c>
+#include <gsl/templates_off.h>
 #undef  BASE_FLOAT
 
 int

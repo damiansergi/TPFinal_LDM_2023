@@ -27,11 +27,11 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/rat_eval.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cdf.h>
 
-#include "rat_eval.h"
 
 static double
 small (double q)

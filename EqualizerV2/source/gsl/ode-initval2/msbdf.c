@@ -52,7 +52,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 
-#include "odeiv_util.h"
+#include <gsl/ode-initval2/odeiv_util.h>
 
 /* Maximum order of BDF methods */
 #define MSBDF_MAX_ORD 5

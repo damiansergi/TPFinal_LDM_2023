@@ -18,12 +18,12 @@
  */
 
 #include <config.h>
+#include <gsl/cblas/cblas.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
 #include <gsl/gsl_cblas.h>
-#include "cblas.h"
 
 void
 cblas_xerbla (int p, const char *rout, const char *form, ...)

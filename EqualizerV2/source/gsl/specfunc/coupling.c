@@ -27,7 +27,7 @@
 #include <gsl/gsl_sf_coupling.h>
 #include <gsl/gsl_sf_exp.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 inline
 static
@@ -408,7 +408,7 @@ gsl_sf_coupling_9j_e(int two_ja, int two_jb, int two_jc,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_coupling_3j(int two_ja, int two_jb, int two_jc,
                           int two_ma, int two_mb, int two_mc)

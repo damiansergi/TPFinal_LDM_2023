@@ -37,12 +37,12 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/beta_inc.c>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 
-#include "beta_inc.c"
 
 static double
 poly_eval (const double c[], unsigned int n, double x)

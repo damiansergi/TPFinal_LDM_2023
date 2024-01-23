@@ -30,7 +30,7 @@
 #include <gsl/gsl_multiroots.h>
 #include <gsl/gsl_linalg.h>
 
-#include "enorm.c"
+#include <gsl/multiroots/enorm.c>
 
 /* Simple globally convergent Newton method (rejects uphill steps) */
 

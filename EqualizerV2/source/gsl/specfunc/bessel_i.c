@@ -25,9 +25,8 @@
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/error.h>
 
 
 /* i_{l+1}/i_l
@@ -305,7 +304,7 @@ int gsl_sf_bessel_il_scaled_array(const int lmax, const double x, double * resul
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_i0_scaled(const double x)
 {

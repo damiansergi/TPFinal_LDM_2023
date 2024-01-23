@@ -19,11 +19,11 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 
-#include "error.h"
 
 double
 gsl_cdf_fdist_Pinv (const double P, const double nu1, const double nu2)

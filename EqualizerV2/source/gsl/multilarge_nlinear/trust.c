@@ -27,8 +27,8 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_permutation.h>
 
-#include "common.c"
-#include "nielsen.c"
+#include <gsl/multilarge_nlinear/common.c>
+#include <gsl/multilarge_nlinear/nielsen.c>
 
 /*
  * This module contains a high level driver for a general trust

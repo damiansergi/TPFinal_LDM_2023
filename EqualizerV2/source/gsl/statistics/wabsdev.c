@@ -3,19 +3,19 @@
 #include <gsl/gsl_statistics.h>
 
 #define BASE_LONG_DOUBLE
-#include "templates_on.h"
-#include "wabsdev_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/statistics/wabsdev_source.c>
+#include <gsl/templates_off.h>
 #undef  BASE_LONG_DOUBLE
 
 #define BASE_DOUBLE
-#include "templates_on.h"
-#include "wabsdev_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/statistics/wabsdev_source.c>
+#include <gsl/templates_off.h>
 #undef  BASE_DOUBLE
 
 #define BASE_FLOAT
-#include "templates_on.h"
-#include "wabsdev_source.c"
-#include "templates_off.h"
+#include <gsl/templates_on.h>
+#include <gsl/statistics/wabsdev_source.c>
+#include <gsl/templates_off.h>
 #undef  BASE_FLOAT

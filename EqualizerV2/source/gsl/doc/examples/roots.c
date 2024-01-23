@@ -1,10 +1,10 @@
+#include <gsl/doc/examples/demo_fn.c>
+#include <gsl/doc/examples/demo_fn.h>
 #include <stdio.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
 
-#include "demo_fn.h"
-#include "demo_fn.c"
 
 int
 main (void)

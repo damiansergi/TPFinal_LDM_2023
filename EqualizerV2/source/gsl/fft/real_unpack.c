@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "complex_internal.h"
+#include <gsl/fft/complex_internal.h>
 
 int
 FUNCTION(gsl_fft_real,unpack) (const BASE real_coefficient[],

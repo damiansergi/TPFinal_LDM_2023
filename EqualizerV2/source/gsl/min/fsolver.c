@@ -23,7 +23,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_min.h>
 
-#include "min.h"
+#include <gsl/min/min.h>
 
 static int 
 compute_f_values (gsl_function * f, double x_minimum, double * f_minimum,

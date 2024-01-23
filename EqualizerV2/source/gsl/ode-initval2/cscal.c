@@ -24,7 +24,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_odeiv2.h>
-#include "control_utils.c"
+#include <gsl/ode-initval2/control_utils.c>
 
 typedef struct
 {

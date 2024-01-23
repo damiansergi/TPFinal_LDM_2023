@@ -26,11 +26,10 @@
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_amp_phase.h"
-#include "bessel_olver.h"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_amp_phase.h>
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -208,7 +207,7 @@ gsl_sf_bessel_Yn_array(const int nmin, const int nmax, const double x, double * 
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Yn(const int n, const double x)
 {

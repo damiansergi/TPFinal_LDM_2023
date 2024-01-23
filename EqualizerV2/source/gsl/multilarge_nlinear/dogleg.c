@@ -58,7 +58,7 @@ typedef struct
   gsl_multilarge_nlinear_parameters params;
 } dogleg_state_t;
 
-#include "common.c"
+#include <gsl/multilarge_nlinear/common.c>
 
 static void * dogleg_alloc (const void * params, const size_t n, const size_t p);
 static void dogleg_free(void *vstate);

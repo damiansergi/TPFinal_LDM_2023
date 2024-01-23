@@ -19,12 +19,12 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_cdf.h>
 
-#include "error.h"
 
 /* Pr (X <= k), i.e., the probability of n or fewer failures until the
    first success. */

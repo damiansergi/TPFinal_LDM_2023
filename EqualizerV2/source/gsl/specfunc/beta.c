@@ -27,7 +27,7 @@
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 static double
 isnegint (const double x) 
@@ -156,7 +156,7 @@ gsl_sf_beta_e(const double x, const double y, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_lnbeta(const double x, const double y)
 {

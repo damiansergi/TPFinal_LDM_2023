@@ -31,7 +31,7 @@
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test2d.c"
+#include <gsl/interpolation/test2d.c>
 
 int
 test_bsearch(void)

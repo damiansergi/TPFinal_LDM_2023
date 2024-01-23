@@ -27,7 +27,7 @@
 
 #include <gsl/gsl_linalg.h>
 
-#include "svdstep.c"
+#include <gsl/linalg/svdstep.c>
 
 /* Factorise a general M x N matrix A into,
  *

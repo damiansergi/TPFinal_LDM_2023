@@ -31,7 +31,7 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_ieee_utils.h>
 #include <gsl/gsl_odeiv2.h>
-#include "odeiv_util.h"
+#include <gsl/ode-initval2/odeiv_util.h>
 
 /* Maximum number of ODE equations */
 #define MAXEQ 15

@@ -33,7 +33,7 @@
 
 typedef double gaussian_type_t;
 typedef double ringbuf_type_t;
-#include "ringbuf.c"
+#include <gsl/filter/ringbuf.c>
 
 typedef struct
 {

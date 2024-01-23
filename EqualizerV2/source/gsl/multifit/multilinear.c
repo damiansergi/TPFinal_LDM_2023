@@ -26,7 +26,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
 
-#include "linear_common.c"
+#include <gsl/multifit/linear_common.c>
 
 static int multifit_linear_svd (const gsl_matrix * X,
                                 const int balance,

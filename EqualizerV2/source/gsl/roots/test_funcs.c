@@ -23,7 +23,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
 
-#include "test.h"
+#include <gsl/roots/test.h>
 
 gsl_function create_function (double (*f)(double, void *)) 
 {

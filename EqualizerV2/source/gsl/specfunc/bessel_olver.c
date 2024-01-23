@@ -24,13 +24,11 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_airy.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_olver.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_olver.h>
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 /* fit for f(x) = zofmzeta((x+1)/2), 0 <= mzeta <= 1 */
 static double zofmzeta_a_data[20] = {

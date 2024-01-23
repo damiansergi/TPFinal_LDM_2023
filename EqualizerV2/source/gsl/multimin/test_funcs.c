@@ -22,7 +22,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_multimin.h>
 
-#include "test_funcs.h"
+#include <gsl/multimin/test_funcs.h>
 
 gsl_multimin_function_fdf simpleabs =
 {&simpleabs_f,

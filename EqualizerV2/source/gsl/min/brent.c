@@ -31,7 +31,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_min.h>
 
-#include "min.h"
+#include <gsl/min/min.h>
 
 typedef struct
   {

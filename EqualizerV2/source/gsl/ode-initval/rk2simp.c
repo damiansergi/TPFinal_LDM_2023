@@ -35,7 +35,7 @@
 #include <gsl/gsl_odeiv.h>
 #include <gsl/gsl_linalg.h>
 
-#include "odeiv_util.h"
+#include <gsl/ode-initval/odeiv_util.h>
 
 typedef struct
 {

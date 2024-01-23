@@ -24,8 +24,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_elementary.h>
 
-#include "error.h"
-#include "check.h"
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 int
 gsl_sf_multiply_e(const double x, const double y, gsl_sf_result * result)
@@ -77,7 +77,7 @@ gsl_sf_multiply_err_e(const double x, const double dx,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_multiply(const double x, const double y)
 {

@@ -22,7 +22,7 @@
 /* Compile all the inline functions */
 
 #define COMPILE_INLINE_STATIC
-#include "build.h"
+#include <gsl/build.h>
 #include <gsl/gsl_pow_int.h>
 
 double gsl_pow_int(double x, int n)

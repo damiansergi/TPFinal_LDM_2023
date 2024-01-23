@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "find.c"
+#include <gsl/histogram/find.c>
 
 static int
 find2d (const size_t nx, const double xrange[],

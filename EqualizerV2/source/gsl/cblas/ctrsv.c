@@ -1,8 +1,8 @@
+#include <gsl/cblas/cblas.h>
+#include <gsl/cblas/error_cblas_l2.h>
+#include <gsl/cblas/hypot.c>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cblas.h>
-#include "cblas.h"
-#include "error_cblas_l2.h"
-
 #include "hypot.c"
 
 void
@@ -12,6 +12,6 @@ cblas_ctrsv (const enum CBLAS_ORDER order, const enum CBLAS_UPLO Uplo,
              const int incX)
 {
 #define BASE float
-#include "source_trsv_c.h"
+#include <gsl/cblas/source_trsv_c.h>
 #undef BASE
 }

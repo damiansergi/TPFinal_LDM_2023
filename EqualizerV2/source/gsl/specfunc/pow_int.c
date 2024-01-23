@@ -66,7 +66,7 @@ int gsl_sf_pow_int_e(double x, int n, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_pow_int(const double x, const int n)
 {

@@ -31,7 +31,7 @@
 #include <gsl/gsl_sf_hyperg.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "tests.h"
+#include <gsl/integration/tests.h>
 
 #define SQRT15             3.8729833462074168852
 #define SQRT30             5.4772255750516611346

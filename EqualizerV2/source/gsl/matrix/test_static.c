@@ -4,4 +4,4 @@
 #define NO_INLINE
 #endif
 #define DESC " (static)"
-#include "test.c"
+#include <gsl/matrix/test.c>

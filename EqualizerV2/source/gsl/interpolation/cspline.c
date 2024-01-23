@@ -24,8 +24,8 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_vector.h>
-#include "integ_eval.h"
 #include <gsl/gsl_interp.h>
+#include <gsl/interpolation/integ_eval.h>
 
 typedef struct
 {

@@ -36,6 +36,7 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
@@ -43,7 +44,6 @@
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_randist.h>
 
-#include "error.h"
 
 static double 
 bisect (double x, double P, double a, double b, double xtol, double Ptol)

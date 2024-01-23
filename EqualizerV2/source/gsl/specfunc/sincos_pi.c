@@ -227,7 +227,7 @@ gsl_sf_cos_pi_e(const double x, gsl_sf_result *result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double
 gsl_sf_sin_pi(const double x)

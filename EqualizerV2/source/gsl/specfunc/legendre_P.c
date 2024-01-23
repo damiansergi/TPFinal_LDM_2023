@@ -42,23 +42,23 @@
 static void legendre_sqrts(const size_t lmax, double *array);
 
 #define LEGENDRE
-#include "legendre_source.c"
+#include <gsl/specfunc/legendre_source.c>
 #undef LEGENDRE
 
 #define LEGENDRE_DERIV
-#include "legendre_source.c"
+#include <gsl/specfunc/legendre_source.c>
 #undef LEGENDRE_DERIV
 
 #define LEGENDRE_DERIV_ALT
-#include "legendre_source.c"
+#include <gsl/specfunc/legendre_source.c>
 #undef LEGENDRE_DERIV_ALT
 
 #define LEGENDRE_DERIV2
-#include "legendre_source.c"
+#include <gsl/specfunc/legendre_source.c>
 #undef LEGENDRE_DERIV2
 
 #define LEGENDRE_DERIV2_ALT
-#include "legendre_source.c"
+#include <gsl/specfunc/legendre_source.c>
 #undef LEGENDRE_DERIV2_ALT
 
 /* number of P_{lm} functions for a given lmax */

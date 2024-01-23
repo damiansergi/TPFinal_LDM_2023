@@ -25,8 +25,8 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_clausen.h>
 
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
 
 static double aclaus_data[15] = {
   2.142694363766688447e+00,
@@ -103,7 +103,7 @@ int gsl_sf_clausen_e(double x, gsl_sf_result *result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_clausen(const double x)
 {

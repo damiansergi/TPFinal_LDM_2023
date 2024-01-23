@@ -32,7 +32,7 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_odeiv.h>
 
-#include "odeiv_util.h"
+#include <gsl/ode-initval/odeiv_util.h>
 
 #define SEQUENCE_COUNT 8
 #define SEQUENCE_MAX   7

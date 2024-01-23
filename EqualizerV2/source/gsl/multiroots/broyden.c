@@ -30,7 +30,7 @@
 #include <gsl/gsl_multiroots.h>
 #include <gsl/gsl_linalg.h>
 
-#include "enorm.c"
+#include <gsl/multiroots/enorm.c>
 
 /* Broyden's method. It is not an efficient or modern algorithm but
    gives an example of a rank-1 update.

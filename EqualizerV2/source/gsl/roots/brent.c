@@ -31,7 +31,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 
-#include "roots.h"
+#include <gsl/roots/roots.h>
 
 
 typedef struct

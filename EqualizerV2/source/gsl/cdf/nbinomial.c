@@ -18,12 +18,12 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_cdf.h>
 
-#include "error.h"
 
 /*
  * Pr(X <= k) for a negative binomial random variable X, i.e.,

@@ -30,7 +30,7 @@
 #include <gsl/gsl_multiroots.h>
 #include <gsl/gsl_linalg.h>
 
-#include "dogleg.c"
+#include <gsl/multiroots/dogleg.c>
 
 typedef struct
 {

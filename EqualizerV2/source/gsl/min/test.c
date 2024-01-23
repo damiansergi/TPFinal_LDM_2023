@@ -24,8 +24,8 @@
 #include <gsl/gsl_test.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "test.h"
-#include "min.h"
+#include <gsl/min/min.h>
+#include <gsl/min/test.h>
 
 /* stopping parameters */
 

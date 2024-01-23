@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <gsl/fft/hc_pass.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -25,7 +26,6 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 
-#include "hc_pass.h"
 
 int
 FUNCTION(gsl_fft_halfcomplex,backward) (BASE data[], const size_t stride, 

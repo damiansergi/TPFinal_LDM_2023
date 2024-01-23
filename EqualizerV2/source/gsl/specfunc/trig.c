@@ -25,10 +25,9 @@
 #include <gsl/gsl_sf_log.h>
 #include <gsl/gsl_sf_trig.h>
 
-#include "error.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/error.h>
 
 /* sinh(x) series
  * double-precision for |x| < 1.0
@@ -719,7 +718,7 @@ int gsl_sf_sinc_e(double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_sin(const double x)
 {

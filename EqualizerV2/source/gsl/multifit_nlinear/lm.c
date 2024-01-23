@@ -56,7 +56,7 @@ typedef struct
   gsl_multifit_nlinear_parameters params;
 } lm_state_t;
 
-#include "common.c"
+#include <gsl/multifit_nlinear/common.c>
 
 static void *lm_alloc (const int accel, const void * params, const size_t n, const size_t p);
 static void *lm_alloc_noaccel (const void * params, const size_t n, const size_t p);

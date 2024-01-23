@@ -24,32 +24,8 @@
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#include "error.h"
-
-/* Computes the cumulative distribution function for a binomial
-   random variable. For a binomial random variable X with n trials
-   and success probability p,
-   
-           Pr( X <= k ) = Pr( Y >= p )
- 
-   where Y is a beta random variable with parameters k+1 and n-k.
- 
-   The binomial distribution has the form,
-
-   prob(k) =  n!/(k!(n-k)!) *  p^k (1-p)^(n-k) for k = 0, 1, ..., n
-
-   The cumulated distributions can be expressed in terms of normalized
-   incomplete beta functions (see Abramowitz & Stegun eq. 26.5.26 and
-   eq. 6.6.3).
-
-   Reference: 
-  
-   W. Feller, "An Introduction to Probability and Its
-   Applications," volume 1. Wiley, 1968. Exercise 45, page 173,
-   chapter 6.
- */
-
 #include <config.h>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>

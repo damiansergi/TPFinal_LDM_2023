@@ -18,7 +18,7 @@
  */
 
 #include <config.h>
-#include <gsl_version.h>
+#include <gsl/gsl_version.h>
 
 /* This file needs to use the top-level <gsl_version.h> due to the
    possibility of a VPATH-style build where the original source

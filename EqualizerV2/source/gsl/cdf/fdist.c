@@ -19,14 +19,14 @@
  */
 
 #include <config.h>
+#include <gsl/cdf/beta_inc.c>
+#include <gsl/cdf/error.h>
 #include <math.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 
-#include "error.h"
-#include "beta_inc.c"
 
 /*
  * Lower tail.

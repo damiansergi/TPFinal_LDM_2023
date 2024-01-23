@@ -24,7 +24,7 @@
 #include <gsl/gsl_permutation.h>
 #include <gsl/gsl_permute_vector.h>
 
-#include "cholesky_common.c"
+#include <gsl/linalg/cholesky_common.c>
 
 /*
  * This module contains routines related to the Modified Cholesky

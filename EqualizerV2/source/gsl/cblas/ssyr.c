@@ -1,7 +1,7 @@
+#include <gsl/cblas/cblas.h>
+#include <gsl/cblas/error_cblas_l2.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cblas.h>
-#include "cblas.h"
-#include "error_cblas_l2.h"
 
 void
 cblas_ssyr (const enum CBLAS_ORDER order, const enum CBLAS_UPLO Uplo,
@@ -9,6 +9,6 @@ cblas_ssyr (const enum CBLAS_ORDER order, const enum CBLAS_UPLO Uplo,
             float *A, const int lda)
 {
 #define BASE float
-#include "source_syr.h"
+#include <gsl/cblas/source_syr.h>
 #undef BASE
 }

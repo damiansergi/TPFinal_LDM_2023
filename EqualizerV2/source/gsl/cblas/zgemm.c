@@ -1,7 +1,7 @@
+#include <gsl/cblas/cblas.h>
+#include <gsl/cblas/error_cblas_l3.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cblas.h>
-#include "cblas.h"
-#include "error_cblas_l3.h"
 
 void
 cblas_zgemm (const enum CBLAS_ORDER Order, const enum CBLAS_TRANSPOSE TransA,
@@ -11,6 +11,6 @@ cblas_zgemm (const enum CBLAS_ORDER Order, const enum CBLAS_TRANSPOSE TransA,
              const int ldc)
 {
 #define BASE double
-#include "source_gemm_c.h"
+#include <gsl/cblas/source_gemm_c.h>
 #undef BASE
 }

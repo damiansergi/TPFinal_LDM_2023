@@ -255,7 +255,7 @@ main (void)
 #define MONTE_FREE gsl_monte_plain_free
 #define MONTE_SPEEDUP 1
 #define MONTE_ERROR_TEST(err,expected) gsl_test_factor(err,expected, 5.0, NAME ", %s, abserr[%d]", I->description, i)
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -273,7 +273,7 @@ main (void)
 #define MONTE_FREE gsl_monte_miser_free
 #define MONTE_SPEEDUP 2
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 5.0 * expected, NAME ", %s, abserr[%d] (obs %g vs plain %g)", I->description, i, err, expected)
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -292,7 +292,7 @@ main (void)
 #define MONTE_FREE gsl_monte_miser_free
 #define MONTE_SPEEDUP 2
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 5.0 * expected, NAME ", %s, abserr[%d] (obs %g vs plain %g)", I->description, i, err, expected)
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -312,7 +312,7 @@ main (void)
 #define MONTE_FREE gsl_monte_miser_free
 #define MONTE_SPEEDUP 2
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 5.0 * expected, NAME ", %s, abserr[%d] (obs %g vs plain %g)", I->description, i, err, expected)
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -331,7 +331,7 @@ main (void)
 #define MONTE_FREE gsl_monte_vegas_free
 #define MONTE_SPEEDUP 3
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 3.0 * (expected == 0 ? 1.0/(I->calls/MONTE_SPEEDUP) : expected), NAME ", %s, abserr[%d] (obs %g vs exp %g)", I->description, i, err, expected) ; gsl_test(gsl_monte_vegas_chisq(s) < 0, NAME " returns valid chisq (%g)", gsl_monte_vegas_chisq(s))
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -350,7 +350,7 @@ main (void)
 #define MONTE_FREE gsl_monte_vegas_free
 #define MONTE_SPEEDUP 3
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 3.0 * (expected == 0 ? 1.0/(I->calls/MONTE_SPEEDUP) : expected), NAME ", %s, abserr[%d] (obs %g vs exp %g)", I->description, i, err, expected); gsl_test(gsl_monte_vegas_chisq(s) < 0, NAME " returns valid chisq (%g)", gsl_monte_vegas_chisq(s))
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC
@@ -370,7 +370,7 @@ main (void)
 #define MONTE_FREE gsl_monte_vegas_free
 #define MONTE_SPEEDUP 3
 #define MONTE_ERROR_TEST(err,expected) gsl_test(err > 3.0 * (expected == 0 ? 1.0/(I->calls/MONTE_SPEEDUP) : expected), NAME ", %s, abserr[%d] (obs %g vs exp %g)", I->description, i, err, expected); gsl_test(gsl_monte_vegas_chisq(s) < 0, NAME " returns valid chisq (%g)", gsl_monte_vegas_chisq(s))
-#include "test_main.c"
+#include <gsl/monte/test_main.c>
 #undef NAME
 #undef MONTE_STATE
 #undef MONTE_ALLOC

@@ -23,7 +23,7 @@
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_histogram2d.h>
 
-#include "find.c"
+#include <gsl/histogram/find.c>
 
 int
 gsl_histogram2d_pdf_sample (const gsl_histogram2d_pdf * p,

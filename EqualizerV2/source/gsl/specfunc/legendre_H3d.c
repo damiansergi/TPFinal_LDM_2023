@@ -27,9 +27,8 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_legendre.h>
 
-#include "error.h"
-
-#include "legendre.h"
+#include <gsl/specfunc/error.h>
+#include <gsl/specfunc/legendre.h>
 
 /* See [Abbott+Schaefer, Ap.J. 308, 546 (1986)] for
  * enough details to follow what is happening here.
@@ -550,7 +549,7 @@ gsl_sf_legendre_H3d_array(const int lmax, const double lambda, const double eta,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_legendre_H3d_0(const double lambda, const double eta)
 {

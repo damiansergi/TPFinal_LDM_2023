@@ -386,20 +386,20 @@ double vander12_solution[] = {0.0, 0.0, 0.0, 0.0,
 
 gsl_matrix * moler10;
 
-#include "test_common.c"
-#include "test_cholesky.c"
-#include "test_choleskyc.c"
-#include "test_cod.c"
-#include "test_ldlt.c"
-#include "test_lu.c"
-#include "test_luc.c"
-#include "test_lu_band.c"
-#include "test_lq.c"
-#include "test_tri.c"
-#include "test_ql.c"
-#include "test_qr.c"
-#include "test_qrc.c"
-#include "test_qr_band.c"
+#include <gsl/linalg/test_common.c>
+#include <gsl/linalg/test_cholesky.c>
+#include <gsl/linalg/test_choleskyc.c>
+#include <gsl/linalg/test_cod.c>
+#include <gsl/linalg/test_ldlt.c>
+#include <gsl/linalg/test_lu.c>
+#include <gsl/linalg/test_luc.c>
+#include <gsl/linalg/test_lu_band.c>
+#include <gsl/linalg/test_lq.c>
+#include <gsl/linalg/test_tri.c>
+#include <gsl/linalg/test_ql.c>
+#include <gsl/linalg/test_qr.c>
+#include <gsl/linalg/test_qrc.c>
+#include <gsl/linalg/test_qr_band.c>
 
 int
 test_QR_solve_dim(const gsl_matrix * m, const double * actual, double eps)

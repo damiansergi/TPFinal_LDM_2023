@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "complex_internal.h"
+#include <gsl/fft/complex_internal.h>
 
 static void
 FUNCTION(fft_halfcomplex,pass_2) (const BASE in[],

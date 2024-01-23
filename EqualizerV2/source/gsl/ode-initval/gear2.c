@@ -26,8 +26,8 @@
 #include <string.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
-#include "odeiv_util.h"
 #include <gsl/gsl_odeiv.h>
+#include <gsl/ode-initval/odeiv_util.h>
 
 
 /* gear2 state object */

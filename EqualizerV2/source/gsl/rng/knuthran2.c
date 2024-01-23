@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
 
-#include "schrage.c"
+#include <gsl/rng/schrage.c>
 
 #define AA1      271828183UL
 #define AA2     1833324378UL    /* = -314159269 mod (2 ^ 31 -1) */

@@ -17,9 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "bitreverse.h"
-#include "signals.h"
-#include "compare.h"
+#include <gsl/fft/bitreverse.h>
+#include <gsl/fft/compare.h>
+#include <gsl/fft/signals.h>
 
 void FUNCTION(test_complex,func) (size_t stride, size_t n);
 int FUNCTION(test,offset) (const BASE data[], size_t stride, 

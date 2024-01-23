@@ -25,11 +25,10 @@
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_bessel.h>
 
-#include "error.h"
-
-#include "bessel.h"
-#include "bessel_amp_phase.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/bessel.h>
+#include <gsl/specfunc/bessel_amp_phase.h>
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -114,7 +113,7 @@ int gsl_sf_bessel_Y0_e(const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_bessel_Y0(const double x)
 {

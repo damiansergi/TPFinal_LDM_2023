@@ -66,7 +66,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_min.h>
 
-#include "min.h"
+#include <gsl/min/min.h>
 
 #define REL_ERR_VAL   1.0e-06
 #define ABS_ERR_VAL   1.0e-10

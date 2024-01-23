@@ -23,7 +23,7 @@
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_histogram2d.h>
 
-#include "find2d.c"
+#include <gsl/histogram/find2d.c>
 
 int
 gsl_histogram2d_increment (gsl_histogram2d * h, double x, double y)

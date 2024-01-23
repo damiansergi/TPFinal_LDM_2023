@@ -28,8 +28,8 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_hyperg.h>
 
-#include "error.h"
-#include "check.h"
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 static double
 isnegint (const double x) 
@@ -202,7 +202,7 @@ gsl_sf_beta_inc_e(
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_beta_inc(const double a, const double b, const double x)
 {

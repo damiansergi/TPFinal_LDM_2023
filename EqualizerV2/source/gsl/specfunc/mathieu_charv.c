@@ -877,7 +877,7 @@ int gsl_sf_mathieu_b_array(int order_min, int order_max, double qq, gsl_sf_mathi
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"                                                          
+#include <gsl/specfunc/eval.h>                                                          
 
 double gsl_sf_mathieu_a(int order, double qq)
 {

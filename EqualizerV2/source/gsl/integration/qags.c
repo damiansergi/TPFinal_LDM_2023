@@ -22,14 +22,14 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "initialise.c"
-#include "set_initial.c"
-#include "qpsrt.c"
-#include "util.c"
-#include "reset.c"
-#include "qpsrt2.c"
-#include "qelg.c"
-#include "positivity.c"
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/positivity.c>
+#include <gsl/integration/qelg.c>
+#include <gsl/integration/qpsrt.c>
+#include <gsl/integration/qpsrt2.c>
+#include <gsl/integration/reset.c>
+#include <gsl/integration/set_initial.c>
+#include <gsl/integration/util.c>
 
 static int qags (const gsl_function * f, const double a, const double
   b, const double epsabs, const double epsrel, const size_t limit,

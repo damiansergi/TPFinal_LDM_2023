@@ -24,7 +24,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_airy.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 static const double zero_Ai[] = {
   0,
@@ -523,7 +523,7 @@ gsl_sf_airy_zero_Bi_deriv_e(unsigned int s, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_airy_zero_Ai(unsigned int s)
 {

@@ -77,34 +77,34 @@ struct fzreal
 
 struct f list[] =
 {
-#include "results1.h"
+#include <gsl/complex/results1.h>
   {"", 0, 0, 0, 0, 0}
 };
 
 
 struct fz listz[] =
 {
-#include "results.h"
+#include <gsl/complex/results.h>
   {"", 0, 0, 0, 0, 0}
 };
 
 struct fzz listzz[] =
 {
   {FN (pow), ARG(0.0,0.0), ARG(0.0,0.0), RES(1.0, 0.0)},
-#include "results2.h"
+#include <gsl/complex/results2.h>
   {"", 0, 0, 0, 0, 0, 0, 0}
 };
 
 struct freal listreal[] =
 {
-#include "results_real.h"
+#include <gsl/complex/results_real.h>
   {"", 0, 0, 0, 0}
 };
 
 
 struct fzreal listzreal[] =
 {
-#include "results_zreal.h"
+#include <gsl/complex/results_zreal.h>
   {"", 0, 0, 0, 0, 0, 0}
 };
 

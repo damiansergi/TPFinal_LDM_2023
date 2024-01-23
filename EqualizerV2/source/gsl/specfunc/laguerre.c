@@ -27,7 +27,7 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_laguerre.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -312,7 +312,7 @@ gsl_sf_laguerre_n_e(const int n, const double a, const double x, gsl_sf_result *
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_laguerre_1(double a, double x)
 {

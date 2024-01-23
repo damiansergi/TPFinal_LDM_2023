@@ -20,8 +20,8 @@
 #include <config.h>
 #include <gsl/gsl_ieee_utils.h>
 
-#include "endian.c"
-#include "standardize.c"
+#include <gsl/ieee-utils/endian.c>
+#include <gsl/ieee-utils/standardize.c>
 
 static void sprint_nybble(int i, char *s) ;
 static void sprint_byte(int i, char *s) ;

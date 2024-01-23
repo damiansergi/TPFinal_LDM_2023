@@ -40,7 +40,7 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_coulomb.h>
 
-#include "error.h"
+#include <gsl/specfunc/error.h>
 
 /* the L=0 normalization constant
  * [Abramowitz+Stegun 14.1.8]

@@ -25,11 +25,10 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_debye.h>
 
-#include "error.h"
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 static double adeb1_data[17] = {
    2.4006597190381410194,
@@ -533,7 +532,7 @@ int gsl_sf_debye_6_e(const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_debye_1(const double x)
 {

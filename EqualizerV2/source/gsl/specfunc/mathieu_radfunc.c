@@ -472,7 +472,7 @@ int gsl_sf_mathieu_Ms_array(int kind, int nmin, int nmax, double qq,
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"                                                           
+#include <gsl/specfunc/eval.h>                                                           
 
 double gsl_sf_mathieu_Mc(int kind, int order, double qq, double zz)
 {

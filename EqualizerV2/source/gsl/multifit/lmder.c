@@ -67,10 +67,10 @@ static int lmder_iterate (void *vstate, const gsl_vector * swts, gsl_multifit_fu
 static void lmder_free (void *vstate);
 static int iterate (void *vstate, const gsl_vector * swts, gsl_multifit_function_fdf * fdf, gsl_vector * x, gsl_vector * f, gsl_vector * dx, int scale);
 
-#include "lmutil.c"
-#include "lmpar.c"
-#include "lmset.c"
-#include "lmiterate.c"
+#include <gsl/multifit/lmutil.c>
+#include <gsl/multifit/lmpar.c>
+#include <gsl/multifit/lmset.c>
+#include <gsl/multifit/lmiterate.c>
 
 
 static int

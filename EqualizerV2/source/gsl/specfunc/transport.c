@@ -24,11 +24,10 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_transport.h>
 
-#include "error.h"
-#include "check.h"
-
-#include "chebyshev.h"
-#include "cheb_eval.c"
+#include <gsl/specfunc/cheb_eval.c>
+#include <gsl/specfunc/chebyshev.h>
+#include <gsl/specfunc/check.h>
+#include <gsl/specfunc/error.h>
 
 static double transport2_data[18] = {
    1.671760446434538503,
@@ -469,7 +468,7 @@ gsl_sf_transport_5_e(const double x, gsl_sf_result * result)
 
 /*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
 
-#include "eval.h"
+#include <gsl/specfunc/eval.h>
 
 double gsl_sf_transport_2(const double x)
 {

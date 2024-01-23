@@ -31,9 +31,9 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include "odeiv_util.h"
-#include "rksubs.c"
-#include "modnewton1.c"
+#include <gsl/ode-initval2/modnewton1.c>
+#include <gsl/ode-initval2/odeiv_util.h>
+#include <gsl/ode-initval2/rksubs.c>
 
 /* Stage of method */
 #define RK1IMP_STAGE 1

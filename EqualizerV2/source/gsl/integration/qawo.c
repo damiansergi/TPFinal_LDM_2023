@@ -24,16 +24,15 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
 
-#include "initialise.c"
-#include "set_initial.c"
-#include "reset.c"
-#include "qpsrt.c"
-#include "util.c"
-#include "qpsrt2.c"
-#include "qelg.c"
-#include "positivity.c"
-
-#include "qc25f.c"
+#include <gsl/integration/initialise.c>
+#include <gsl/integration/positivity.c>
+#include <gsl/integration/qc25f.c>
+#include <gsl/integration/qelg.c>
+#include <gsl/integration/qpsrt.c>
+#include <gsl/integration/qpsrt2.c>
+#include <gsl/integration/reset.c>
+#include <gsl/integration/set_initial.c>
+#include <gsl/integration/util.c>
 
 int
 gsl_integration_qawo (gsl_function * f,

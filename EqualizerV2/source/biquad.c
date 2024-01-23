@@ -10,6 +10,7 @@
 
 #include "biquad.h"
 #include <math.h>
+#include "gsl-2.7.1/matrix/gsl_matrix.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -119,7 +120,6 @@ float computeFilters(float x)
   return output;
 }
 
-// Cambiar funcion para recibir un vector de ganancias para no tener que poner un indice de filtro
 void setGain(uint8_t filterID, uint8_t value) // value in dB
 {
   t[filterID] = value;

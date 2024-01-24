@@ -59,10 +59,10 @@ void App_Init(void)
     gpioMode(PIN_LED_BLUE, OUTPUT);
     gpioMode(PIN_LED_RED, OUTPUT);
     gpioMode(PIN_LED_GREEN, OUTPUT);
-
     gpioWrite(PIN_LED_BLUE, HIGH);
     gpioWrite(PIN_LED_RED, HIGH);
     gpioWrite(PIN_LED_GREEN, HIGH);
+
 
     uartInit(0, uartConfig);
 
@@ -124,11 +124,13 @@ void App_Run(void)
  *******************************************************************************
  ******************************************************************************/
 
+/*
 static void delayLoop(uint32_t veces)
 {
     while (veces--)
         ;
 }
+*/
 
 /*******************************************************************************
  ******************************************************************************/

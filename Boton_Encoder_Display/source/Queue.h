@@ -20,7 +20,7 @@
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-typedef uint8_t queuedata_t; // Queuedata podria ser en principio 8 bits. Cambiarlo despues de ver que funciona
+typedef uint8_t queuedata_t;
 typedef struct Queue
 {
   queuedata_t buffer[BUFFER_SIZE + 1];

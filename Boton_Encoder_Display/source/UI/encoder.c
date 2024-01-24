@@ -52,7 +52,7 @@ static void RCHA_CB(void)
 
 	if (gpioRead(RCHB_PIN))
 	{
-		gpioToggle(PIN_LED_GREEN);
+		// gpioToggle(PIN_LED_GREEN);	DEBUG
 		putEvent(EncoderLeft);
 	}
 
@@ -68,7 +68,7 @@ static void RCHB_CB(void)
 
 	if (gpioRead(RCHA_PIN))
 	{
-		gpioToggle(PIN_LED_BLUE);
+		// gpioToggle(PIN_LED_BLUE);	DEBUG
 		putEvent(EncoderRight);
 	}
 

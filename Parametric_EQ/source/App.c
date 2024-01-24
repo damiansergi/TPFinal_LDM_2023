@@ -33,8 +33,8 @@ static void delay();
 /* Función que se llama 1 vez, al comienzo del programa */
 void App_Init(void)
 {
-	initVumeter();
-	//initLEDMatrix();
+	//initVumeter();
+	initLEDMatrix();
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
@@ -46,18 +46,16 @@ void App_Run(void)
 	color_t colorcito;
 	colorcito.hex = 0x0000FF;
 
-	for(int i = 0; i < 8; i++){
-		selectBar(i);
-		for(int j = 0; j <= MAXLEVEL; j++){
-			delay();
-			setLevel(j);
-			delay();
-		}
-	}
+//	for(int i = 5; i < 8; i++){
+//		selectBar(i);
+//		delay();
+//		setLevel(MAXLEVEL);
+//		delay();
+//	}
 
-//	delay();
-//	hearth();
-//	delay();
+	delay();
+	hearth();
+	delay();
 
 //	starx = rand()%8;
 //	stary = rand()%8;
@@ -81,7 +79,7 @@ void App_Run(void)
 }
 
 static void delay(){
-	uint32_t time = 16000000;
+	uint32_t time = 4000000;
 	while(time--);
 }
 

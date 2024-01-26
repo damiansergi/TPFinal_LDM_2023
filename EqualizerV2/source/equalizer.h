@@ -12,14 +12,21 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
+#include "biquad.h"
+
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
+
+#define DECREASE (0)
+#define INCREASE (1)
 
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
+
+enum{rock, pop};
 
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
@@ -34,8 +41,15 @@
  * @param pin the pin whose mode you wish to set (according PORTNUM2PIN)
  * @param mode INPUT, OUTPUT, INPUT_PULLUP or INPUT_PULLDOWN.
  */
-float computeFilters(float nextInput);
+void initEqualizer();
 
+void changeGain(uint8_t filterID, bool direction);
+
+float processEqualizer(float sample);
+
+void changePreset(uint8_t preset);
+
+/* TODO: POR AHI FALTA HACER UNA FUNCION PARA BORRAR LOS DATOS DEL EQUALIZADOR DE LA CANCION ANTERIOR POR UN TEMA DE CAUSALIDAD*/
 
 /*******************************************************************************
  ******************************************************************************/

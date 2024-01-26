@@ -10,7 +10,7 @@
 
 #include "gpio.h"
 #include "board.h"
-#include "biquad.h"
+#include "equalizer.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -18,8 +18,8 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 
-#define FREQ (80)
-#define PERIODS (2.0f)
+#define FREQ (34)
+#define PERIODS (3.0f)
 #define AMPLITUDE (1.0f)
 #define SAMPLERATE (44100)
 #define SIZE (10000)
@@ -44,7 +44,7 @@ static int reserved = 0;
 /* Función que se llama 1 vez, al comienzo del programa */
 void App_Init(void)
 {
-	initFilters();
+	initEqualizer();
 
 	reserved = generateWave(signal, FREQ);
 }
@@ -54,10 +54,10 @@ void App_Run(void)
 {
 
 	for(int i = 0; i < reserved; i++){
-		output[i] = computeFilters(signal[i]);
+		output[i] = processEqualizer(signal[i]);
 	}
 
-	resetFilters();
+	changePreset(rock);
 }
 
 /*******************************************************************************

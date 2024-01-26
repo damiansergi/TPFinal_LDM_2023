@@ -130,7 +130,7 @@ void button1_ISR(void){
 		putEvent(ButtonLine);
 
 		//DEBUG
-		gpioToggle(PIN_LED_BLUE);
+		//gpioToggle(PIN_LED_BLUE);
 	}
 	else if (lastButtonState == LOW && state == HIGH){
 
@@ -155,7 +155,7 @@ void button2_ISR(void){
 		putEvent(ButtonPoint);
 
 		//DEBUG
-		gpioToggle(PIN_LED_RED);
+		//gpioToggle(PIN_LED_RED);
 	}
 	else if (lastButtonState == LOW && state == HIGH){
 
@@ -180,7 +180,7 @@ void button3_ISR(void){
 		putEvent(ButtonCross);
 
 		//DEBUG
-		gpioToggle(PIN_LED_GREEN);
+		//gpioToggle(PIN_LED_GREEN);
 	}
 	else if (lastButtonState == LOW && state == HIGH){
 
@@ -205,7 +205,7 @@ void buttonEncoder_ISR(void){
 			putEvent(EncoderClick);
 
 			//DEBUG
-			gpioToggle(PIN_LED_RED);
+			//gpioToggle(PIN_LED_RED);
 		}
 		else if (lastButtonState == LOW && state == HIGH){
 

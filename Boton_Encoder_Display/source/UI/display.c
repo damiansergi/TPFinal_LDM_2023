@@ -4,7 +4,6 @@
   @author	Grupo 3
  ******************************************************************************/
 
-//TODO: Importante, optimizar el tema de los delays.
 
 /*******************************************************************************
  * INCLUDE HEADER FILES
@@ -12,6 +11,7 @@
 
 #include "..\config.h"
 #include "..\I2C.h"
+#include "..\Queue.h"
 #include "display.h"
 #include "timer.h"
 #include <string.h>
@@ -22,6 +22,7 @@
 
 #define WriteDriverByteIIC(args) i2cWriteSlave(0, DISPLAY_ADDR, (args) , 1)
 #define NOCHARACTER 32
+#define SENDINGTIME 1 //ms
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
@@ -45,6 +46,7 @@ void command(uint8_t data);
 void write4bits(uint8_t * value);
 void DelayInit(uint32_t delay);
 void DisplayPeriodicISR();
+void displaySendPeriodicISR();
 
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
@@ -71,6 +73,9 @@ static uint8_t offsetCursor = 0; //Este es el cursor que se mueve dentro de la p
 static uint8_t upperCharCant = 16;
 
 uint8_t displayTimer = 0;
+uint8_t displayDataTimer = 0;
+
+static queue_t displayDataBuffer = {{0}, 0, 0, false, true};
 
 /*******************************************************************************
  *******************************************************************************
@@ -81,190 +86,88 @@ uint8_t displayTimer = 0;
 
 void initDisplay() {
 
+	//Empiezo a usar send por eso ya arranco el timer displayDataTimer
+	displayDataTimer = createTimer_SYS(SENDINGTIME, displaySendPeriodicISR, PERIODIC);
+	startTimer_SYS(displayDataTimer);
+
 	_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
+	uint8_t zero = 0;
 
 	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
 	// according to datasheet, we need at least 40ms after power rises above 2.7V
-	// before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
+	// before sending commands. Arduino can turn on way befer 4.5V so we'll wait 100ms
+	DelayInit(1428572UL);
 
-	DelayInit(20000000UL);
-
-	// Now we pull both RS and R/W low to begin commands
-	uint8_t word_msg = 0;
-	WriteDriverByteIIC(&word_msg);	// reset expanderand turn backlight off (Bit 8 =1)
-	DelayInit(2000000UL);
-
-	//put the LCD into 4 bit mode
+	// put the LCD into 4 bit mode
 	// this is according to the hitachi HD44780 datasheet
 	// figure 24, pg 46
 
-	 // we start in 8bit mode, try to set 4 bit mode
-	word_msg = 0x03 << 4;
+	// we start in 8bit mode, try to set 4 bit mode
+	uint8_t word_msg = 0x03 << 4;
 	WriteDriverByteIIC(&word_msg);
-	DelayInit(2000000UL); // wait min 4.1ms
+	DelayInit(59000UL); // wait more than 4.1ms
 
-    // second try
+	WriteDriverByteIIC(&zero);
+	DelayInit(2000UL); // wait more than 100us
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL); // wait min 4.1ms
+    DelayInit(2000UL); // wait more than 100us
 
-    // third go!
+    WriteDriverByteIIC(&zero);
+    DelayInit(2000UL); // wait more than 100us
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(1500UL);
 
     // finally, set to 4-bit interface
     word_msg = 0x02 << 4;
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(58572UL);
 
-
-	// Esta es la secuencia de inicializacion que uso nico, funciona
-	word_msg = 0x02;
-	WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    word_msg = 0x28;	//Function Set
+    WriteDriverByteIIC(&zero);
+    DelayInit(58572UL);
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(58572UL);
 
-    word_msg = 0x0C;	//DisplayON
+    word_msg = LCD_FUNCTIONSET | _displayfunction;
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(58572UL);
 
-    word_msg = 0x06;	//Incremento a la derecha el cursor luego de usarlo
+    WriteDriverByteIIC(&zero);
+    DelayInit(58572UL);
+
+    word_msg = 0x08 << 4;
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(58572UL);
 
-    word_msg = 0x01;	//Clear del display
+    WriteDriverByteIIC(&zero);
+    DelayInit(58572UL);
+
+    word_msg = 0x01 << 4;
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
+    DelayInit(58572UL);
 
+    WriteDriverByteIIC(&zero);
+    DelayInit(58572UL);
 
-	// set # lines, font size, etc.
-	command(LCD_FUNCTIONSET | _displayfunction);
-
-	// turn the display on with no cursor or blinking default
-	_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
-	DisplayDisplay();
-
-	// clear it off
-	DisplayClear();
-
-	// Initialize to default text direction (for roman languages)
-	_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-
-	// set the entry mode
-	command(LCD_ENTRYMODESET | _displaymode);
-
-	DisplayHome();
-
-
-	/*
-	 *
-	 * EXPERIMENTAL Repito el código de arriba para ver si ahora no da error al inicializarse
-	 *
-	 */
-
-	_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
-
-	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-	// according to datasheet, we need at least 40ms after power rises above 2.7V
-	// before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
-
-	DelayInit(20000000UL);
-
-	// Now we pull both RS and R/W low to begin commands
-	word_msg = 0;
-	WriteDriverByteIIC(&word_msg);	// reset expanderand turn backlight off (Bit 8 =1)
-	DelayInit(2000000UL);
-
-	//put the LCD into 4 bit mode
-	// this is according to the hitachi HD44780 datasheet
-	// figure 24, pg 46
-
-	 // we start in 8bit mode, try to set 4 bit mode
-	word_msg = 0x03 << 4;
-	WriteDriverByteIIC(&word_msg);
-	DelayInit(2000000UL); // wait min 4.1ms
-
-    // second try
+    word_msg = LCD_ENTRYMODESET | _displaymode | _backlightval;
     WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL); // wait min 4.1ms
+    DelayInit(58572UL);
 
-    // third go!
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    // finally, set to 4-bit interface
-    word_msg = 0x02 << 4;
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-
-	// Esta es la secuencia de inicializacion que uso nico, funciona
-	word_msg = 0x02;
-	WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    word_msg = 0x28;	//Function Set
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    word_msg = 0x0C;	//DisplayON
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    word_msg = 0x06;	//Incremento a la derecha el cursor luego de usarlo
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-    word_msg = 0x01;	//Clear del display
-    WriteDriverByteIIC(&word_msg);
-    DelayInit(2000000UL);
-
-
-	// set # lines, font size, etc.
-	command(LCD_FUNCTIONSET | _displayfunction);
-
-	// turn the display on with no cursor or blinking default
-	_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
-	DisplayDisplay();
-
-	// clear it off
-	DisplayClear();
-
-	// Initialize to default text direction (for roman languages)
-	_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-
-	// set the entry mode
-	command(LCD_ENTRYMODESET | _displaymode);
-
-	DisplayHome();
-
-
-	/*
-	 *
-	 * EXPERIMENTAL: fin
-	 *
-	 */
-
-
-
-	displayTimer = createTimer_SYS(REFRESHTIME, DisplayPeriodicISR, PERIODIC);
-	startTimer_SYS(displayTimer);
+    displayTimer = createTimer_SYS(REFRESHTIME, DisplayPeriodicISR, PERIODIC);
+    startTimer_SYS(displayTimer);
 }
 
 
 void DisplayClear(){
 	command(LCD_CLEARDISPLAY);// clear display, set cursor position to zero
 
-	DelayInit(100000UL);
+	DelayInit(22142UL);
 	// delayMicroseconds(2000);  // this command takes a long time!
 }
 
 void DisplayHome(){
 	command(LCD_RETURNHOME);  // set cursor position to zero
 
-	DelayInit(100000UL);
+	DelayInit(22142UL);
 	//delayMicroseconds(2000);  // this command takes a long time!
 }
 
@@ -388,7 +291,7 @@ void DisplayPeriodicISR(){
 		send(upperLine[i  + offsetCursor], DATA_Rs);
 		i++;
 	}
-	if (i<16){	//Relleno el display con nada, (borro lo que estaba antes)
+	if (i<16){	//Relleno el resto del display con nada, (borro lo que estaba antes)
 		while (i<16){
 			send(NOCHARACTER, DATA_Rs);
 			i++;
@@ -418,6 +321,36 @@ void DisplayPeriodicISR(){
 	}
 }
 
+void displaySendPeriodicISR(){
+
+	static int sendingState = 0;
+	static uint8_t wordSend;
+
+	//Primero lo mando sin el enable, y después pulseando el enable. No sé porque... la libreria lo hace asi
+
+	switch(sendingState){
+	case 0:
+		if (getFillLevel(&displayDataBuffer) != 0){
+			wordSend = getNext(&displayDataBuffer);
+			WriteDriverByteIIC(&wordSend);
+			sendingState=1;
+		}
+	break;
+	case 1:
+		wordSend |= En;
+		WriteDriverByteIIC(&wordSend);
+		sendingState=2;
+	break;
+	case 2:
+		wordSend &= ~En;
+		WriteDriverByteIIC(&wordSend);
+		sendingState = 0;
+	break;
+	default:
+
+	break;
+	}
+}
 
 /*******************************************************************************
  *******************************************************************************
@@ -429,6 +362,16 @@ void DisplayPeriodicISR(){
 
 void send(uint8_t data, uint8_t mode){
 
+	//Primero mando el nibble alto y después el bajo.
+
+	uint8_t highnib= (data&0xf0) | mode | _backlightval;
+	uint8_t lownib= ((data<<4)&0xf0) |mode | _backlightval;
+
+	put(&displayDataBuffer, highnib);
+	put(&displayDataBuffer, lownib);
+
+
+	/*	OLD SEND FUNCTION
 	uint8_t highnib= (data&0xf0) | mode | _backlightval;
 	uint8_t lownib= ((data<<4)&0xf0) |mode | _backlightval;
 
@@ -454,6 +397,8 @@ void send(uint8_t data, uint8_t mode){
 	lownib &= ~En;
 	WriteDriverByteIIC(&lownib);
 	DelayInit(1500UL);
+
+	*/
 }
 
 void command(uint8_t data){

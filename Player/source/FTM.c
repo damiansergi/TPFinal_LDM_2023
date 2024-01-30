@@ -8,7 +8,6 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 #include "FTM.h"
-#include "gpio.h"
 #include "MK64F12.h"
 #include <stdlib.h>
 #include <stdint.h>

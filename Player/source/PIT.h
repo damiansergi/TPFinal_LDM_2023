@@ -18,7 +18,7 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 
-#define MAXTIMERS (4)
+#define MAXTIMERS (3)
 #define MAXCOUNT ((float)(4294967296 / __CORE_CLOCK__ / 2))
 
 /*******************************************************************************

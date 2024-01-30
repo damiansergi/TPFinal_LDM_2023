@@ -1,8 +1,8 @@
-
+#include <stdlib.h>
 #include "MK64F12.h"
 #include "hardware.h"
 #include "PIT.h"
-#include "gpio.h"
+
 
 #define REFERENCE ((float)(0.02))
 
@@ -22,7 +22,6 @@ void initPIT()
 	NVIC_EnableIRQ(PIT0_IRQn);
 	NVIC_EnableIRQ(PIT1_IRQn);
 	NVIC_EnableIRQ(PIT2_IRQn);
-	NVIC_EnableIRQ(PIT3_IRQn);
 
 	//	gpioMode(PORTNUM2PIN(PC, 7), OUTPUT);
 	//	gpioMode(PORTNUM2PIN(PC, 0), OUTPUT);
@@ -128,13 +127,4 @@ void PIT2_IRQHandler(void)
 	NVIC_ClearPendingIRQ(PIT2_IRQn);
 }
 
-void PIT3_IRQHandler(void)
-{
 
-	PIT->CHANNEL[3].TFLG = PIT_TFLG_TIF(1);
-	if (timer[3].callback != NULL)
-	{
-		timer[3].callback();
-	}
-	NVIC_ClearPendingIRQ(PIT3_IRQn);
-}

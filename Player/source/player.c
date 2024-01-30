@@ -9,6 +9,8 @@
  ******************************************************************************/
 #include "player.h"
 #include "fsl_dac.h"
+#include "fsl_pit.h"
+#include "fsl_edma.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -19,6 +21,8 @@
 #include "fsl_sysmpu.h"
 #include "MK64F12.h"
 #include "MP3Dec.h"
+#include "peripherals.h"
+#include <stdio.h>
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
@@ -40,7 +44,6 @@ typedef enum _PlayerStates
     DECODING,
     WAITING_TO_DECODE,
     FILTERING,
-    WAITING_FOR_SONG,
     STOPPED,
     PAUSED,
 
@@ -48,7 +51,14 @@ typedef enum _PlayerStates
 /*******************************************************************************
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
-
+// /* Source address extern definition */
+// extern uint16_t *srcAddrPing;
+// /* Source address extern definition */
+// extern uint16_t *srcAddrPong;
+// /* Transactional transfer configuration */
+// extern edma_transfer_config_t DMA_CH0_PING_config;
+// /* Transactional transfer configuration */
+// extern edma_transfer_config_t DMA_CH0_PONG_config;
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
@@ -71,9 +81,14 @@ static dac_config_t dac_conf = {kDAC_ReferenceVoltageSourceVref2, false};
 static FATFS g_fileSystem; /* File system object */
 
 static PlayerStates_t state = STARTING;
+static PlayerStates_t pausePrevState = WAITING_TO_DECODE;
 static FRESULT error;
 
 static song_node_t *currentSong = NULL;
+
+uint16_t pingBuffer[1152] = {2048};
+uint16_t pongBuffer[1152] = {2048};
+static uint16_t *currBuffPlaying = pingBuffer;
 
 static const TCHAR driverNumberBuffer[3U] = {SDDISK + '0', ':', '/'};
 volatile bool failedFlag = false;
@@ -89,26 +104,96 @@ BYTE work[FF_MAX_SS];
 
 bool playerInit()
 {
-    BOARD_InitPins();
     BOARD_BootClockRUN();
+    BOARD_InitPeripherals();
+    BOARD_InitPins();
     BOARD_InitDebugConsole();
     SYSMPU_Enable(SYSMPU, false);
     initList();
     MP3DecInit();
 
-    // DAC Configuration
-    DAC_Init(DAC0, &dac_conf);
-    DAC_Enable(DAC0, true);
-    DAC_EnableBuffer(DAC0, false);
-
     return true;
 }
 
-bool play();
-bool stop();
-bool pause();
-bool nextSong();
-bool prevSong();
+bool play()
+{
+    switch (state)
+    {
+    case STOPPED:
+        if (currentSong == NULL)
+        {
+            return true;
+        }
+        MP3SelectSong(currentSong);
+
+        EDMA_AbortTransfer(&DMA_CH3_Handle);
+        uint32_t decodedSamples = MP3DecDecode(pingBuffer);
+
+        // TODO: Aca va filtrado
+        DMA_CH0_PING_config.majorLoopCounts = decodedSamples * 2;
+        EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
+        currBuffPlaying = pingBuffer;
+
+        EDMA_StartTransfer(&DMA_CH3_Handle);
+        PIT_StartTimer(PIT, kPIT_Chnl_3);
+
+        state = DECODING;
+        break;
+    case PAUSED:
+        PIT_StartTimer(PIT, kPIT_Chnl_3);
+        state = pausePrevState;
+        break;
+    default:
+        false;
+        break;
+    }
+}
+
+bool stop()
+{
+    PIT_StopTimer(PIT, kPIT_Chnl_3);
+    state = STOPPED;
+}
+
+bool pause()
+{
+    PIT_StopTimer(PIT, kPIT_Chnl_3);
+    pausePrevState = state;
+    state = PAUSED;
+}
+
+bool nextSong()
+{
+    stop();
+    if (getListTail() == currentSong->next)
+    {
+        currentSong = getListHead()->next;
+    }
+    else
+    {
+        currentSong = currentSong->next;
+    }
+
+    play();
+    return false;
+}
+
+bool prevSong()
+{
+    stop();
+    if (getListHead() == currentSong->prev)
+    {
+        currentSong = getListTail();
+    }
+    else
+    {
+        currentSong = currentSong->prev;
+    }
+
+    play();
+    return false;
+}
+
 bool adjustVolume(float vol);
 
 song_node_t *getSongList()
@@ -118,16 +203,16 @@ song_node_t *getSongList()
 
 bool selectSong(song_node_t *song)
 {
-    if (!playingMusic)
+    switch (state)
     {
+    case STOPPED:
         currentSong = song;
+        MP3SelectSong(currentSong);
         return false;
-    }
-    else
-    {
-        stop();
-        currentSong = song;
-        play();
+        break;
+
+    default:
+        break;
     }
 
     return true;
@@ -137,6 +222,7 @@ void getSongInfo(song_node_t *node);
 
 player_msg_t updatePlayer()
 {
+    static uint32_t decodedSamples = 0;
     switch (state)
     {
     case STARTING:
@@ -188,19 +274,43 @@ player_msg_t updatePlayer()
         // Read MP· files on SD
         readMP3Files("");
         selectSong(getListHead()->next);
-        MP3SelectSong(currentSong);
         state = STOPPED;
         break;
 
     case DECODING:
-        // Decode the first song using helix mp3 decoder and play it
-        MP3DecDecode();
+        if (currBuffPlaying == pingBuffer)
+        {
+            decodedSamples = MP3DecDecode(pongBuffer);
+            if (decodedSamples == 0)
+            {
+                nextSong();
+                return 0;
+            }
+
+            // TODO: Aca va filtrado
+            DMA_CH0_PONG_config.majorLoopCounts = decodedSamples * 2;
+            EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PONG_config);
+        }
+        else
+        {
+            decodedSamples = MP3DecDecode(pingBuffer);
+            if (decodedSamples == 0)
+            {
+                nextSong();
+                return 0;
+            }
+
+            // TODO: Aca va filtrado
+            DMA_CH0_PING_config.majorLoopCounts = decodedSamples * 2;
+            EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
+        }
+
+        state = WAITING_TO_DECODE;
+
         break;
 
     case WAITING_TO_DECODE:
-        break;
-
-    case FILTERING:
+        doNothing();
         break;
 
     case STOPPED:
@@ -221,6 +331,23 @@ player_msg_t updatePlayer()
                         LOCAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
+
+/* DMA channel DMA_CH3 callback function */
+void DMA_callback(edma_handle_t *handle, void *data, bool, uint32_t)
+{
+    if (state == WAITING_TO_DECODE)
+    {
+        if (currBuffPlaying == pingBuffer)
+        {
+            currBuffPlaying = pongBuffer;
+        }
+        else
+        {
+            currBuffPlaying = pingBuffer;
+        }
+        state = DECODING;
+    }
+}
 
 void doNothing(void)
 {

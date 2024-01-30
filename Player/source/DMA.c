@@ -76,6 +76,7 @@ void DMA_Init()
 	NVIC_ClearPendingIRQ(DMA0_IRQn);
 	/* Enable the DMA interrupts. */
 	NVIC_EnableIRQ(DMA0_IRQn);
+	NVIC_EnableIRQ(DMA3_IRQn);
 }
 
 void DMA_StartTransfer(DMAChannel_t chn)
@@ -89,7 +90,7 @@ void DMAMUX_ConfigChannel(DMAChannel_t chn, bool enable, bool trigger, dma_reque
 	DMAMUX0->CHCFG[chn] = DMAMUX_CHCFG_ENBL(enable) + DMAMUX_CHCFG_SOURCE(source) + DMAMUX_CHCFG_TRIG(trigger);
 }
 
-void DMA_SetChannelInterrupt(DMAChannel_t chn, bool mode,callback_t cb)
+void DMA_SetChannelInterrupt(DMAChannel_t chn, bool mode, callback_t cb)
 {
 	if (cb != 0)
 	{
@@ -231,20 +232,3 @@ uint16_t DMA_GetStartMajorLoopCount(DMAChannel_t chn)
 						LOCAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
-void DMA0_IRQHandler()
-{
-	/* Clear the interrupt flag. */
-	uint16_t status = DMA0->INT;
-	DMA0->INT = 0xFFFF;
-
-	for (int i = 0; i < 16; i++)
-	{
-		if ((status >> i) & 1)
-		{
-			if (callback[i] != 0)
-			{
-				callback[i]();
-			}
-		}
-	}
-}

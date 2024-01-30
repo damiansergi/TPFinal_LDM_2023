@@ -24,9 +24,9 @@ typedef uint16_t		WORD;	/* 16-bit unsigned integer */
 typedef uint32_t		DWORD;	/* 32-bit unsigned integer */
 typedef uint64_t		QWORD;	/* 64-bit unsigned integer */
 typedef WORD			WCHAR;	/* UTF-16 character type */
-typedef BYTE	DSTATUS;
 typedef DWORD FSIZE_t;
 typedef DWORD LBA_t;
+typedef BYTE	DSTATUS;
 
 /* Results of Disk Functions */
 typedef enum {

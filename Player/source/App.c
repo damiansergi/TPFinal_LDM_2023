@@ -1,8 +1,8 @@
-/***************************************************************************//**
- @file     main.c
- @brief    FW main
- @author   Grupo 3
- ******************************************************************************/
+/***************************************************************************/ /**
+  @file     main.c
+  @brief    FW main
+  @author   Grupo 3
+  ******************************************************************************/
 
 #include <board.h>
 #include <clock_config.h>
@@ -27,14 +27,11 @@
 
 static void delayLoop(uint32_t veces);
 
-static FATFS g_fileSystem; /* File system object */
-static FIL g_fileObject; /* File object */
-const TCHAR driverNumberBuffer[3U] = { SDDISK + '0', ':', '/' };
-static sd_card_t SD;
 void App_Init(void);
 void App_Run(void);
 
-int main(void) {
+int main(void)
+{
 
 	hw_Init();
 	hw_DisableInterrupts();
@@ -42,39 +39,19 @@ int main(void) {
 	hw_EnableInterrupts();
 
 	__FOREVER__
-		App_Run(); /* Program-specific loop  */
+	App_Run(); /* Program-specific loop  */
 }
 
 /* Función que se llama 1 vez, al comienzo del programa */
-void App_Init(void) {
-	BOARD_InitPins();
-	BOARD_BootClockRUN();
-	BOARD_InitDebugConsole();
-	SYSMPU_Enable(SYSMPU, false);
-
+void App_Init(void)
+{
+	playerInit();
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
-void App_Run(void) {
-	static bool cardIn = false;
-	static DIR dir;
-	while (SD_IsCardPresent(&SD)) {
-		/* code */
-	}
-
-	if (!cardIn) {
-		if (SD_IsCardPresent(&SD)) {
-			cardIn = true;
-			f_mount(&g_fileSystem, driverNumberBuffer, 0U);
-			FRESULT res = f_opendir(&dir, "2:");
-			PRINTF(res + '0');
-		}
-	} else {
-		if (!(SDHC->PRSSTAT && (1 << 16))) {
-			cardIn = false;
-		}
-	}
-	delayLoop(40000000L);
+void App_Run(void)
+{
+	updatePlayer();
 }
 
 /*******************************************************************************
@@ -83,7 +60,8 @@ void App_Run(void) {
  *******************************************************************************
  ******************************************************************************/
 
-static void delayLoop(uint32_t veces) {
+static void delayLoop(uint32_t veces)
+{
 	while (veces--)
 		;
 }

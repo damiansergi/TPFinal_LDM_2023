@@ -73,6 +73,14 @@ void setLevel(uint8_t level);
  */
 void selectBar(bar barID);
 
+/**
+ * @brief Select bar and set level. Use it to do the vumeter.
+ * @param barID Bar to change
+ * @param level desired level
+ * @return void
+ */
+void setLevelVumeter(bar barID, uint8_t level);
+
 /*******************************************************************************
  ******************************************************************************/
 

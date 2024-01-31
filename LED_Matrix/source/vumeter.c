@@ -125,6 +125,23 @@ void setLevel(uint8_t level){
 	blinkBar(bandSelected, blinkTime);
 }
 
+void setLevelVumeter(bar barID, uint8_t level){
+
+	if(state == ON){
+		state = OFF;
+	}
+
+	if(level < 0){
+		level = 0;
+	}
+	else if(level > MAXLEVEL){
+		level = MAXLEVEL;
+	}
+
+	bandLevel[barID] = level;
+	turnOnBar(barID);
+}
+
 void selectBar(bar barID){
 
 	if(state == ON){

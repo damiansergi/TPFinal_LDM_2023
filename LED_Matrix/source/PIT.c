@@ -100,14 +100,20 @@ uint8_t getTimerState(uint8_t id)
 void PIT0_IRQHandler(void)
 {
 	PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF(1);
-	timer[0].callback();
+	if (timer[0].callback != NULL)
+	{
+		timer[0].callback();
+	}
 	NVIC_ClearPendingIRQ(PIT0_IRQn);
 }
 
 void PIT1_IRQHandler(void)
 {
 	PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF(1);
-	timer[1].callback();
+	if (timer[1].callback != NULL)
+	{
+		timer[1].callback();
+	}
 	NVIC_ClearPendingIRQ(PIT1_IRQn);
 }
 
@@ -115,7 +121,10 @@ void PIT2_IRQHandler(void)
 {
 
 	PIT->CHANNEL[2].TFLG = PIT_TFLG_TIF(1);
-	timer[2].callback();
+	if (timer[2].callback != NULL)
+	{
+		timer[2].callback();
+	}
 	NVIC_ClearPendingIRQ(PIT2_IRQn);
 }
 
@@ -123,6 +132,9 @@ void PIT3_IRQHandler(void)
 {
 
 	PIT->CHANNEL[3].TFLG = PIT_TFLG_TIF(1);
-	timer[3].callback();
+	if (timer[3].callback != NULL)
+	{
+		timer[3].callback();
+	}
 	NVIC_ClearPendingIRQ(PIT3_IRQn);
 }

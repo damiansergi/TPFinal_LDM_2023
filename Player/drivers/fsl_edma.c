@@ -92,18 +92,18 @@ void EDMA_InstallTCD(DMA_Type *base, uint32_t channel, edma_tcd_t *tcd)
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
     /* Push tcd into hardware TCD register */
-    base->TCD[channel].SADDR         = tcd->SADDR;
-    base->TCD[channel].SOFF          = tcd->SOFF;
-    base->TCD[channel].ATTR          = tcd->ATTR;
-    base->TCD[channel].NBYTES_MLNO   = tcd->NBYTES;
-    base->TCD[channel].SLAST         = (int32_t)tcd->SLAST;
-    base->TCD[channel].DADDR         = tcd->DADDR;
-    base->TCD[channel].DOFF          = tcd->DOFF;
+    base->TCD[channel].SADDR = tcd->SADDR;
+    base->TCD[channel].SOFF = tcd->SOFF;
+    base->TCD[channel].ATTR = tcd->ATTR;
+    base->TCD[channel].NBYTES_MLNO = tcd->NBYTES;
+    base->TCD[channel].SLAST = (int32_t)tcd->SLAST;
+    base->TCD[channel].DADDR = tcd->DADDR;
+    base->TCD[channel].DOFF = tcd->DOFF;
     base->TCD[channel].CITER_ELINKNO = tcd->CITER;
-    base->TCD[channel].DLAST_SGA     = (int32_t)tcd->DLAST_SGA;
+    base->TCD[channel].DLAST_SGA = (int32_t)tcd->DLAST_SGA;
     /* Clear DONE bit first, otherwise ESG cannot be set */
-    base->TCD[channel].CSR           = 0;
-    base->TCD[channel].CSR           = tcd->CSR;
+    base->TCD[channel].CSR = 0;
+    base->TCD[channel].CSR = tcd->CSR;
     base->TCD[channel].BITER_ELINKNO = tcd->BITER;
 }
 
@@ -177,9 +177,9 @@ void EDMA_GetDefaultConfig(edma_config_t *config)
     (void)memset(config, 0, sizeof(*config));
 
     config->enableRoundRobinArbitration = false;
-    config->enableHaltOnError           = true;
-    config->enableContinuousLinkMode    = false;
-    config->enableDebugMode             = false;
+    config->enableHaltOnError = true;
+    config->enableContinuousLinkMode = false;
+    config->enableDebugMode = false;
 }
 
 /*!
@@ -277,7 +277,7 @@ void EDMA_SetMajorOffsetConfig(DMA_Type *base, uint32_t channel, int32_t sourceO
 {
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
-    base->TCD[channel].SLAST     = sourceOffset;
+    base->TCD[channel].SLAST = sourceOffset;
     base->TCD[channel].DLAST_SGA = destOffset;
 }
 
@@ -295,10 +295,10 @@ void EDMA_SetChannelPreemptionConfig(DMA_Type *base, uint32_t channel, const edm
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
     assert(config != NULL);
 
-    bool tmpEnablePreemptAbility    = config->enablePreemptAbility;
+    bool tmpEnablePreemptAbility = config->enablePreemptAbility;
     bool tmpEnableChannelPreemption = config->enableChannelPreemption;
-    uint8_t tmpChannelPriority      = config->channelPriority;
-    volatile uint8_t *tmpReg        = &base->DCHPRI3;
+    uint8_t tmpChannelPriority = config->channelPriority;
+    volatile uint8_t *tmpReg = &base->DCHPRI3;
 
     ((volatile uint8_t *)tmpReg)[DMA_DCHPRI_INDEX(channel)] =
         (DMA_DCHPRI0_DPA((true == tmpEnablePreemptAbility ? 0U : 1U)) |
@@ -368,7 +368,7 @@ void EDMA_SetModulo(DMA_Type *base, uint32_t channel, edma_modulo_t srcModulo, e
 
     uint16_t tmpreg;
 
-    tmpreg                  = base->TCD[channel].ATTR & (~(uint16_t)(DMA_ATTR_SMOD_MASK | DMA_ATTR_DMOD_MASK));
+    tmpreg = base->TCD[channel].ATTR & (~(uint16_t)(DMA_ATTR_SMOD_MASK | DMA_ATTR_DMOD_MASK));
     base->TCD[channel].ATTR = tmpreg | DMA_ATTR_DMOD(destModulo) | DMA_ATTR_SMOD(srcModulo);
 }
 
@@ -448,17 +448,17 @@ void EDMA_TcdReset(edma_tcd_t *tcd)
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
     /* Reset channel TCD */
-    tcd->SADDR     = 0U;
-    tcd->SOFF      = 0U;
-    tcd->ATTR      = 0U;
-    tcd->NBYTES    = 0U;
-    tcd->SLAST     = 0U;
-    tcd->DADDR     = 0U;
-    tcd->DOFF      = 0U;
-    tcd->CITER     = 0U;
+    tcd->SADDR = 0U;
+    tcd->SOFF = 0U;
+    tcd->ATTR = 0U;
+    tcd->NBYTES = 0U;
+    tcd->SLAST = 0U;
+    tcd->DADDR = 0U;
+    tcd->DOFF = 0U;
+    tcd->CITER = 0U;
     tcd->DLAST_SGA = 0U;
     /* Enable auto disable request feature */
-    tcd->CSR   = DMA_CSR_DREQ(true);
+    tcd->CSR = DMA_CSR_DREQ(true);
     tcd->BITER = 0U;
 }
 
@@ -579,7 +579,7 @@ void EDMA_TcdSetMajorOffsetConfig(edma_tcd_t *tcd, int32_t sourceOffset, int32_t
     assert(tcd != NULL);
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->SLAST     = (uint32_t)sourceOffset;
+    tcd->SLAST = (uint32_t)sourceOffset;
     tcd->DLAST_SGA = (uint32_t)destOffset;
 }
 
@@ -615,7 +615,7 @@ void EDMA_TcdSetChannelLink(edma_tcd_t *tcd, edma_channel_link_type_t type, uint
         tmpreg = tcd->CITER & (~(uint16_t)DMA_CITER_ELINKYES_LINKCH_MASK);
         tmpreg |= DMA_CITER_ELINKYES_LINKCH(linkedChannel);
         tcd->CITER = tmpreg;
-        tmpreg     = tcd->BITER & (~(uint16_t)DMA_BITER_ELINKYES_LINKCH_MASK);
+        tmpreg = tcd->BITER & (~(uint16_t)DMA_BITER_ELINKYES_LINKCH_MASK);
         tmpreg |= DMA_BITER_ELINKYES_LINKCH(linkedChannel);
         tcd->BITER = tmpreg;
     }
@@ -626,7 +626,7 @@ void EDMA_TcdSetChannelLink(edma_tcd_t *tcd, edma_channel_link_type_t type, uint
         /* Enable major link */
         tcd->CSR |= DMA_CSR_MAJORELINK_MASK;
         /* Set major linked channel */
-        tmpreg   = tcd->CSR & (~(uint16_t)DMA_CSR_MAJORLINKCH_MASK);
+        tmpreg = tcd->CSR & (~(uint16_t)DMA_CSR_MAJORLINKCH_MASK);
         tcd->CSR = tmpreg | DMA_CSR_MAJORLINKCH(linkedChannel);
     }
     else /* Link none */
@@ -655,7 +655,7 @@ void EDMA_TcdSetModulo(edma_tcd_t *tcd, edma_modulo_t srcModulo, edma_modulo_t d
 
     uint16_t tmpreg;
 
-    tmpreg    = tcd->ATTR & (~(uint16_t)(DMA_ATTR_SMOD_MASK | DMA_ATTR_DMOD_MASK));
+    tmpreg = tcd->ATTR & (~(uint16_t)(DMA_ATTR_SMOD_MASK | DMA_ATTR_DMOD_MASK));
     tcd->ATTR = tmpreg | DMA_ATTR_DMOD(destModulo) | DMA_ATTR_SMOD(srcModulo);
 }
 
@@ -851,7 +851,7 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
     /* Zero the handle */
     (void)memset(handle, 0, sizeof(*handle));
 
-    handle->base    = base;
+    handle->base = base;
     handle->channel = (uint8_t)channel;
 
     /* Get the DMA instance number */
@@ -867,18 +867,18 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
        CSR will be 0. Because in order to suit EDMA busy check mechanism in
        EDMA_SubmitTransfer, CSR must be set 0.
     */
-    tcdRegs            = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
-    tcdRegs->SADDR     = 0;
-    tcdRegs->SOFF      = 0;
-    tcdRegs->ATTR      = 0;
-    tcdRegs->NBYTES    = 0;
-    tcdRegs->SLAST     = 0;
-    tcdRegs->DADDR     = 0;
-    tcdRegs->DOFF      = 0;
-    tcdRegs->CITER     = 0;
+    tcdRegs = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
+    tcdRegs->SADDR = 0;
+    tcdRegs->SOFF = 0;
+    tcdRegs->ATTR = 0;
+    tcdRegs->NBYTES = 0;
+    tcdRegs->SLAST = 0;
+    tcdRegs->DADDR = 0;
+    tcdRegs->DOFF = 0;
+    tcdRegs->CITER = 0;
     tcdRegs->DLAST_SGA = 0;
-    tcdRegs->CSR       = 0;
-    tcdRegs->BITER     = 0;
+    tcdRegs->CSR = 0;
+    tcdRegs->BITER = 0;
 }
 
 /*!
@@ -908,10 +908,10 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
      * During first submit, the header should be assigned to 1, since 0 is current one and 1 is next TCD to be loaded,
      * but software cannot know which submission is the first one, so assign 1 to header here.
      */
-    handle->header  = 1;
+    handle->header = 1;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
-    handle->flags   = 0;
+    handle->flags = 0;
     handle->tcdPool = tcdPool;
 }
 
@@ -940,38 +940,38 @@ static edma_transfer_size_t EDMA_TransferWidthMapping(uint32_t width)
     /* map width to register value */
     switch (width)
     {
-        /* width 8bit */
-        case 1U:
-            transferSize = kEDMA_TransferSize1Bytes;
-            break;
-        /* width 16bit */
-        case 2U:
-            transferSize = kEDMA_TransferSize2Bytes;
-            break;
-        /* width 32bit */
-        case 4U:
-            transferSize = kEDMA_TransferSize4Bytes;
-            break;
+    /* width 8bit */
+    case 1U:
+        transferSize = kEDMA_TransferSize1Bytes;
+        break;
+    /* width 16bit */
+    case 2U:
+        transferSize = kEDMA_TransferSize2Bytes;
+        break;
+    /* width 32bit */
+    case 4U:
+        transferSize = kEDMA_TransferSize4Bytes;
+        break;
 #if (defined(FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER) && FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER)
-        /* width 64bit */
-        case 8U:
-            transferSize = kEDMA_TransferSize8Bytes;
-            break;
+    /* width 64bit */
+    case 8U:
+        transferSize = kEDMA_TransferSize8Bytes;
+        break;
 #endif
 #if (defined(FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER) && FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER)
-        /* width 128bit */
-        case 16U:
-            transferSize = kEDMA_TransferSize16Bytes;
-            break;
+    /* width 128bit */
+    case 16U:
+        transferSize = kEDMA_TransferSize16Bytes;
+        break;
 #endif
-        /* width 256bit */
-        case 32U:
-            transferSize = kEDMA_TransferSize32Bytes;
-            break;
-        default:
-            /* All the cases have been listed above, the default clause should not be reached. */
-            assert(false);
-            break;
+    /* width 256bit */
+    case 32U:
+        transferSize = kEDMA_TransferSize32Bytes;
+        break;
+    default:
+        /* All the cases have been listed above, the default clause should not be reached. */
+        assert(false);
+        break;
     }
 
     return transferSize;
@@ -1018,18 +1018,18 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
     (void)memset(config, 0, sizeof(*config));
 
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-    config->srcAddr  = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcAddr, kMEMORY_Local2DMA);
+    config->srcAddr = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcAddr, kMEMORY_Local2DMA);
     config->destAddr = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)destAddr, kMEMORY_Local2DMA);
 #else
     config->destAddr = (uint32_t)(uint32_t *)destAddr;
-    config->srcAddr  = (uint32_t)(uint32_t *)srcAddr;
+    config->srcAddr = (uint32_t)(uint32_t *)srcAddr;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
-    config->minorLoopBytes   = bytesEachRequest;
-    config->majorLoopCounts  = transferBytes / bytesEachRequest;
-    config->srcTransferSize  = EDMA_TransferWidthMapping(srcWidth);
+    config->minorLoopBytes = bytesEachRequest;
+    config->majorLoopCounts = transferBytes / bytesEachRequest;
+    config->srcTransferSize = EDMA_TransferWidthMapping(srcWidth);
     config->destTransferSize = EDMA_TransferWidthMapping(destWidth);
-    config->destOffset       = destOffset;
-    config->srcOffset        = srcOffset;
+    config->destOffset = destOffset;
+    config->srcOffset = srcOffset;
 }
 
 /*!
@@ -1064,26 +1064,26 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
 
     switch (type)
     {
-        case kEDMA_MemoryToMemory:
-            destOffset = (int16_t)destWidth;
-            srcOffset  = (int16_t)srcWidth;
-            break;
-        case kEDMA_MemoryToPeripheral:
-            destOffset = 0;
-            srcOffset  = (int16_t)srcWidth;
-            break;
-        case kEDMA_PeripheralToMemory:
-            destOffset = (int16_t)destWidth;
-            srcOffset  = 0;
-            break;
-        case kEDMA_PeripheralToPeripheral:
-            destOffset = 0;
-            srcOffset  = 0;
-            break;
-        default:
-            /* All the cases have been listed above, the default clause should not be reached. */
-            assert(false);
-            break;
+    case kEDMA_MemoryToMemory:
+        destOffset = (int16_t)destWidth;
+        srcOffset = (int16_t)srcWidth;
+        break;
+    case kEDMA_MemoryToPeripheral:
+        destOffset = 0;
+        srcOffset = (int16_t)srcWidth;
+        break;
+    case kEDMA_PeripheralToMemory:
+        destOffset = (int16_t)destWidth;
+        srcOffset = 0;
+        break;
+    case kEDMA_PeripheralToPeripheral:
+        destOffset = 0;
+        srcOffset = 0;
+        break;
+    default:
+        /* All the cases have been listed above, the default clause should not be reached. */
+        assert(false);
+        break;
     }
 
     EDMA_PrepareTransferConfig(config, srcAddr, srcWidth, srcOffset, destAddr, destWidth, destOffset, bytesEachRequest,
@@ -1152,7 +1152,7 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
         int8_t tmpTcdSize;
 
         /* Check if tcd pool is full. */
-        primask    = DisableGlobalIRQ();
+        primask = DisableGlobalIRQ();
         tmpTcdUsed = handle->tcdUsed;
         tmpTcdSize = handle->tcdSize;
         if (tmpTcdUsed >= tmpTcdSize)
@@ -1361,8 +1361,8 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {
-        handle->header  = 1;
-        handle->tail    = 0;
+        handle->header = 1;
+        handle->tail = 0;
         handle->tcdUsed = 0;
     }
 }

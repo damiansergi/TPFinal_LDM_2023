@@ -45,6 +45,11 @@
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="Peripheral" resourceId="DAC0" description="Peripheral DAC0 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -129,6 +134,10 @@
                         <pin_feature name="passive_filter" value="disable"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="DAC0" signal="OUT" pin_num="27" pin_signal="DAC0_OUT/CMP1_IN3/ADC0_SE23"/>
+                  <pin peripheral="DAC0" signal="REF_1" pin_num="26" pin_signal="VREF_OUT/CMP1_IN5/CMP0_IN5/ADC1_SE18"/>
+                  <pin peripheral="DAC0" signal="REF_2" pin_num="22" pin_signal="VDDA"/>
+                  <pin peripheral="DAC0" signal="TRG" pin_num="" pin_signal="PDB0_DAC0_Trigger"/>
                </pins>
             </function>
          </functions_list>
@@ -282,16 +291,6 @@
                   <data type="Version">0.14.0</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="UART Driver is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="An unsupported version of the UART Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.5.1</data>
-               </feature>
-            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="EDMA Driver is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -312,6 +311,26 @@
                   <data type="Version">2.0.3</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="Utility debug_console is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="An unsupported version of the Utility debug_console in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">1.0.0</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="UART Driver is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="An unsupported version of the UART Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.5.1</data>
+               </feature>
+            </dependency>
             <dependency resourceType="Tool" resourceId="Clocks" description="The Clocks tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data>true</data>
@@ -322,9 +341,14 @@
             <file path="board/peripherals.c" update_enabled="true"/>
             <file path="board/peripherals.h" update_enabled="true"/>
             <file path="source/ffconf.h" update_enabled="true"/>
+            <file path="utilities/fsl_debug_console_conf.h" update_enabled="true"/>
          </generated_project_files>
          <peripherals_profile>
             <processor_version>14.0.0</processor_version>
+            <ignored_component_migration_offer>
+               <component>uart</component>
+               <component>edma</component>
+            </ignored_component_migration_offer>
          </peripherals_profile>
          <functional_groups>
             <functional_group name="BOARD_InitPeripherals" uuid="9496ff68-fbe8-4243-ae2a-46321a563f27" called_from_default_init="true" id_prefix="" core="core0">
@@ -346,21 +370,6 @@
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="ClockOutput" resourceId="System_clock" description="System clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="frequency" evaluation="greaterThan">
-                        <data type="Frequency" unit="Hz">0</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_tx" description="Signal TX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_rx" description="Signal RX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The fsl_dmamux driver is missing in the project  (required for the eDMA)." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="enabled" evaluation="equal">
                         <data type="Boolean">true</data>
@@ -376,6 +385,21 @@
                         <data type="Frequency" unit="Hz">0</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="System_clock" description="System clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_tx" description="Signal TX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_rx" description="Signal RX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                </dependencies>
                <instances>
                   <instance name="NVIC" uuid="d98da378-cbd6-4379-a610-c77216b19caa" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
@@ -383,19 +407,18 @@
                         <array name="interrupt_table">
                            <struct name="0"/>
                            <struct name="1"/>
-                           <struct name="2"/>
                         </array>
                         <array name="interrupts"/>
                      </config_set>
                   </instance>
                   <instance name="DAC0" uuid="d782daa0-558c-46eb-a87f-2712cadf005e" type="dac" type_id="dac_a54f338a6fa6fd273bc89d61f5a3b85e" mode="basic" peripheral="DAC0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
-                     <config_set name="fsl_dac" quick_selection="QS_DAC_1">
+                     <config_set name="fsl_dac">
                         <struct name="dac_config">
                            <setting name="referenceVoltageSource" value="kDAC_ReferenceVoltageSourceVref2"/>
                            <setting name="enableLowPowerMode" value="false"/>
                         </struct>
                         <setting name="dac_enable" value="true"/>
-                        <setting name="dac_value" value="0"/>
+                        <setting name="dac_value" value="2048"/>
                      </config_set>
                   </instance>
                   <instance name="FATFS" uuid="29fb2ddf-95fb-4f8e-a13a-771f5a29bbea" type="fatfs" type_id="fatfs_2f85acf758668258920f70258052a088" mode="general" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
@@ -431,7 +454,7 @@
                            <setting name="FF_FS_READONLY" value="true"/>
                            <setting name="FF_FS_MINIMIZE" value="level1"/>
                            <setting name="FF_USE_FIND" value="disableDirRead"/>
-                           <setting name="FF_USE_MKFS" value="true"/>
+                           <setting name="FF_USE_MKFS" value="false"/>
                            <setting name="FF_USE_FASTSEEK" value="true"/>
                            <setting name="FF_USE_EXPAND" value="false"/>
                            <setting name="FF_USE_CHMOD" value="false"/>
@@ -439,14 +462,14 @@
                            <setting name="FF_USE_FORWARD" value="false"/>
                            <setting name="FF_USE_STRFUNC" value="enableWithoutConversion"/>
                            <setting name="FF_PRINT_LLI" value="false"/>
-                           <setting name="FF_PRINT_FLOAT" value="disable"/>
+                           <setting name="FF_PRINT_FLOAT" value="enableFloatSeparator"/>
                         </struct>
                         <struct name="namespaceConfig">
                            <setting name="FF_USE_LFN" value="enableLfnHeap"/>
                            <setting name="FF_MAX_LFN" value="255"/>
                            <setting name="FF_LFN_BUF" value="LFNID"/>
                            <setting name="FF_SFN_BUF" value="SFNID"/>
-                           <setting name="FF_LFN_UNICODE" value="UTF16"/>
+                           <setting name="FF_LFN_UNICODE" value="ansiOEM"/>
                            <setting name="FF_STRF_ENCODE" value="UTF16LE"/>
                            <setting name="FF_CODE_PAGE" value="cpUS"/>
                            <setting name="FF_FS_RPATH" value="enableRP2"/>
@@ -501,55 +524,6 @@
                         <struct name="fatfs_codegenerator"/>
                      </config_set>
                   </instance>
-                  <instance name="UART0" uuid="f26d1e4a-3857-4f4d-8741-1b3201cb22bd" type="uart" type_id="uart_9b45c456566d03f79ecfe90751c10bb4" mode="interrupts" peripheral="UART0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
-                     <config_set name="uartConfig_t" quick_selection="QuickSelection1">
-                        <struct name="uartConfig">
-                           <setting name="clockSource" value="BusInterfaceClock"/>
-                           <setting name="clockSourceFreq" value="GetFreq"/>
-                           <setting name="baudRate_Bps" value="115200"/>
-                           <setting name="parityMode" value="kUART_ParityDisabled"/>
-                           <setting name="dataBitsCount" value="kUART_EightDataBits"/>
-                           <setting name="stopBitCount" value="kUART_OneStopBit"/>
-                           <setting name="enableMatchAddress1" value="false"/>
-                           <setting name="matchAddress1" value="0"/>
-                           <setting name="enableMatchAddress2" value="false"/>
-                           <setting name="matchAddress2" value="0"/>
-                           <setting name="txFifoWatermark" value="0"/>
-                           <setting name="rxFifoWatermark" value="1"/>
-                           <setting name="idleType" value="kUART_IdleTypeStartBit"/>
-                           <setting name="enableTx" value="true"/>
-                           <setting name="enableRx" value="true"/>
-                        </struct>
-                     </config_set>
-                     <config_set name="interruptsCfg" quick_selection="QuickSelection1">
-                        <set name="interrupts">
-                           <selected>
-                              <id>kUART_TxDataRegEmptyInterruptEnable</id>
-                              <id>kUART_TransmissionCompleteInterruptEnable</id>
-                              <id>kUART_RxDataRegFullInterruptEnable</id>
-                              <id>kUART_RxOverrunInterruptEnable</id>
-                           </selected>
-                        </set>
-                        <struct name="interrupt_vectors">
-                           <setting name="enable_rx_tx_irq" value="true"/>
-                           <struct name="interrupt_rx_tx">
-                              <setting name="IRQn" value="UART0_RX_TX_IRQn"/>
-                              <setting name="enable_interrrupt" value="enabled"/>
-                              <setting name="enable_priority" value="false"/>
-                              <setting name="priority" value="0"/>
-                              <setting name="enable_custom_name" value="false"/>
-                           </struct>
-                           <setting name="enable_err_irq" value="false"/>
-                           <struct name="interrupt_err">
-                              <setting name="IRQn" value="UART0_ERR_IRQn"/>
-                              <setting name="enable_interrrupt" value="enabled"/>
-                              <setting name="enable_priority" value="false"/>
-                              <setting name="priority" value="0"/>
-                              <setting name="enable_custom_name" value="false"/>
-                           </struct>
-                        </struct>
-                     </config_set>
-                  </instance>
                   <instance name="DMA" uuid="c8381b54-fe70-471c-8605-c6b8052d2658" type="edma" type_id="edma_46976c94302ab714c0d335f519487c8a" mode="basic" peripheral="DMA" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
                      <config_set name="fsl_edma">
                         <struct name="common_settings">
@@ -570,7 +544,7 @@
                                  <setting name="channel_prefix_id" value="CH3"/>
                                  <setting name="uid" value="1706581251721"/>
                                  <setting name="eDMAn" value="3"/>
-                                 <setting name="eDMA_source" value="kDmaRequestMux0DAC0"/>
+                                 <setting name="eDMA_source" value="kDmaRequestMux0AlwaysOn58"/>
                                  <setting name="enableTriggerPIT" value="true"/>
                                  <setting name="init_channel_priority" value="false"/>
                                  <struct name="edma_channel_Preemption">
@@ -592,7 +566,7 @@
                                     <setting name="tcdID" value="CH0_PING"/>
                                     <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
                                     <setting name="saddr_expr" value="pingBuffer"/>
-                                    <setting name="saddr_def" value="extern uint16_t pingBuffer[1152];"/>
+                                    <setting name="saddr_def" value="extern int16_t pingBuffer[1152];"/>
                                     <setting name="soff" value="2"/>
                                     <setting name="soff_def" value=""/>
                                     <setting name="dsize" value="kEDMA_TransferSize2Bytes"/>
@@ -609,7 +583,7 @@
                                     <setting name="tcdID" value="CH0_PONG"/>
                                     <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
                                     <setting name="saddr_expr" value="pongBuffer"/>
-                                    <setting name="saddr_def" value="extern uint16_t pongBuffer[1152];"/>
+                                    <setting name="saddr_def" value="extern int16_t pongBuffer[1152];"/>
                                     <setting name="soff" value="2"/>
                                     <setting name="soff_def" value=""/>
                                     <setting name="dsize" value="kEDMA_TransferSize2Bytes"/>
@@ -708,6 +682,49 @@
                               </struct>
                            </struct>
                         </array>
+                     </config_set>
+                  </instance>
+                  <instance name="DebugConsole" uuid="e5c89bdb-e6f8-469e-b72d-3a65b7437226" type="debug_console" type_id="debug_console_51864e4f3ac859dae7b603e07bc4ae33" mode="general" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="fsl_debug_console">
+                        <struct name="config">
+                           <setting name="SDK_DEBUGCONSOLE" value="DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN"/>
+                           <setting name="SDK_DEBUGCONSOLE_UART" value="semihost"/>
+                           <setting name="DEBUG_CONSOLE_RX_ENABLE" value="true"/>
+                           <setting name="DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN" value="128"/>
+                           <setting name="DEBUG_CONSOLE_SCANF_MAX_LOG_LEN" value="20"/>
+                           <setting name="DEBUG_CONSOLE_ENABLE_ECHO" value="false"/>
+                           <setting name="PRINTF_FLOAT_ENABLE" value="false"/>
+                           <setting name="SCANF_FLOAT_ENABLE" value="false"/>
+                           <setting name="PRINTF_ADVANCED_ENABLE" value="false"/>
+                           <setting name="SCANF_ADVANCED_ENABLE" value="false"/>
+                           <setting name="DEBUG_CONSOLE_TRANSFER_NON_BLOCKING" value="true"/>
+                           <setting name="DEBUG_CONSOLE_TRANSMIT_BUFFER_LEN" value="512"/>
+                           <setting name="DEBUG_CONSOLE_RECEIVE_BUFFER_LEN" value="1024"/>
+                           <setting name="DEBUG_CONSOLE_TX_RELIABLE_ENABLE" value="true"/>
+                           <setting name="DEBUG_CONSOLE_DISABLE_RTOS_SYNCHRONIZATION" value="false"/>
+                        </struct>
+                        <struct name="debug_console_codegenerator"/>
+                     </config_set>
+                  </instance>
+                  <instance name="UART0" uuid="afd7797b-f684-4620-854a-78a554d1121b" type="uart" type_id="uart_9b45c456566d03f79ecfe90751c10bb4" mode="polling" peripheral="UART0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="uartConfig_t" quick_selection="QuickSelection1">
+                        <struct name="uartConfig">
+                           <setting name="clockSource" value="BusInterfaceClock"/>
+                           <setting name="clockSourceFreq" value="GetFreq"/>
+                           <setting name="baudRate_Bps" value="115200"/>
+                           <setting name="parityMode" value="kUART_ParityDisabled"/>
+                           <setting name="dataBitsCount" value="kUART_EightDataBits"/>
+                           <setting name="stopBitCount" value="kUART_OneStopBit"/>
+                           <setting name="enableMatchAddress1" value="false"/>
+                           <setting name="matchAddress1" value="0"/>
+                           <setting name="enableMatchAddress2" value="false"/>
+                           <setting name="matchAddress2" value="0"/>
+                           <setting name="txFifoWatermark" value="0"/>
+                           <setting name="rxFifoWatermark" value="1"/>
+                           <setting name="idleType" value="kUART_IdleTypeStartBit"/>
+                           <setting name="enableTx" value="true"/>
+                           <setting name="enableRx" value="true"/>
+                        </struct>
                      </config_set>
                   </instance>
                </instances>

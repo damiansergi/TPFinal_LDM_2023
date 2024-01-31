@@ -54,6 +54,10 @@ BOARD_InitPins:
     pull_select: up, pull_enable: enable, passive_filter: disable}
   - {pin_num: '7', peripheral: GPIOE, signal: 'GPIO, 6', pin_signal: PTE6/SPI1_PCS3/UART3_CTS_b/I2S0_MCLK/FTM3_CH1/USB_SOF_OUT, slew_rate: fast, open_drain: disable,
     drive_strength: low, pull_select: down, pull_enable: enable, passive_filter: disable}
+  - {pin_num: '27', peripheral: DAC0, signal: OUT, pin_signal: DAC0_OUT/CMP1_IN3/ADC0_SE23}
+  - {pin_num: '26', peripheral: DAC0, signal: REF_1, pin_signal: VREF_OUT/CMP1_IN5/CMP0_IN5/ADC1_SE18}
+  - {pin_num: '22', peripheral: DAC0, signal: REF_2, pin_signal: VDDA}
+  - {peripheral: DAC0, signal: TRG, pin_signal: PDB0_DAC0_Trigger}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */

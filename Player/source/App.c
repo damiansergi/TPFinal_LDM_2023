@@ -12,10 +12,12 @@
 #include <fsl_sd.h>
 #include <fsl_sysmpu.h>
 #include <hardware.h>
-#include <MK64F12.h>
 #include <pin_mux.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+
+#include "player.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -24,8 +26,6 @@
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
-
-static void delayLoop(uint32_t veces);
 
 void App_Init(void);
 void App_Run(void);
@@ -51,6 +51,32 @@ void App_Init(void)
 /* Función que se llama constantemente en un ciclo infinito */
 void App_Run(void)
 {
+	static char culero = '\0';
+
+	//culero = GETCHAR();
+
+//	switch (culero)
+//	{
+//	case 'p':
+//		play();
+//		break;
+//	case 's':
+//		stop();
+//		break;
+//	case 'w':
+//		pause();
+//		break;
+//	case 'a':
+//		prevSong();
+//		break;
+//	case 'd':
+//		nextSong();
+//		break;
+//	case 't':
+//		break;
+//	default:
+//		break;
+//	}
 	updatePlayer();
 }
 
@@ -59,12 +85,6 @@ void App_Run(void)
  LOCAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
-
-static void delayLoop(uint32_t veces)
-{
-	while (veces--)
-		;
-}
 
 /*******************************************************************************
  ******************************************************************************/

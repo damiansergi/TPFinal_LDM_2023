@@ -35,7 +35,7 @@ bool MP3DecInit(void);
 
 int MP3SelectSong(song_t *song);
 
-uint32_t MP3DecDecode(uint16_t *buffer);
+int MP3DecDecode(uint16_t *buffer);
 
 /*******************************************************************************
  ******************************************************************************/

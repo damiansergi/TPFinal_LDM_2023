@@ -72,7 +72,7 @@ uint16_t ticksPerPeriod = 100;
 uint16_t *waveform = 0;
 uint32_t waveform_lenght = 0;
 uint32_t waveform_offset = 0;
-static void (*FTM_Interruption)(void) = NULL;
+static void (*Table_end_cb)(void) = NULL;
 
 void PWM_Init(void)
 {
@@ -135,7 +135,7 @@ void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t 
 	waveform = waveform_pointer;
 	waveform_lenght = wave_length;
 	waveform_offset = waveTable_offset;
-	FTM_Interruption = callback;
+	Table_end_cb = callback;
 
 	FTM_StopClock(FTM0);
 	FTM_DmaMode(FTM0, FTM_CH_0, true);
@@ -198,8 +198,8 @@ uint32_t PWM_GetWaveformOffset();
  ******************************************************************************/
 void DMA_callback_CH0(edma_handle_t *, void *, bool, uint32_t)
 {
-	if (FTM_Interruption != NULL)
+	if (Table_end_cb != NULL)
 	{
-		FTM_Interruption();
+		Table_end_cb();
 	}
 }

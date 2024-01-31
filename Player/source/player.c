@@ -11,6 +11,7 @@
 #include "fsl_dac.h"
 #include "fsl_pit.h"
 #include "fsl_edma.h"
+#include "fsl_dac.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -19,10 +20,13 @@
 #include "fsl_sd_disk.h"
 #include "sdmmc_config.h"
 #include "fsl_sysmpu.h"
-#include "MK64F12.h"
 #include "MP3Dec.h"
+#include "MK64F12.h"
 #include "peripherals.h"
+#include "board.h"
+#include "pin_mux.h"
 #include <stdio.h>
+#include <string.h>
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
@@ -48,6 +52,8 @@ typedef enum _PlayerStates
     PAUSED,
 
 } PlayerStates_t;
+
+#define OUTBUFF_SIZE 1152
 /*******************************************************************************
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
@@ -76,8 +82,6 @@ void doNothing(void);
  * STATIC VARIABLES AND CONST VARIABLES WITH FILE LEVEL SCOPE
  ******************************************************************************/
 
-static dac_config_t dac_conf = {kDAC_ReferenceVoltageSourceVref2, false};
-
 static FATFS g_fileSystem; /* File system object */
 
 static PlayerStates_t state = STARTING;
@@ -86,16 +90,22 @@ static FRESULT error;
 
 static song_node_t *currentSong = NULL;
 
-uint16_t pingBuffer[1152] = {2048};
-uint16_t pongBuffer[1152] = {2048};
-static uint16_t *currBuffPlaying = pingBuffer;
+int16_t pingBuffer[1152] = {[0 ... 1151] = 2048};
+int16_t pongBuffer[1152] = {[0 ... 1151] = 2048};
+static int16_t *currBuffPlaying = pingBuffer;
 
-static const TCHAR driverNumberBuffer[3U] = {SDDISK + '0', ':', '/'};
-volatile bool failedFlag = false;
-volatile bool playingMusic = false;
+static const TCHAR driverNumberBuffer[4U] = {SDDISK + '0', ':', '/', '\0'};
+bool failedFlag = false;
+bool playingMusic = false;
 
 char ch = '0';
 BYTE work[FF_MAX_SS];
+
+gpio_pin_config_t config =
+    {
+        kGPIO_DigitalOutput,
+        0,
+};
 /*******************************************************************************
  *******************************************************************************
                         GLOBAL FUNCTION DEFINITIONS
@@ -111,6 +121,8 @@ bool playerInit()
     SYSMPU_Enable(SYSMPU, false);
     initList();
     MP3DecInit();
+    PORT_SetPinMux(PORTB, 20, kPORT_MuxAsGpio);
+    GPIO_PinInit(GPIOB, 20, &config);
 
     return true;
 }
@@ -124,13 +136,19 @@ bool play()
         {
             return true;
         }
-        MP3SelectSong(currentSong);
+        MP3SelectSong(currentSong->data);
 
         EDMA_AbortTransfer(&DMA_CH3_Handle);
         uint32_t decodedSamples = MP3DecDecode(pingBuffer);
 
         // TODO: Aca va filtrado
-        DMA_CH0_PING_config.majorLoopCounts = decodedSamples * 2;
+
+        // 16bit to 12bit + offset correction
+        for (int i = 0; i < OUTBUFF_SIZE; i++)
+        {
+            pingBuffer[i] = (pingBuffer[i] + 0x8000U) >> 4;
+        }
+        DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
         EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         currBuffPlaying = pingBuffer;
 
@@ -144,15 +162,17 @@ bool play()
         state = pausePrevState;
         break;
     default:
-        false;
+        return false;
         break;
     }
+    return false;
 }
 
 bool stop()
 {
     PIT_StopTimer(PIT, kPIT_Chnl_3);
     state = STOPPED;
+    return false;
 }
 
 bool pause()
@@ -160,6 +180,7 @@ bool pause()
     PIT_StopTimer(PIT, kPIT_Chnl_3);
     pausePrevState = state;
     state = PAUSED;
+    return false;
 }
 
 bool nextSong()
@@ -207,11 +228,14 @@ bool selectSong(song_node_t *song)
     {
     case STOPPED:
         currentSong = song;
-        MP3SelectSong(currentSong);
+        MP3SelectSong(currentSong->data);
         return false;
         break;
 
     default:
+        currentSong = song;
+        MP3SelectSong(currentSong->data);
+        return false;
         break;
     }
 
@@ -223,6 +247,7 @@ void getSongInfo(song_node_t *node);
 player_msg_t updatePlayer()
 {
     static uint32_t decodedSamples = 0;
+    static uint32_t tickCount = 0;
     switch (state)
     {
     case STARTING:
@@ -272,12 +297,14 @@ player_msg_t updatePlayer()
 
     case READING_SD:
         // Read MP· files on SD
-        readMP3Files("");
-        selectSong(getListHead()->next);
+        readMP3Files((char const *)&driverNumberBuffer[0U]);
+        selectSong(getListHead()->next->next);
         state = STOPPED;
+        play();
         break;
 
     case DECODING:
+        GPIO_PinWrite(GPIOB, 20, 1);
         if (currBuffPlaying == pingBuffer)
         {
             decodedSamples = MP3DecDecode(pongBuffer);
@@ -288,7 +315,12 @@ player_msg_t updatePlayer()
             }
 
             // TODO: Aca va filtrado
-            DMA_CH0_PONG_config.majorLoopCounts = decodedSamples * 2;
+            // 16bit to 12bit + offset correction
+            for (int i = 0; i < OUTBUFF_SIZE; i++)
+            {
+                pongBuffer[i] = (pongBuffer[i] + 0x8000U) >> 4;
+            }
+            DMA_CH0_PONG_config.majorLoopCounts = decodedSamples;
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PONG_config);
         }
         else
@@ -301,12 +333,17 @@ player_msg_t updatePlayer()
             }
 
             // TODO: Aca va filtrado
-            DMA_CH0_PING_config.majorLoopCounts = decodedSamples * 2;
+            // 16bit to 12bit + offset correction
+            for (int i = 0; i < OUTBUFF_SIZE; i++)
+            {
+                pingBuffer[i] = (pingBuffer[i] + 0x8000U) >> 4;
+            }
+            DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         }
 
         state = WAITING_TO_DECODE;
-
+        GPIO_PinWrite(GPIOB, 20, 0);
         break;
 
     case WAITING_TO_DECODE:
@@ -324,6 +361,7 @@ player_msg_t updatePlayer()
     default:
         break;
     }
+    return false;
 }
 
 /*******************************************************************************
@@ -335,18 +373,16 @@ player_msg_t updatePlayer()
 /* DMA channel DMA_CH3 callback function */
 void DMA_callback(edma_handle_t *handle, void *data, bool, uint32_t)
 {
-    if (state == WAITING_TO_DECODE)
+
+    if (currBuffPlaying == pingBuffer)
     {
-        if (currBuffPlaying == pingBuffer)
-        {
-            currBuffPlaying = pongBuffer;
-        }
-        else
-        {
-            currBuffPlaying = pingBuffer;
-        }
-        state = DECODING;
+        currBuffPlaying = pongBuffer;
     }
+    else
+    {
+        currBuffPlaying = pingBuffer;
+    }
+    state = DECODING;
 }
 
 void doNothing(void)
@@ -356,7 +392,7 @@ void doNothing(void)
 
 static void readMP3Files(const char *path)
 {
-    static volatile char currentPath[256];
+    static char currentPath[256];
     static DIR directory;
     static FILINFO fileInfo;
 

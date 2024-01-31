@@ -84,7 +84,7 @@ instance:
           - channel_prefix_id: 'CH3'
           - uid: '1706581251721'
           - eDMAn: '3'
-          - eDMA_source: 'kDmaRequestMux0DAC0'
+          - eDMA_source: 'kDmaRequestMux0AlwaysOn58'
           - enableTriggerPIT: 'true'
           - init_channel_priority: 'false'
           - edma_channel_Preemption:
@@ -103,7 +103,7 @@ instance:
             - tcdID: 'CH0_PING'
             - ssize: 'kEDMA_TransferSize2Bytes'
             - saddr_expr: 'pingBuffer'
-            - saddr_def: 'extern uint16_t pingBuffer[1152];'
+            - saddr_def: 'extern int16_t pingBuffer[1152];'
             - soff: '2'
             - soff_def: ''
             - dsize: 'kEDMA_TransferSize2Bytes'
@@ -119,7 +119,7 @@ instance:
             - tcdID: 'CH0_PONG'
             - ssize: 'kEDMA_TransferSize2Bytes'
             - saddr_expr: 'pongBuffer'
-            - saddr_def: 'extern uint16_t pongBuffer[1152];'
+            - saddr_def: 'extern int16_t pongBuffer[1152];'
             - soff: '2'
             - soff_def: ''
             - dsize: 'kEDMA_TransferSize2Bytes'
@@ -198,7 +198,7 @@ static void DMA_init(void) {
   EDMA_EnableMinorLoopMapping(DMA_DMA_BASEADDR, false);
 
   /* Channel CH3 initialization */
-  /* Set the source kDmaRequestMux0DAC0 request in the DMAMUX */
+  /* Set the source kDmaRequestMux0AlwaysOn58 request in the DMAMUX */
   DMAMUX_SetSource(DMA_DMAMUX_BASEADDR, DMA_CH3_DMA_CHANNEL, DMA_CH3_DMA_REQUEST);
   /* Set the DMA channel 3 periodic trigger */
   DMAMUX_EnablePeriodTrigger(DMA_DMAMUX_BASEADDR, DMA_CH3_DMA_CHANNEL);
@@ -247,7 +247,6 @@ instance:
     - interrupt_table:
       - 0: []
       - 1: []
-      - 2: []
     - interrupts: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -275,8 +274,7 @@ instance:
       - referenceVoltageSource: 'kDAC_ReferenceVoltageSourceVref2'
       - enableLowPowerMode: 'false'
     - dac_enable: 'true'
-    - dac_value: '0'
-    - quick_selection: 'QS_DAC_1'
+    - dac_value: '2048'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 const dac_config_t DAC0_config = {
@@ -288,81 +286,11 @@ static void DAC0_init(void) {
   /* Initialize DAC converter */
   DAC_Init(DAC0_PERIPHERAL, &DAC0_config);
   /* Output value of DAC. */
-  DAC_SetBufferValue(DAC0_PERIPHERAL, 0U, 0U);
+  DAC_SetBufferValue(DAC0_PERIPHERAL, 0U, 2048U);
   /* Make sure the read pointer is set to the start */
   DAC_SetBufferReadPointer(DAC0_PERIPHERAL, 0U);
   /* Enable DAC output */
   DAC_Enable(DAC0_PERIPHERAL, true);
-}
-
-/***********************************************************************************************************************
- * UART0 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'UART0'
-- type: 'uart'
-- mode: 'interrupts'
-- custom_name_enabled: 'false'
-- type_id: 'uart_9b45c456566d03f79ecfe90751c10bb4'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'UART0'
-- config_sets:
-  - uartConfig_t:
-    - uartConfig:
-      - clockSource: 'BusInterfaceClock'
-      - clockSourceFreq: 'GetFreq'
-      - baudRate_Bps: '115200'
-      - parityMode: 'kUART_ParityDisabled'
-      - dataBitsCount: 'kUART_EightDataBits'
-      - stopBitCount: 'kUART_OneStopBit'
-      - enableMatchAddress1: 'false'
-      - matchAddress1: '0'
-      - enableMatchAddress2: 'false'
-      - matchAddress2: '0'
-      - txFifoWatermark: '0'
-      - rxFifoWatermark: '1'
-      - idleType: 'kUART_IdleTypeStartBit'
-      - enableTx: 'true'
-      - enableRx: 'true'
-    - quick_selection: 'QuickSelection1'
-  - interruptsCfg:
-    - interrupts: 'kUART_TxDataRegEmptyInterruptEnable kUART_TransmissionCompleteInterruptEnable kUART_RxDataRegFullInterruptEnable kUART_RxOverrunInterruptEnable'
-    - interrupt_vectors:
-      - enable_rx_tx_irq: 'true'
-      - interrupt_rx_tx:
-        - IRQn: 'UART0_RX_TX_IRQn'
-        - enable_interrrupt: 'enabled'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
-      - enable_err_irq: 'false'
-      - interrupt_err:
-        - IRQn: 'UART0_ERR_IRQn'
-        - enable_interrrupt: 'enabled'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
-    - quick_selection: 'QuickSelection1'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const uart_config_t UART0_config = {
-  .baudRate_Bps = 115200UL,
-  .parityMode = kUART_ParityDisabled,
-  .stopBitCount = kUART_OneStopBit,
-  .txFifoWatermark = 0U,
-  .rxFifoWatermark = 1U,
-  .idleType = kUART_IdleTypeStartBit,
-  .enableTx = true,
-  .enableRx = true
-};
-
-static void UART0_init(void) {
-  UART_Init(UART0_PERIPHERAL, &UART0_config, UART0_CLOCK_SOURCE);
-  UART_EnableInterrupts(UART0_PERIPHERAL, kUART_TxDataRegEmptyInterruptEnable | kUART_TransmissionCompleteInterruptEnable | kUART_RxDataRegFullInterruptEnable | kUART_RxOverrunInterruptEnable);
-  /* Enable interrupt UART0_RX_TX_IRQn request in the NVIC. */
-  EnableIRQ(UART0_SERIAL_RX_TX_IRQN);
 }
 
 /***********************************************************************************************************************
@@ -412,6 +340,55 @@ static void PIT_init(void) {
 }
 
 /***********************************************************************************************************************
+ * UART0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'UART0'
+- type: 'uart'
+- mode: 'polling'
+- custom_name_enabled: 'false'
+- type_id: 'uart_9b45c456566d03f79ecfe90751c10bb4'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'UART0'
+- config_sets:
+  - uartConfig_t:
+    - uartConfig:
+      - clockSource: 'BusInterfaceClock'
+      - clockSourceFreq: 'GetFreq'
+      - baudRate_Bps: '115200'
+      - parityMode: 'kUART_ParityDisabled'
+      - dataBitsCount: 'kUART_EightDataBits'
+      - stopBitCount: 'kUART_OneStopBit'
+      - enableMatchAddress1: 'false'
+      - matchAddress1: '0'
+      - enableMatchAddress2: 'false'
+      - matchAddress2: '0'
+      - txFifoWatermark: '0'
+      - rxFifoWatermark: '1'
+      - idleType: 'kUART_IdleTypeStartBit'
+      - enableTx: 'true'
+      - enableRx: 'true'
+    - quick_selection: 'QuickSelection1'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const uart_config_t UART0_config = {
+  .baudRate_Bps = 115200UL,
+  .parityMode = kUART_ParityDisabled,
+  .stopBitCount = kUART_OneStopBit,
+  .txFifoWatermark = 0U,
+  .rxFifoWatermark = 1U,
+  .idleType = kUART_IdleTypeStartBit,
+  .enableTx = true,
+  .enableRx = true
+};
+
+static void UART0_init(void) {
+  UART_Init(UART0_PERIPHERAL, &UART0_config, UART0_CLOCK_SOURCE);
+}
+
+/***********************************************************************************************************************
  * FATFS initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -450,7 +427,7 @@ instance:
       - FF_FS_READONLY: 'true'
       - FF_FS_MINIMIZE: 'level1'
       - FF_USE_FIND: 'disableDirRead'
-      - FF_USE_MKFS: 'true'
+      - FF_USE_MKFS: 'false'
       - FF_USE_FASTSEEK: 'true'
       - FF_USE_EXPAND: 'false'
       - FF_USE_CHMOD: 'false'
@@ -458,13 +435,13 @@ instance:
       - FF_USE_FORWARD: 'false'
       - FF_USE_STRFUNC: 'enableWithoutConversion'
       - FF_PRINT_LLI: 'false'
-      - FF_PRINT_FLOAT: 'disable'
+      - FF_PRINT_FLOAT: 'enableFloatSeparator'
     - namespaceConfig:
       - FF_USE_LFN: 'enableLfnHeap'
       - FF_MAX_LFN: '255'
       - FF_LFN_BUF: 'LFNID'
       - FF_SFN_BUF: 'SFNID'
-      - FF_LFN_UNICODE: 'UTF16'
+      - FF_LFN_UNICODE: 'ansiOEM'
       - FF_STRF_ENCODE: 'UTF16LE'
       - FF_CODE_PAGE: 'cpUS'
       - FF_FS_RPATH: 'enableRP2'
@@ -513,6 +490,44 @@ static void FATFS_init(void) {
 } */
 
 /***********************************************************************************************************************
+ * DebugConsole initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'DebugConsole'
+- type: 'debug_console'
+- mode: 'general'
+- custom_name_enabled: 'false'
+- type_id: 'debug_console_51864e4f3ac859dae7b603e07bc4ae33'
+- functional_group: 'BOARD_InitPeripherals'
+- config_sets:
+  - fsl_debug_console:
+    - config:
+      - SDK_DEBUGCONSOLE: 'DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN'
+      - SDK_DEBUGCONSOLE_UART: 'semihost'
+      - DEBUG_CONSOLE_RX_ENABLE: 'true'
+      - DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN: '128'
+      - DEBUG_CONSOLE_SCANF_MAX_LOG_LEN: '20'
+      - DEBUG_CONSOLE_ENABLE_ECHO: 'false'
+      - PRINTF_FLOAT_ENABLE: 'false'
+      - SCANF_FLOAT_ENABLE: 'false'
+      - PRINTF_ADVANCED_ENABLE: 'false'
+      - SCANF_ADVANCED_ENABLE: 'false'
+      - DEBUG_CONSOLE_TRANSFER_NON_BLOCKING: 'true'
+      - DEBUG_CONSOLE_TRANSMIT_BUFFER_LEN: '512'
+      - DEBUG_CONSOLE_RECEIVE_BUFFER_LEN: '1024'
+      - DEBUG_CONSOLE_TX_RELIABLE_ENABLE: 'true'
+      - DEBUG_CONSOLE_DISABLE_RTOS_SYNCHRONIZATION: 'false'
+    - debug_console_codegenerator: []
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+
+/* Empty initialization function (commented out)
+static void DebugConsole_init(void) {
+} */
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
@@ -524,8 +539,8 @@ void BOARD_InitPeripherals(void)
   /* Initialize components */
   DMA_init();
   DAC0_init();
-  UART0_init();
   PIT_init();
+  UART0_init();
 }
 
 /***********************************************************************************************************************

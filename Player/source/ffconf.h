@@ -56,7 +56,7 @@ extern "C" {
 /  f_findnext(). (0:Disable, 1:Enable 2:Enable with matching altname[] too) */
 
 
-#define FF_USE_MKFS  1
+#define FF_USE_MKFS  0
 /* This option switches f_mkfs() function. (0:Disable or 1:Enable) */
 
 
@@ -91,7 +91,7 @@ extern "C" {
 
 
 #define FF_PRINT_LLI  0
-#define FF_PRINT_FLOAT  0
+#define FF_PRINT_FLOAT  2
 /* FF_PRINT_LLI = 1 makes f_printf() support long long argument and FF_PRINT_FLOAT = 1/2
 /  makes f_printf() support floating point argument. These features want C99 or later.
 /  FF_STRF_ENCODE selects assumption of character encoding ON THE FILE to be read/written
@@ -150,7 +150,7 @@ extern "C" {
 /  ff_memfree() exemplified in ffsystem.c, need to be added to the project. */
 
 
-#define FF_LFN_UNICODE  1
+#define FF_LFN_UNICODE  0
 /* This option switches the character encoding on the API when LFN is enabled.
 /
 /   0: ANSI/OEM in current CP (TCHAR = char)
@@ -170,7 +170,7 @@ extern "C" {
 /  on character encoding. When LFN is not enabled, these options have no effect. */
 
 
-#define FF_STRF_ENCODE  1
+#define FF_STRF_ENCODE  0
 /* When FF_LFN_UNICODE >= 1 with LFN enabled, string I/O functions, f_gets(),
 /  f_putc(), f_puts and f_printf() convert the character encoding in it.
 /  This option selects assumption of character encoding ON THE FILE to be

@@ -220,7 +220,7 @@ void FTM_SetInputCaptureChannelSource(FTM_t ftm, FTM_InputCaptureSource_t source
 		break;
 	}
 }
-void FTM_GetInputCaptureChannelSource(FTM_t ftm, FTM_InputCaptureSource_t source)
+uint32_t FTM_GetInputCaptureChannelSource(FTM_t ftm, FTM_InputCaptureSource_t source)
 {
 	switch ((uint32_t)ftm)
 	{
@@ -231,6 +231,8 @@ void FTM_GetInputCaptureChannelSource(FTM_t ftm, FTM_InputCaptureSource_t source
 	case (uint32_t)FTM2:
 		return (SIM->SOPT4 & SIM_SOPT4_FTM2CH0SRC_MASK) >> SIM_SOPT4_FTM2CH0SRC_SHIFT;
 		break;
+	default:
+		return 0;
 	}
 }
 

@@ -14,9 +14,9 @@
 #include "stdlib.h"
 #include "fsl_common.h"
 #include "fsl_dac.h"
+#include "fsl_pit.h"
 #include "fsl_uart.h"
 #include "fsl_clock.h"
-#include "fsl_pit.h"
 #include "ff.h"
 #include "diskio.h"
 
@@ -35,7 +35,7 @@ extern "C" {
 
   /* Channel CH3 definitions */
 /* DMA eDMA source request. */
-#define DMA_CH3_DMA_REQUEST kDmaRequestMux0DAC0
+#define DMA_CH3_DMA_REQUEST kDmaRequestMux0AlwaysOn58
 /* Selected eDMA channel number. */
 #define DMA_CH3_DMA_CHANNEL 3
 /* TCD pool size */
@@ -52,18 +52,6 @@ extern "C" {
 #define DMA_DMA_CH_INT_DONE_0_IRQN DMA0_IRQn
 /* Alias for DAC0 peripheral */
 #define DAC0_PERIPHERAL DAC0
-/* Definition of peripheral ID */
-#define UART0_PERIPHERAL UART0
-/* Definition of the clock source frequency */
-#define UART0_CLOCK_SOURCE CLOCK_GetFreq(UART0_CLK_SRC)
-/* UART0 interrupt vector ID (number). */
-#define UART0_SERIAL_RX_TX_IRQN UART0_RX_TX_IRQn
-/* UART0 interrupt handler identifier. */
-#define UART0_SERIAL_RX_TX_IRQHANDLER UART0_RX_TX_IRQHandler
-/* UART0 interrupt vector ID (number). */
-#define UART0_SERIAL_ERROR_IRQN UART0_ERR_IRQn
-/* UART0 interrupt handler identifier. */
-#define UART0_SERIAL_ERROR_IRQHANDLER UART0_ERR_IRQHandler
 /* BOARD_InitPeripherals defines for PIT */
 /* Definition of peripheral ID. */
 #define PIT_PERIPHERAL PIT
@@ -77,15 +65,21 @@ extern "C" {
 #define PIT_CHANNEL_3 kPIT_Chnl_3
 /* Definition of ticks count for channel 3. */
 #define PIT_CHANNEL_3_TICKS 1134U
+/* Definition of peripheral ID */
+#define UART0_PERIPHERAL UART0
+/* Definition of the clock source frequency */
+#define UART0_CLOCK_SOURCE CLOCK_GetFreq(UART0_CLK_SRC)
+/* Debug console is initialized in the peripheral tool */
+#define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
 extern const edma_config_t DMA_config;
 /* Source address extern definition */
-extern uint16_t pingBuffer[1152];
+extern int16_t pingBuffer[1152];
 /* Source address extern definition */
-extern uint16_t pongBuffer[1152];
+extern int16_t pongBuffer[1152];
 extern edma_handle_t DMA_CH3_Handle;
 /* Transactional transfer configuration */
 extern edma_transfer_config_t DMA_CH0_PING_config;
@@ -93,8 +87,8 @@ extern edma_transfer_config_t DMA_CH0_PING_config;
 extern edma_transfer_config_t DMA_CH0_PONG_config;
 extern edma_handle_t DMA_CH0_Handle;
 extern const dac_config_t DAC0_config;
-extern const uart_config_t UART0_config;
 extern const pit_config_t PIT_config;
+extern const uart_config_t UART0_config;
 
 /***********************************************************************************************************************
  * Callback functions

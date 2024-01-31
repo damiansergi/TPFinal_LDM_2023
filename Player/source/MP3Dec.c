@@ -64,12 +64,7 @@ static MP3FrameInfo mp3Info;
 static bool fileOpen = false;
 
 static FRESULT error;
-static DIR directory; /* Directory object */
-static FILINFO fileInformation;
-static UINT bytesWritten;
-static UINT bytesRead;
-static const TCHAR driverNumberBuffer[3U] = {SDDISK + '0', ':', '/'};
-static BYTE work[FF_MAX_SS];
+
 /*******************************************************************************
  *******************************************************************************
                         GLOBAL FUNCTION DEFINITIONS
@@ -85,8 +80,8 @@ bool MP3DecInit()
 
 int MP3SelectSong(song_t *song)
 {
-    static volatile char mp3path[256] = {0};
-    static volatile BYTE readBuff[MAINBUF_SIZE]; // Buffer to store file content
+    static char mp3path[256] = {0};
+    static BYTE readBuff[MAINBUF_SIZE]; // Buffer to store file content
     UINT br;
     int err = 1, offset;
 
@@ -142,54 +137,56 @@ int MP3SelectSong(song_t *song)
 
     f_close(&mp3File);
     fileOpen = false;
+    return 1;
 }
 
-uint32_t MP3DecDecode(uint16_t *buffer)
+int MP3DecDecode(uint16_t *buffer)
 {
-    static volatile BYTE readBuff[MAINBUF_SIZE];                 // Buffer to store file content
-    static volatile uint16_t stereoOutBuff[DEC_BUFFER_SIZE * 2]; // Buffer to store stereo samples
-    UINT br;
+    static BYTE readBuff[MAINBUF_SIZE];                 // Buffer to store file content
+    static uint16_t stereoOutBuff[DEC_BUFFER_SIZE * 2]; // Buffer to store stereo samples
+    UINT bytesRead;
     int offset;
     int err = 1;
     bool needSync = true;
-    BYTE bytesLeft = 0;
+    UINT bytesLeft = 0;
 
     if (fileOpen)
     {
-        while (!f_eof(&mp3File))
+        while (!f_eof(&mp3File)) // Read until Frame valid or EOF
         {
-            if (f_read(&mp3File, readBuff, MAINBUF_SIZE, &br) == FR_OK)
+
+            if (f_read(&mp3File, readBuff, MAINBUF_SIZE, &bytesRead) == FR_OK)
             { // Save file content in readBuff
 
-                // Sync to Header
+                BYTE *readBuffPtr = readBuff;
 
-                bytesLeft = br;
+                bytesLeft = bytesRead; // Save bytes left to read
+
+                // Sync to Header
                 if (needSync)
                 {
-                    offset = MP3FindSyncWord(readBuff, br);
+                    offset = MP3FindSyncWord(readBuff, bytesRead);
                     if (offset < 0)
                     {
                         continue; // Skip block
                     }
-                    needSync = false;
-                    bytesLeft -= offset;
+                    needSync = false;      // Sync found
+                    bytesLeft -= offset;   // Update bytes left to read
+                    readBuffPtr += offset; // Move buffer pointer to start of frame
                 }
-                else
-                {
-                    offset = 0;
-                }
-
+                int checkpoint = bytesLeft;
                 // Decode
-                err = MP3GetNextFrameInfo(mp3Dec, &mp3Info, readBuff + offset);
+                err = MP3GetNextFrameInfo(mp3Dec, &mp3Info, readBuffPtr);
 
                 if (!err)
                 {
                     if (mp3Info.nChans == 1) // File is mono
                     {
-                        err = MP3Decode(mp3Dec, readBuff + offset, &br, buffer, 0);
-                        bytesLeft -= br;
 
-                        if (!err)
+                        err = MP3Decode(mp3Dec, &readBuffPtr, &bytesRead, buffer, 0);
+                        bytesLeft -= bytesRead;
+
+                        if (err == ERR_MP3_NONE)
                         {
                             f_lseek(&mp3File, f_tell(&mp3File) - bytesLeft);
 
@@ -198,10 +195,10 @@ uint32_t MP3DecDecode(uint16_t *buffer)
                     }
                     else if (mp3Info.nChans == 2) // File is stereo
                     {
-                        err = MP3Decode(mp3Dec, readBuff + offset, &br, stereoOutBuff, 0);
-                        bytesLeft -= br;
+                        err = MP3Decode(mp3Dec, &readBuffPtr, &bytesRead, stereoOutBuff, 0);
+                        bytesLeft -= bytesRead;
 
-                        if (!err)
+                        if (err == ERR_MP3_NONE)
                         {
                             for (int i = 0; i < DEC_BUFFER_SIZE; i++)
                             {
@@ -218,41 +215,23 @@ uint32_t MP3DecDecode(uint16_t *buffer)
                 switch (err)
                 {
                 case ERR_MP3_INDATA_UNDERFLOW:
-                    break;
                 case ERR_MP3_MAINDATA_UNDERFLOW:
 
                     if (!f_eof(&mp3File))
                     { // Move file pointer to start of last frame
-                        f_lseek(&mp3File, f_tell(&mp3File) - br + offset);
+                        f_lseek(&mp3File, f_tell(&mp3File) - checkpoint);
                     }
                     break;
-                case ERR_MP3_FREE_BITRATE_SYNC:
-                    break;
-                case ERR_MP3_OUT_OF_MEMORY:
-                    break;
-                case ERR_MP3_NULL_POINTER:
-                    break;
                 case ERR_MP3_INVALID_FRAMEHEADER:
-                    break;
-                case ERR_MP3_INVALID_SIDEINFO:
-                    break;
-                case ERR_MP3_INVALID_SCALEFACT:
-                    break;
                 case ERR_MP3_INVALID_HUFFCODES:
                     // Move file pointer next to start of last frame and resync
                     needSync = true;
-                    f_lseek(&mp3File, f_tell(&mp3File) - br + offset + 1);
-                    break;
-                case ERR_MP3_INVALID_DEQUANTIZE:
-                    break;
-                case ERR_MP3_INVALID_IMDCT:
-                    break;
-                case ERR_MP3_INVALID_SUBBAND:
+                    f_lseek(&mp3File, f_tell(&mp3File) - checkpoint + 1);
                     break;
                 default:
                     // Move file pointer next to start of last frame and resync
                     needSync = true;
-                    f_lseek(&mp3File, f_tell(&mp3File) - br + offset + 1);
+                    f_lseek(&mp3File, f_tell(&mp3File) - checkpoint + 1);
                     break;
                 }
             }

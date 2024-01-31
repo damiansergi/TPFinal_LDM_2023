@@ -112,6 +112,10 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_SDHC_CD_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
                                                         /* @} */
 
+/*! @name DAC0_OUT (number 27), J4[11]
+  @{ */
+/* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

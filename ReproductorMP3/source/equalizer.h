@@ -51,6 +51,10 @@ void changePreset(uint8_t preset);
 
 /* TODO: POR AHI FALTA HACER UNA FUNCION PARA BORRAR LOS DATOS DEL EQUALIZADOR DE LA CANCION ANTERIOR POR UN TEMA DE CAUSALIDAD*/
 
+
+void analizeBlock(float * data, uint32_t datalen);
+
+void analisis2vumeter(uint8_t vumeterDataout[8]);
 /*******************************************************************************
  ******************************************************************************/
 

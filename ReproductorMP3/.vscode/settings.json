@@ -4,6 +4,7 @@
         "fsl_sd_disk.h": "c",
         "sdmmc_config.h": "c",
         "stdbool.h": "c",
-        "random": "c"
+        "random": "c",
+        "algorithm": "c"
     }
 }

@@ -25,6 +25,8 @@
 #include "peripherals.h"
 #include "board.h"
 #include "pin_mux.h"
+#include "equalizer.h"
+#include "vumeter.h"
 #include <stdio.h>
 #include <string.h>
 /*******************************************************************************
@@ -75,7 +77,7 @@ static void readMP3Files();
 
 void doNothing(void);
 
-void convert16to12(const int16_t *input, uint16_t *output, size_t numSamples);
+void processSamples(int16_t *buff, uint32_t buffSize);
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
  ******************************************************************************/
@@ -142,11 +144,9 @@ bool playPlayer()
 
         EDMA_AbortTransfer(&DMA_CH3_Handle);
         uint32_t decodedSamples = MP3DecDecode(pingBuffer);
-
-        // TODO: Aca va filtrado
-
-        // 16bit to 12bit + offset correction
-        convert16to12(pingBuffer, pingBuffer, decodedSamples);
+        float sample = 0.0f;
+        // Filtrado, casteo a 12 bits y correccion de offset
+        processSamples(pingBuffer, decodedSamples);
         DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
         EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         currBuffPlaying = pingBuffer;
@@ -170,6 +170,8 @@ bool playPlayer()
 bool stopPlayer()
 {
     PIT_StopTimer(PIT, kPIT_Chnl_3);
+    DAC0->DAT[0].DATH = 0x8U; // Pull to middle
+    DAC0->DAT[0].DATL = 0x00U;
     state = STOPPED;
     return false;
 }
@@ -177,6 +179,8 @@ bool stopPlayer()
 bool pausePlayer()
 {
     PIT_StopTimer(PIT, kPIT_Chnl_3);
+    DAC0->DAT[0].DATH = 0x8U; // Pull to middle
+    DAC0->DAT[0].DATL = 0x00U;
     pausePrevState = state;
     state = PAUSED;
     return false;
@@ -296,7 +300,7 @@ player_msg_t updatePlayer()
 
     case READING_SD:
         // Read MP· files on SD
-        readMP3Files((char const *)&driverNumberBuffer[0U]);
+        readMP3Files("/");
         selectSong(getListHead()->next);
         state = STOPPED;
         playPlayer();
@@ -314,9 +318,8 @@ player_msg_t updatePlayer()
                 return 0;
             }
 
-            // TODO: Aca va filtrado
-            // 16bit to 12bit + offset correction
-            convert16to12(pongBuffer, pongBuffer, decodedSamples);
+            // Filtrado, casteo a 12 bits y correccion de offset
+            processSamples(pongBuffer, decodedSamples);
             DMA_CH0_PONG_config.majorLoopCounts = decodedSamples;
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PONG_config);
         }
@@ -329,9 +332,8 @@ player_msg_t updatePlayer()
                 return 0;
             }
 
-            // TODO: Aca va filtrado
-            // 16bit to 12bit + offset correction
-            convert16to12(pingBuffer, pingBuffer, decodedSamples);
+            // Filtrado, casteo a 12 bits y correccion de offset
+            processSamples(pingBuffer, decodedSamples);
             DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         }
@@ -387,8 +389,8 @@ void doNothing(void)
 static void readMP3Files(const char *path)
 {
     static char currentPath[256];
-    static DIR directory;
     static FILINFO fileInfo;
+    DIR directory;
 
     FRESULT result = f_opendir(&directory, path); // Open the directory
     if (result != FR_OK)
@@ -436,26 +438,37 @@ static void readMP3Files(const char *path)
     f_closedir(&directory); // Close the directory
 }
 
-void convert16to12(const int16_t *input, uint16_t *output, size_t numSamples)
+void processSamples(int16_t *buff, uint32_t buffSize)
 {
-    for (size_t i = 0; i < numSamples; ++i)
+    static float floatSamples[1152];
+    static uint8_t vumeterDataout[8];
+
+    for (size_t i = 0; i < buffSize; i++)
     {
-        // Shift right by 4 bits to discard the least significant 4 bits
-        int16_t shiftedValue = input[i] >> 4;
 
-        // Apply an offset to center the 12-bit samples at 2048
-        shiftedValue += 2048;
-
-        // Make sure the value is within the 12-bit unsigned range
-        if (shiftedValue < 0)
+        floatSamples[i] = (float)buff[i];
+        // sample = processEqualizer(sample) / 16.0f + 2048.0f;
+        floatSamples[i] = floatSamples[i] / 16.0f + 2048.0f;
+        if (floatSamples[i] < 0)
         {
-            // For negative values, set output to 0
-            output[i] = 0;
+            buff[i] = 0;
+        }
+        else if (floatSamples[i] > 4095)
+        {
+            buff[i] = 4095;
         }
         else
         {
-            // For non-negative values, ensure the value fits within 12 bits
-            output[i] = (uint16_t)(shiftedValue > 0xFFF ? 0xFFF : shiftedValue);
+            buff[i] = (uint16_t)floatSamples[i];
         }
+    }
+
+    analizeBlock(floatSamples, buffSize);
+    analisis2vumeter(vumeterDataout);
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        selectBar(i);
+        setLevel(vumeterDataout[i]);
     }
 }

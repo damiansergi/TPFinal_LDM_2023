@@ -19,7 +19,7 @@
 #define NOTCHGAIN (-12) // in dB
 #define GAINSTEP (3)	// in dB
 // TODO: ajustar valor de MAX_POWER_VALUE
-#define MAX_POWER_VALUE (1000)
+#define MAX_POWER_VALUE (32768/4)
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS

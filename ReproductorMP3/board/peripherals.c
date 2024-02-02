@@ -158,23 +158,7 @@ instance:
         - tcd_settings:
           - tcd_size: '1'
           - tcd_memory_custom_id: 'false'
-        - transfer_config:
-          - 0:
-            - uid: '1706903627527'
-            - tcdID: 'CH0_TRANSFER'
-            - ssize: 'kEDMA_TransferSize2Bytes'
-            - saddr_expr: '(uint32_t *)waveform'
-            - saddr_def: 'extern uint16_t *waveform;'
-            - soff: '2'
-            - soff_def: ''
-            - dsize: 'kEDMA_TransferSize2Bytes'
-            - daddr_expr: '(uint32_t) & (FTM0->CONTROLS[0].CnV)'
-            - daddr_def: ''
-            - doff: '0'
-            - doff_def: ''
-            - nbytes: '2'
-            - transferBytes: '2'
-            - submitTransfer: 'false'
+        - transfer_config: []
         - no_init_uid: '1706585616758'
         - init_callback: 'true'
         - callback_function: 'DMA_callback_CH0'
@@ -204,8 +188,6 @@ const edma_config_t DMA_config = {
 edma_transfer_config_t DMA_CH0_PING_config;
 /* Tansactional transfer configuration */
 edma_transfer_config_t DMA_CH0_PONG_config;
-/* Tansactional transfer configuration */
-edma_transfer_config_t DMA_CH0_TRANSFER_config;
 edma_handle_t DMA_CH3_Handle;
 /* TCD pool initialization */
 edma_tcd_t * DMA_CH3_TCD_pool_ptr;
@@ -245,8 +227,6 @@ static void DMA_init(void) {
   EDMA_CreateHandle(&DMA_CH0_Handle, DMA_DMA_BASEADDR, DMA_CH0_DMA_CHANNEL);
   /* DMA callback initialization */
   EDMA_SetCallback(&DMA_CH0_Handle, DMA_callback_CH0, NULL);
-  /* DMA transfer CH0_TRANSFER configuration */
-  EDMA_PrepareTransferConfig(&DMA_CH0_TRANSFER_config, (void *) (uint32_t *)waveform, 1 << kEDMA_TransferSize2Bytes, 2, (void *) (uint32_t) & (FTM0->CONTROLS[0].CnV), 1 << kEDMA_TransferSize2Bytes, 0, 2U, 2U); 
 }
 
 /***********************************************************************************************************************

@@ -103,12 +103,12 @@ FTMData_t FTM_GetModulus(FTM_t ftm)
 
 void FTM_StartClock(FTM_t ftm)
 {
-	ftm->SC |= FTM_SC_CLKS(0x01);
+	ftm->SC = (ftm->SC & ~FTM_SC_CLKS(0x11)) | FTM_SC_CLKS(0x01);
 }
 
 void FTM_StopClock(FTM_t ftm)
 {
-	ftm->SC &= ~FTM_SC_CLKS(0x01);
+	ftm->SC &= ~FTM_SC_CLKS(0x11);
 	ftm->CNT = 0;
 }
 

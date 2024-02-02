@@ -17,7 +17,7 @@
 #define REFRESHRATE (41666.0f)		  // 24Hz
 #define DEFAULTBLINKTIME (1000000.0f) // 1s
 
-#define SCALECOLOR(color, b) ((int)((color) * (b) / 100))
+#define SCALECOLOR(color, b) ((int)(((float)(color)) * ((float)(b)) / 100.0f))
 #define ON (1)
 #define OFF (0)
 
@@ -37,7 +37,7 @@ typedef struct
 
 static LED_t LEDMatrix[NUMOFLEDS] = {0};
 static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 10] = {0};
-static uint8_t brightness = MAXBRIGHTNESS / 6;
+static uint8_t brightness = 90;
 static uint8_t refreshTimerID = 0;
 static uint8_t blinkTimerID = 0;
 
@@ -57,6 +57,7 @@ void initLEDMatrix()
 		for (int j = 0; j < COLS; j++)
 		{
 			changeColor(i, j, defaultColor);
+			turnOff(i, j);
 		}
 	}
 
@@ -169,8 +170,6 @@ static void refresh()
 
 static void updateSingle(uint8_t row, uint8_t col)
 {
-	int currBit = 7;
-	states currColor = G;
 	uint8_t bit = 0;
 	uint8_t tempColor;
 
@@ -179,15 +178,15 @@ static void updateSingle(uint8_t row, uint8_t col)
 		if (LEDMatrix[row * 8 + col].onoff == ON)
 		{
 			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.g, brightness);
-			bit = (tempColor >> currBit) & (0x1);
+			bit = (tempColor << j) & (0x80);
 			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j] = bit ? T1H : T0H;
 
 			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.r, brightness);
-			bit = (tempColor >> currBit) & (0x1);
+			bit = (tempColor << j) & (0x80);
 			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 8] = bit ? T1H : T0H;
 
 			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.b, brightness);
-			bit = (tempColor >> currBit) & (0x1);
+			bit = (tempColor << j) & (0x80);
 			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 16] = bit ? T1H : T0H;
 		}
 		else

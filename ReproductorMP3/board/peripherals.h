@@ -80,16 +80,12 @@ extern const edma_config_t DMA_config;
 extern int16_t pingBuffer[1152];
 /* Source address extern definition */
 extern int16_t pongBuffer[1152];
-/* Source address extern definition */
-extern uint16_t *waveform;
 extern edma_handle_t DMA_CH3_Handle;
 /* Transactional transfer configuration */
 extern edma_transfer_config_t DMA_CH0_PING_config;
 /* Transactional transfer configuration */
 extern edma_transfer_config_t DMA_CH0_PONG_config;
 extern edma_handle_t DMA_CH0_Handle;
-/* Transactional transfer configuration */
-extern edma_transfer_config_t DMA_CH0_TRANSFER_config;
 extern const dac_config_t DAC0_config;
 extern const pit_config_t PIT_config;
 extern const uart_config_t UART0_config;

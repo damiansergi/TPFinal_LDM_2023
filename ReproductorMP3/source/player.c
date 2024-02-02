@@ -464,6 +464,14 @@ void processSamples(int16_t *buff, uint32_t buffSize)
 
     processEqualizer(floatSamplesaux, floatSamples, buffSize);
 
+    analizeBlock(floatSamples, buffSize);
+    analisis2vumeter(vumeterDataout);
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        selectBar(i);
+        setLevel(vumeterDataout[i]);
+    }
     for (size_t i = 0; i < buffSize; i++)
     {
 
@@ -481,14 +489,5 @@ void processSamples(int16_t *buff, uint32_t buffSize)
         {
             buff[i] = (uint16_t)floatSamples[i];
         }
-    }
-
-    analizeBlock(floatSamples, buffSize);
-    analisis2vumeter(vumeterDataout);
-
-    for (size_t i = 0; i < 8; i++)
-    {
-        selectBar(i);
-        setLevel(vumeterDataout[i]);
     }
 }

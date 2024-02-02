@@ -5,6 +5,7 @@
 #include "UI/display.h"
 #include "UI/privateSTDIO.h"
 #include "player.h"
+#include "equalizer.h"
 
 // En estas variables voy a guardar lo seleccionado por la UI en cada caso, y en cada rutina
 //  de accion al cambiar a alguna de estas voy a llamar a una funcion de ustedes que tiene que responder
@@ -13,8 +14,6 @@ uint8_t volumeLevel = 15;
 uint8_t songSelected = 1;
 bool pause = true;
 uint8_t eqLevel = 0;
-#define EQCANT 5													 // TODO: Esto deberia estar en el header del eq
-char *eqBands[EQCANT] = {"Flat", "Jazz", "Rock", "Classic", "Atun"}; // TODO: Esto deberia estar en el header del eq
 
 /*Foward Declarations*/
 
@@ -101,9 +100,10 @@ static void do_nothing(void)
 }
 static void goToRepFromOff(void)
 {
+	DisplayBacklight();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len+1, 0);
+	DisplayWrite(name, len + 1, 0);
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -113,8 +113,7 @@ static void goToRepFromVol(void)
 {
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len+1, 0);
-
+	DisplayWrite(name, len + 1, 0);
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -124,7 +123,7 @@ static void goToRepFromEq(void)
 {
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len+1, 0);
+	DisplayWrite(name, len + 1, 0);
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -151,15 +150,14 @@ static void changeSongLeft(void)
 	prevSong();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len+1, 0);
-
+	DisplayWrite(name, len + 1, 0);
 }
 static void changeSongRight(void)
 {
 	nextSong();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len+1, 0);
+	DisplayWrite(name, len + 1, 0);
 }
 static void goToVolume(void)
 {
@@ -209,6 +207,7 @@ static void changeEqRight(void)
 	if (eqLevel < (EQCANT - 1))
 	{
 		eqLevel++;
+		changePreset(eqLevel);
 		char buffer2[17] = "                ";
 		eqStringPrinter(buffer2, eqBands[eqLevel]);
 		DisplayWrite(buffer2, 16, 1);
@@ -220,6 +219,7 @@ static void changeEqLeft(void)
 	if (eqLevel > 0)
 	{
 		eqLevel--;
+		changePreset(eqLevel);
 		char buffer2[17] = "                ";
 		eqStringPrinter(buffer2, eqBands[eqLevel]);
 		DisplayWrite(buffer2, 16, 1);
@@ -227,17 +227,17 @@ static void changeEqLeft(void)
 }
 static void turnOff(void)
 {
-
+	DisplayNoBacklight();
 	char buffer[17] = "    APAGADO     ";
 	DisplayWrite(buffer, 16, 0);
 	bufferClean(buffer);
 	DisplayWrite(buffer, 16, 1);
+	stopPlayer();
 }
 
 static void autoPlayNextSong(void)
 {
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
-	DisplayWrite(name, len, 0);
-
+	DisplayWrite(name, len + 1, 0);
 }

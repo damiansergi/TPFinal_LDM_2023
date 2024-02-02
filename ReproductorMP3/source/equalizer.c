@@ -32,6 +32,8 @@
 static int8_t currentGains[BANDS];
 
 static int8_t *presetSelected;
+static int8_t flatConfig[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0};
+static int8_t bassConfig[BANDS] = {4, 3, 2, 0, 0, 0, 0, 0};
 static int8_t rockConfig[BANDS] = {5, 4, 2, 0, -1, 1, 3, 4};
 static int8_t popConfig[BANDS] = {-2, -1, 2, 4, 4, 2, -1, -2};
 
@@ -84,11 +86,17 @@ void changePreset(uint8_t preset)
 
 	switch (preset)
 	{
-	case rock:
+	case Rock:
 		presetSelected = rockConfig;
 		break;
-	case pop:
+	case Pop:
 		presetSelected = popConfig;
+		break;
+	case Flat:
+		presetSelected = flatConfig;
+		break;
+	case Bass:
+		presetSelected = bassConfig;
 		break;
 	}
 

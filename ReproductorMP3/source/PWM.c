@@ -125,7 +125,7 @@ void PWM_SetTickPerPeriod(uint16_t tPerPeriod)
 		FTM_SetModulus(FTM0, ticksPerPeriod);
 		PWM_SetDC(DC);
 	}
-	FTM_StartClock(FTM0);
+
 }
 uint16_t PWM_GetTickPerPeriod()
 {
@@ -142,42 +142,39 @@ void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t 
 	FTM_DmaMode(FTM0, FTM_CH_0, true);
 	FTM_SetInterruptMode(FTM0, FTM_CH_0, true);
 
-	DMA_CH0_TRANSFER_config.srcAddr = waveform;
-	DMA_CH0_TRANSFER_config.majorLoopCounts = wave_length * DMA_CH0_TRANSFER_config.minorLoopBytes;
-	DMA_CH0_TRANSFER_config.srcOffset = waveform_offset * DMA_CH0_TRANSFER_config.minorLoopBytes;
-	// DMA_SetSourceModulo(DMA_CH0, 0);
-	// DMA_SetDestModulo(DMA_CH0, 0);
 
-	// DMA_SetSourceAddr(DMA_CH0, (uint32_t)waveform);
-	// DMA_SetDestAddr(DMA_CH0, (uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV));
+	 DMA_SetSourceModulo(DMA_CH0, 0);
+	 DMA_SetDestModulo(DMA_CH0, 0);
 
-	// DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
-	// DMA_SetDestAddrOffset(DMA_CH0, 0);
+	 DMA_SetSourceAddr(DMA_CH0, (uint32_t)waveform);
+	 DMA_SetDestAddr(DMA_CH0, (uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV));
 
-	// DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
-	// DMA_SetDestLastAddrOffset(DMA_CH0, 0);
+	 DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
+	 DMA_SetDestAddrOffset(DMA_CH0, 0);
 
-	// DMA_SetSourceTransfSize(DMA_CH0, DMA_TransSize_16Bit);
-	// DMA_SetDestTransfSize(DMA_CH0, DMA_TransSize_16Bit);
+	 DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
+	 DMA_SetDestLastAddrOffset(DMA_CH0, 0);
 
-	// DMA_SetMinorLoopTransCount(DMA_CH0, 2);
+	 DMA_SetSourceTransfSize(DMA_CH0, DMA_TransSize_16Bit);
+	 DMA_SetDestTransfSize(DMA_CH0, DMA_TransSize_16Bit);
 
-	// DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
-	// DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
+	 DMA_SetMinorLoopTransCount(DMA_CH0, 2);
 
-	// DMA_SetEnableRequest(DMA_CH0, true);
+	 DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
+	 DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
 
-	// DMAMUX_ConfigChannel(DMA_CH0, true, false, kDmaRequestMux0FTM0Channel0);
-	// DMA_SetChannelInterrupt(DMA_CH0, true, NULL);
-	// DMA_StartTransfer(DMA_CH0);
-	EDMA_SubmitTransfer(&DMA_CH0_Handle, &DMA_CH0_TRANSFER_config);
+	 DMA_SetEnableRequest(DMA_CH0, true);
+
+	 DMAMUX_ConfigChannel(DMA_CH0, true, false, kDmaRequestMux0FTM0Channel0);
+	 DMA_SetChannelInterrupt(DMA_CH0, true, NULL);
+	 DMA_StartTransfer(DMA_CH0);
+
 	FTM_ClearInterruptFlag(FTM0, FTM_CH_0);
 	FTM_ClearOverflowFlag(FTM0);
 }
 
 void PWM_burst(void)
 {
-	EDMA_StartTransfer(&DMA_CH0_Handle);
 	FTM_StartClock(FTM0);
 }
 /*******************************************************************************
@@ -188,5 +185,5 @@ void PWM_burst(void)
 void DMA_callback_CH0(edma_handle_t *, void *, bool, uint32_t)
 {
 	FTM_StopClock(FTM0);
-	EDMA_SubmitTransfer(&DMA_CH0_Handle, &DMA_CH0_TRANSFER_config);
+
 }

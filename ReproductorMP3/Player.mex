@@ -631,25 +631,7 @@
                                  <setting name="tcd_size" value="1"/>
                                  <setting name="tcd_memory_custom_id" value="false"/>
                               </struct>
-                              <array name="transfer_config">
-                                 <struct name="0">
-                                    <setting name="uid" value="1706903627527"/>
-                                    <setting name="tcdID" value="CH0_TRANSFER"/>
-                                    <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
-                                    <setting name="saddr_expr" value="(uint32_t *)waveform"/>
-                                    <setting name="saddr_def" value="extern uint16_t *waveform;"/>
-                                    <setting name="soff" value="2"/>
-                                    <setting name="soff_def" value=""/>
-                                    <setting name="dsize" value="kEDMA_TransferSize2Bytes"/>
-                                    <setting name="daddr_expr" value="(uint32_t) &amp; (FTM0-&gt;CONTROLS[0].CnV)"/>
-                                    <setting name="daddr_def" value=""/>
-                                    <setting name="doff" value="0"/>
-                                    <setting name="doff_def" value=""/>
-                                    <setting name="nbytes" value="2"/>
-                                    <setting name="transferBytes" value="2"/>
-                                    <setting name="submitTransfer" value="false"/>
-                                 </struct>
-                              </array>
+                              <array name="transfer_config"/>
                               <setting name="no_init_uid" value="1706585616758"/>
                               <setting name="init_callback" value="true"/>
                               <setting name="callback_function" value="DMA_callback_CH0"/>

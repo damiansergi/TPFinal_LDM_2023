@@ -17,7 +17,7 @@
 #include "sdmmc_config.h"
 #include "fsl_sysmpu.h"
 #include "MK64F12.h"
-#include "mp3dec.h"
+#include <mp3dec.h>
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/

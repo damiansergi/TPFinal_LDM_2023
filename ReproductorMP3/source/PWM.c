@@ -10,6 +10,8 @@
 #include "FTM.h"
 #include "DMA.h"
 #include "MK64F12.h"
+#include "peripherals.h"
+#include "fsl_edma.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -130,67 +132,54 @@ uint16_t PWM_GetTickPerPeriod()
 	return ticksPerPeriod;
 }
 
-void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset, void (*callback)(void))
+void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset)
 {
 	waveform = waveform_pointer;
 	waveform_lenght = wave_length;
 	waveform_offset = waveTable_offset;
-	Table_end_cb = callback;
 
 	FTM_StopClock(FTM0);
 	FTM_DmaMode(FTM0, FTM_CH_0, true);
 	FTM_SetInterruptMode(FTM0, FTM_CH_0, true);
 
-	DMA_SetSourceModulo(DMA_CH0, 0);
-	DMA_SetDestModulo(DMA_CH0, 0);
+	DMA_CH0_TRANSFER_config.srcAddr = waveform;
+	DMA_CH0_TRANSFER_config.majorLoopCounts = wave_length * DMA_CH0_TRANSFER_config.minorLoopBytes;
+	DMA_CH0_TRANSFER_config.srcOffset = waveform_offset * DMA_CH0_TRANSFER_config.minorLoopBytes;
+	// DMA_SetSourceModulo(DMA_CH0, 0);
+	// DMA_SetDestModulo(DMA_CH0, 0);
 
-	DMA_SetSourceAddr(DMA_CH0, (uint32_t)waveform);
-	DMA_SetDestAddr(DMA_CH0, (uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV));
+	// DMA_SetSourceAddr(DMA_CH0, (uint32_t)waveform);
+	// DMA_SetDestAddr(DMA_CH0, (uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV));
 
-	DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
-	DMA_SetDestAddrOffset(DMA_CH0, 0);
+	// DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
+	// DMA_SetDestAddrOffset(DMA_CH0, 0);
 
-	DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
-	DMA_SetDestLastAddrOffset(DMA_CH0, 0);
+	// DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
+	// DMA_SetDestLastAddrOffset(DMA_CH0, 0);
 
-	DMA_SetSourceTransfSize(DMA_CH0, DMA_TransSize_16Bit);
-	DMA_SetDestTransfSize(DMA_CH0, DMA_TransSize_16Bit);
+	// DMA_SetSourceTransfSize(DMA_CH0, DMA_TransSize_16Bit);
+	// DMA_SetDestTransfSize(DMA_CH0, DMA_TransSize_16Bit);
 
-	DMA_SetMinorLoopTransCount(DMA_CH0, 2);
+	// DMA_SetMinorLoopTransCount(DMA_CH0, 2);
 
-	DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
-	DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
+	// DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
+	// DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
 
-	DMA_SetEnableRequest(DMA_CH0, true);
+	// DMA_SetEnableRequest(DMA_CH0, true);
 
-	DMAMUX_ConfigChannel(DMA_CH0, true, false, kDmaRequestMux0FTM0Channel0);
-	DMA_SetChannelInterrupt(DMA_CH0, true, NULL);
-	DMA_StartTransfer(DMA_CH0);
-
+	// DMAMUX_ConfigChannel(DMA_CH0, true, false, kDmaRequestMux0FTM0Channel0);
+	// DMA_SetChannelInterrupt(DMA_CH0, true, NULL);
+	// DMA_StartTransfer(DMA_CH0);
+	EDMA_SubmitTransfer(&DMA_CH0_Handle, &DMA_CH0_TRANSFER_config);
 	FTM_ClearInterruptFlag(FTM0, FTM_CH_0);
 	FTM_ClearOverflowFlag(FTM0);
-	FTM_StartClock(FTM0);
 }
 
-void PWM_SetWaveformOffset(uint32_t waveTable_offset)
+void PWM_burst(void)
 {
-	waveform_offset = waveTable_offset;
-	FTM_StopClock(FTM0);
-
-	uint32_t newCount = ((int32_t)DMA_GetSourceAddr(DMA_CH0) - (int32_t)waveform) / (2 * waveform_offset);
-	if (newCount > 109)
-		waveform = waveform;
-	if (newCount < 0)
-		waveform = waveform;
-	DMA_SetSourceAddr(DMA_CH0, (uint32_t)waveform + newCount * waveform_offset * 2);
-	DMA_SetSourceAddrOffset(DMA_CH0, waveform_offset * 2);
-	DMA_SetCurrMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1 - newCount);
-	DMA_SetStartMajorLoopCount(DMA_CH0, waveform_lenght / waveform_offset - 1);
-	DMA_SetSourceLastAddrOffset(DMA_CH0, -2 * (int32_t)(waveform_lenght - waveform_offset));
+	EDMA_StartTransfer(&DMA_CH0_Handle);
 	FTM_StartClock(FTM0);
-	// DMA_StartTransfer(DMA_CH0);
 }
-uint32_t PWM_GetWaveformOffset();
 /*******************************************************************************
  *******************************************************************************
 						LOCAL FUNCTION DEFINITIONS
@@ -198,8 +187,6 @@ uint32_t PWM_GetWaveformOffset();
  ******************************************************************************/
 void DMA_callback_CH0(edma_handle_t *, void *, bool, uint32_t)
 {
-	if (Table_end_cb != NULL)
-	{
-		Table_end_cb();
-	}
+	FTM_StopClock(FTM0);
+	EDMA_SubmitTransfer(&DMA_CH0_Handle, &DMA_CH0_TRANSFER_config);
 }

@@ -58,6 +58,7 @@ uint32_t PWM_GetWaveformOffset();
  */
 void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset, void (*callback)(void));
 
+void PWM_burst(void);
 /*******************************************************************************
  ******************************************************************************/
 

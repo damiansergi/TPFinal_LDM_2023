@@ -25,8 +25,6 @@
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-#define EQCANT 4
-const char *eqBands[EQCANT] = {"Flat", "Rock", "Pop", "Bass"};
 
 enum
 {

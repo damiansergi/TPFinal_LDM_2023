@@ -36,7 +36,7 @@ typedef struct
 } LED_t;
 
 static LED_t LEDMatrix[NUMOFLEDS] = {0};
-static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 2] = {0};
+static uint16_t PWMLEDMatrix[NUMOFLEDS * RGBBITS + 10] = {0};
 static uint8_t brightness = MAXBRIGHTNESS / 6;
 static uint8_t refreshTimerID = 0;
 static uint8_t blinkTimerID = 0;

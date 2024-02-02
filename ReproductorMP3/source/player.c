@@ -303,7 +303,6 @@ player_msg_t updatePlayer()
         readMP3Files("/");
         selectSong(getListHead()->next);
         state = STOPPED;
-        playPlayer();
         break;
 
     case DECODING:

@@ -160,14 +160,14 @@ void initDisplay() {
 void DisplayClear(){
 	command(LCD_CLEARDISPLAY);// clear display, set cursor position to zero
 
-	DelayInit(22142UL);
+	//DelayInit(22142UL);
 	// delayMicroseconds(2000);  // this command takes a long time!
 }
 
 void DisplayHome(){
 	command(LCD_RETURNHOME);  // set cursor position to zero
 
-	DelayInit(22142UL);
+	//DelayInit(22142UL);
 	//delayMicroseconds(2000);  // this command takes a long time!
 }
 

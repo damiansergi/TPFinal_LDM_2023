@@ -76,13 +76,13 @@ void App_Init(void)
 /* Función que se llama constantemente en un ciclo infinito */
 void App_Run(void)
 {
-//	static event_t nextEvent;
-//
-//	nextEvent = getNextEvent();
-//		if (nextEvent != None){
-//
-//			p2state = fsm(p2state,nextEvent);      //Se lo paso a la maquina de estados
-//		}
+	static event_t nextEvent;
+
+	nextEvent = getNextEvent();
+	if (nextEvent != None){
+
+		p2state = fsm(p2state,nextEvent);      //Se lo paso a la maquina de estados
+	}
 	updatePlayer();
 }
 

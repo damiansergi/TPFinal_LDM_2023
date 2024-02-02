@@ -134,31 +134,31 @@ void analizeBlock(float *data, uint32_t datalen)
 
 	for (size_t i = 0; i < power / 2; i++)
 	{
-		if (11025.0f / power * (i + 1) > 8158.27f)
+		if (44100.0f / power * (i + 1) > 8158.27f)
 		{
 			j = 7;
 		}
-		else if (11025.0f / power * (i + 1) > 3392.86f)
+		else if (44100.0f / power * (i + 1) > 3392.86f)
 		{
 			j = 6;
 		}
-		else if (11025.0f / power * (i + 1) > 1547.15f)
+		else if (44100.0f / power * (i + 1) > 1547.15f)
 		{
 			j = 5;
 		}
-		else if (11025.0f / power * (i + 1) > 623.0f)
+		else if (44100.0f / power * (i + 1) > 623.0f)
 		{
 			j = 4;
 		}
-		else if (11025.0f / power * (i + 1) > 263.0f)
+		else if (44100.0f / power * (i + 1) > 263.0f)
 		{
 			j = 3;
 		}
-		else if (11025.0f / power * (i + 1) > 112.52f)
+		else if (44100.0f / power * (i + 1) > 112.52f)
 		{
 			j = 2;
 		}
-		else if (11025.0f / power * (i + 1) > 47.8f)
+		else if (44100.0f / power * (i + 1) > 47.8f)
 		{
 			j = 1;
 		}

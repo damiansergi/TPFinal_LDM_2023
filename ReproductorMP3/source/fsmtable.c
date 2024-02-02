@@ -10,7 +10,7 @@
 // En estas variables voy a guardar lo seleccionado por la UI en cada caso, y en cada rutina
 //  de accion al cambiar a alguna de estas voy a llamar a una funcion de ustedes que tiene que responder
 //  haciendo los cambios necesarios, y si lo precisasen guardando el numero al cual cambió la variable
-uint8_t volumeLevel = 15;
+uint8_t volumeLevel = 30;
 uint8_t songSelected = 1;
 bool pause = true;
 uint8_t eqLevel = 0;

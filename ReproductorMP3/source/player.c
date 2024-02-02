@@ -175,6 +175,7 @@ bool stopPlayer()
     PIT_StopTimer(PIT, kPIT_Chnl_3);
     DAC0->DAT[0].DATH = 0x8U; // Pull to middle
     DAC0->DAT[0].DATL = 0x00U;
+    turnOffVumeter();
     state = STOPPED;
     return false;
 }

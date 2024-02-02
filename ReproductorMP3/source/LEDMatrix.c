@@ -44,7 +44,6 @@ static uint8_t blinkTimerID = 0;
 static void update();
 static void updateSingle(uint8_t row, uint8_t col);
 static void refresh();
-static void onRefreshEnded();
 static void toggle();
 
 void initLEDMatrix()
@@ -65,7 +64,7 @@ void initLEDMatrix()
 	initPIT();
 	PWM_Init();
 	PWM_SetTickPerPeriod(TICKSPERPERIOD);
-	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS + 2, 1, onRefreshEnded);
+	PWM_GenWaveform(PWMLEDMatrix, NUMOFLEDS * RGBBITS + 2, 1);
 
 	refreshTimerID = createTimer(REFRESHRATE, refresh);
 	blinkTimerID = createTimer(DEFAULTBLINKTIME, toggle);

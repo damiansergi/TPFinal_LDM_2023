@@ -63,7 +63,8 @@ STATE st_rep[] =
 		{ButtonPoint, st_vol, goToVolume},
 		{ButtonLine, st_eq, goToEq},
 		{EncoderClick, st_off, turnOff},
-		{AutoNextSong, st_rep, autoPlayNextSong()} {FIN_TABLA, st_rep, do_nothing}};
+		{AutoNextSong, st_rep, autoPlayNextSong},
+		{FIN_TABLA, st_rep, do_nothing}};
 
 /*** estado volumen ***/
 
@@ -165,7 +166,7 @@ static void goToVolume(void)
 static void changeVolumeRight(void)
 {
 
-	if (volumeLevel < 29)
+	if (volumeLevel < 30)
 	{
 		volumeLevel++;
 		char buffer2[17] = "                ";

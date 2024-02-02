@@ -102,7 +102,8 @@ static void do_nothing(void)
 static void goToRepFromOff(void)
 {
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len+1, 0);
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -111,7 +112,9 @@ static void goToRepFromOff(void)
 static void goToRepFromVol(void)
 {
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len+1, 0);
+
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -120,7 +123,8 @@ static void goToRepFromVol(void)
 static void goToRepFromEq(void)
 {
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len+1, 0);
 
 	char buffer2[17] = "                ";
 	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
@@ -146,13 +150,16 @@ static void changeSongLeft(void)
 {
 	prevSong();
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len+1, 0);
+
 }
 static void changeSongRight(void)
 {
 	nextSong();
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len+1, 0);
 }
 static void goToVolume(void)
 {
@@ -230,5 +237,7 @@ static void turnOff(void)
 static void autoPlayNextSong(void)
 {
 	char *name = getCurrentSongName();
-	DisplayWrite(name, 16, 0);
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len, 0);
+
 }

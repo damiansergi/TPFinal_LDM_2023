@@ -641,7 +641,7 @@
                                     <setting name="soff" value="2"/>
                                     <setting name="soff_def" value=""/>
                                     <setting name="dsize" value="kEDMA_TransferSize2Bytes"/>
-                                    <setting name="daddr_expr" value="(uint32_t) &amp; (FTM0-&gt;CONTROLS[FTM_CH_0].CnV)"/>
+                                    <setting name="daddr_expr" value="(uint32_t) &amp; (FTM0-&gt;CONTROLS[0].CnV)"/>
                                     <setting name="daddr_def" value=""/>
                                     <setting name="doff" value="0"/>
                                     <setting name="doff_def" value=""/>

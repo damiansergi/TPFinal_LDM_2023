@@ -168,7 +168,7 @@ instance:
             - soff: '2'
             - soff_def: ''
             - dsize: 'kEDMA_TransferSize2Bytes'
-            - daddr_expr: '(uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV)'
+            - daddr_expr: '(uint32_t) & (FTM0->CONTROLS[0].CnV)'
             - daddr_def: ''
             - doff: '0'
             - doff_def: ''
@@ -246,7 +246,7 @@ static void DMA_init(void) {
   /* DMA callback initialization */
   EDMA_SetCallback(&DMA_CH0_Handle, DMA_callback_CH0, NULL);
   /* DMA transfer CH0_TRANSFER configuration */
-  EDMA_PrepareTransferConfig(&DMA_CH0_TRANSFER_config, (void *) (uint32_t *)waveform, 1 << kEDMA_TransferSize2Bytes, 2, (void *) (uint32_t) & (FTM0->CONTROLS[FTM_CH_0].CnV), 1 << kEDMA_TransferSize2Bytes, 0, 2U, 2U); 
+  EDMA_PrepareTransferConfig(&DMA_CH0_TRANSFER_config, (void *) (uint32_t *)waveform, 1 << kEDMA_TransferSize2Bytes, 2, (void *) (uint32_t) & (FTM0->CONTROLS[0].CnV), 1 << kEDMA_TransferSize2Bytes, 0, 2U, 2U); 
 }
 
 /***********************************************************************************************************************

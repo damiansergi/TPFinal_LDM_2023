@@ -56,7 +56,7 @@ uint32_t PWM_GetWaveformOffset();
  * @param callback funtion to call at the end of every transmission. Use 0 if not needed.
  * @return void
  */
-void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset, void (*callback)(void));
+void PWM_GenWaveform(uint16_t *waveform_pointer, uint32_t wave_length, uint32_t waveTable_offset);
 
 void PWM_burst(void);
 /*******************************************************************************

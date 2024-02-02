@@ -99,6 +99,18 @@ void vumeterOff()
 	state = OFF;
 }
 
+void turnOffVumeter(void)
+{
+	for (size_t i = 0; i < ROWS; i++)
+	{
+		for (size_t j = 0; j < COLS; j++)
+		{
+			turnOff(i, j);
+		}
+	}
+	return;
+}
+
 void adjustBrightness(uint8_t bright)
 {
 	changeBrightness(bright);

@@ -130,6 +130,7 @@ void analizeBlock(float *data, uint32_t datalen)
 	memset(bandPower, 0, sizeof(bandPower));
 
 	uint32_t j = 0;
+	uint32_t binCounter[BANDS] = {0};
 
 	for (size_t i = 0; i < power / 2; i++)
 	{
@@ -161,13 +162,13 @@ void analizeBlock(float *data, uint32_t datalen)
 		{
 			j = 1;
 		}
-
-		bandPower[i / (power / 16)] += pOutMod[i];
+		binCounter[j]++;
+		bandPower[j] += pOutMod[i];
 	}
 
 	for (int i = 0; i < BANDS; i++)
 	{
-		bandPower[i] /= (power / 16) * MAX_POWER_VALUE;
+		bandPower[i] /= (binCounter[i]) * MAX_POWER_VALUE;
 	}
 }
 

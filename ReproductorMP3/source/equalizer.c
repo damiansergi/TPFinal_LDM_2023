@@ -74,9 +74,9 @@ void changeGain(uint8_t filterID, bool direction)
 	}
 }
 
-float processEqualizer(float sample)
+void processEqualizer(float *in, float *out, uint32_t blockSize)
 {
-	return computeFilters(sample);
+	computeFilters(in, out, blockSize);
 }
 
 void changePreset(uint8_t preset)

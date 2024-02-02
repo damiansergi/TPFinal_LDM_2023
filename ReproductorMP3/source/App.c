@@ -24,6 +24,7 @@
 #include "encoder.h"
 #include "display.h"
 #include "vumeter.h"
+#include "equalizer.h"
 #include "eventQueue.h"
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -67,6 +68,7 @@ void App_Init(void)
 	initEncoder();
 	initDisplay();
 	initVumeter();
+	initEqualizer();
 
 	p2state=FSM_GetInitState();// Inicializo la FSM con el estado inicial
 }

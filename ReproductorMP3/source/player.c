@@ -441,14 +441,22 @@ static void readMP3Files(const char *path)
 void processSamples(int16_t *buff, uint32_t buffSize)
 {
     static float floatSamples[1152];
+    static float floatSamplesaux[1152];
     static uint8_t vumeterDataout[8];
 
     for (size_t i = 0; i < buffSize; i++)
     {
 
-        floatSamples[i] = (float)buff[i];
-        // sample = processEqualizer(sample) / 16.0f + 2048.0f;
-        floatSamples[i] = floatSamples[i] / 16.0f + 2048.0f;
+        floatSamplesaux[i] = (float)buff[i] / 16.0f + 2048.0f;
+    }
+
+    processEqualizer(floatSamplesaux, floatSamples, buffSize);
+
+    for (size_t i = 0; i < buffSize; i++)
+    {
+
+        // floatSamples[i] = floatSamples[i] / 16.0f + 2048.0f;
+
         if (floatSamples[i] < 0)
         {
             buff[i] = 0;
@@ -466,9 +474,9 @@ void processSamples(int16_t *buff, uint32_t buffSize)
     analizeBlock(floatSamples, buffSize);
     analisis2vumeter(vumeterDataout);
 
-    for (size_t i = 0; i < 8; i++)
-    {
-        selectBar(i);
-        setLevel(vumeterDataout[i]);
-    }
+	for (size_t i = 0; i < 8; i++)
+	{
+		selectBar(i);
+		setLevel(vumeterDataout[i]);
+	}
 }

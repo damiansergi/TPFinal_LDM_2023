@@ -42,6 +42,7 @@ static uint8_t refreshTimerID = 0;
 static uint8_t blinkTimerID = 0;
 
 static void update();
+static void updateSingle(uint8_t row, uint8_t col);
 static void refresh();
 static void onRefreshEnded();
 static void toggle();
@@ -69,19 +70,29 @@ void initLEDMatrix()
 	refreshTimerID = createTimer(REFRESHRATE, refresh);
 	blinkTimerID = createTimer(DEFAULTBLINKTIME, toggle);
 	startTimer(refreshTimerID);
-	startTimer(blinkTimerID);
+	// startTimer(blinkTimerID);
 }
 
 void turnOn(uint8_t row, uint8_t col)
 {
+	if (LEDMatrix[row * 8 + col].onoff == ON)
+	{
+		return;
+	}
+
 	LEDMatrix[row * 8 + col].onoff = ON;
-	update();
+	updateSingle(row, col);
 }
 
 void turnOff(uint8_t row, uint8_t col)
 {
+	if (LEDMatrix[row * 8 + col].onoff == OFF)
+	{
+		return;
+	}
+
 	LEDMatrix[row * 8 + col].onoff = OFF;
-	update();
+	updateSingle(row, col);
 }
 
 void turnOnAll()
@@ -105,12 +116,13 @@ void changeBrightness(uint8_t percentage)
 	}
 
 	brightness = percentage;
+	update();
 }
 
 void changeColor(uint8_t row, uint8_t col, color_t color)
 {
 	LEDMatrix[row * 8 + col].color = color;
-	update();
+	updateSingle(row, col);
 }
 
 void blink(uint8_t row, uint8_t col, float ms)
@@ -159,6 +171,41 @@ static void refresh()
 static void onRefreshEnded()
 {
 	FTM_StopClock(FTM0);
+}
+
+static void updateSingle(uint8_t row, uint8_t col)
+{
+	int currBit = 7;
+	states currColor = G;
+	uint8_t bit = 0;
+	uint8_t tempColor;
+
+	for (int j = 0; j < 8; j++)
+	{
+		if (LEDMatrix[row * 8 + col].onoff == ON)
+		{
+			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.g, brightness);
+			bit = (tempColor >> currBit) & (0x1);
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j] = bit ? T1H : T0H;
+
+			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.r, brightness);
+			bit = (tempColor >> currBit) & (0x1);
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 8] = bit ? T1H : T0H;
+
+			tempColor = SCALECOLOR(LEDMatrix[row * 8 + col].color.b, brightness);
+			bit = (tempColor >> currBit) & (0x1);
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 16] = bit ? T1H : T0H;
+		}
+		else
+		{
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j] = T0H;
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 8] = T0H;
+			PWMLEDMatrix[(row * 8 + col) * RGBBITS + j + 16] = T0H;
+		}
+	}
+
+	PWMLEDMatrix[NUMOFLEDS * RGBBITS] = T0H;
+	PWMLEDMatrix[NUMOFLEDS * RGBBITS + 1] = T0H;
 }
 
 static void update()

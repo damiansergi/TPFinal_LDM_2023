@@ -5,6 +5,7 @@
         "sdmmc_config.h": "c",
         "stdbool.h": "c",
         "random": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "cmath": "c"
     }
 }

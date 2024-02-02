@@ -18,14 +18,11 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 
-#define PI (3.141592654f) // PI value
 #define BANDS (8)
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
-
-typedef enum {b34Hz, b80Hz, b190Hz, b450Hz, b1K1Hz, b2K5Hz, b6KHz, b14K2Hz};
 
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
@@ -52,7 +49,7 @@ void resetFilters();
  * @param x The next sample to be processed
  * @return Returns the sample processed
  */
-float computeFilters(float x);
+void computeFilters(float *in, float *out, uint32_t blockSize);
 
 /**
  * @brief Change the dB gain/atten of filters. Recompute the filters coeffiencients.

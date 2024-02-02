@@ -9,7 +9,7 @@
  ******************************************************************************/
 
 #include "biquad.h"
-#include <math.h>
+#include <arm_math.h>
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -17,7 +17,7 @@
 
 #define EPSILON (1e-6) // EPSILON value to make float comparisons
 
-#define FS (44100.0f)   // sampling frequency in Hz
+#define FS (44100.0f) // sampling frequency in Hz
 #define DB2TIMES(x) (pow(10, (x) / 20))
 #define GN (10) // normalization gain in dB (depend on gain when A matrix was calculated)
 
@@ -47,23 +47,26 @@ static const uint16_t centerFreqs[BANDS] = {34, 80, 190, 450, 1100, 2500, 6000, 
 
 // Target amplitud of each filter, equation g = A^-1 . t
 static float g[BANDS]; // In dB
-static float t[BANDS]; // In dB
-static const float A[BANDS][BANDS] = {	{1.000000f, 0.116971f, 0.017231f, 0.002969f, 0.000492f, 0.000094f, 0.000015f, 0.000001f},
-										{0.116976f, 1.000000f, 0.114335f, 0.016989f, 0.002740f, 0.000519f, 0.000081f, 0.000007f},
-										{0.015469f, 0.104019f, 1.000000f, 0.104674f, 0.014312f, 0.002637f, 0.000409f, 0.000033f},
-										{0.002664f, 0.015272f, 0.104806f, 1.000000f, 0.096643f, 0.015350f, 0.002312f, 0.000187f},
-										{0.000498f, 0.002770f, 0.016116f, 0.107201f, 1.000000f, 0.125835f, 0.016116f, 0.001265f},
-										{0.000076f, 0.000422f, 0.002398f, 0.013963f, 0.104705f, 1.000000f, 0.081895f, 0.005435f},
-										{0.000016f, 0.000087f, 0.000490f, 0.002762f, 0.017069f, 0.104253f, 1.000000f, 0.049675f},
-										{0.000006f, 0.000032f, 0.000181f, 0.001013f, 0.006055f, 0.031334f, 0.183376f, 1.000000f}}; // In dB
+static float t[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0}; // In dB
+static const float A[BANDS][BANDS] = {{1.000000f, 0.116971f, 0.017231f, 0.002969f, 0.000492f, 0.000094f, 0.000015f, 0.000001f},
+                                      {0.116976f, 1.000000f, 0.114335f, 0.016989f, 0.002740f, 0.000519f, 0.000081f, 0.000007f},
+                                      {0.015469f, 0.104019f, 1.000000f, 0.104674f, 0.014312f, 0.002637f, 0.000409f, 0.000033f},
+                                      {0.002664f, 0.015272f, 0.104806f, 1.000000f, 0.096643f, 0.015350f, 0.002312f, 0.000187f},
+                                      {0.000498f, 0.002770f, 0.016116f, 0.107201f, 1.000000f, 0.125835f, 0.016116f, 0.001265f},
+                                      {0.000076f, 0.000422f, 0.002398f, 0.013963f, 0.104705f, 1.000000f, 0.081895f, 0.005435f},
+                                      {0.000016f, 0.000087f, 0.000490f, 0.002762f, 0.017069f, 0.104253f, 1.000000f, 0.049675f},
+                                      {0.000006f, 0.000032f, 0.000181f, 0.001013f, 0.006055f, 0.031334f, 0.183376f, 1.000000f}}; // In dB
+
+
+static float pState[4 * BANDS] = {0};
+static float pCoeffs[BANDS * 5];
+static arm_biquad_casd_df1_inst_f32 Sequ;
 
 static biquad_t filter[BANDS];
 
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
-
-static float getBeta(float G, float B, float Gb);
 
 static void choleskyDecomposition(float A[][BANDS], float L[][BANDS], int n);
 static void forwardSubstitution(float L[][BANDS], float B[], float Y[], int n);
@@ -88,7 +91,6 @@ void initFilters()
 {
     solveLinear(A, t, g, BANDS);
 
-
     resetFilters();
 
     for (int i = 0; i < BANDS; i++)
@@ -98,8 +100,16 @@ void initFilters()
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
         filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2);
+
+        pCoeffs[i * 5] = (1 + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
+        pCoeffs[i * 5 + 1] = (-2 * filter[i].cosWc) / (1 + filter[i].beta);             // b1
+        pCoeffs[i * 5 + 2] = (1 - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
+
+        pCoeffs[i * 5 + 3] = (2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
+        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
     }
 
+    arm_biquad_cascade_df1_init_f32(&Sequ, 8, pCoeffs, pState);
 }
 
 /*
@@ -108,53 +118,35 @@ void initFilters()
             (1-G.b) * x(n-2) + 2cos(wc) y(n-1) - (1-b) y(n-2)] /(1+b)
 */
 
-float computeFilters(float x)
+void computeFilters(float *in, float *out, uint32_t blockSize)
 {
-    float G, beta, cosWc, y, output;
 
-    for (int i = 0; i < BANDS; i++)
-    {
-        G = filter[i].G;
-        cosWc = filter[i].cosWc;
-        beta = filter[i].beta;
+    arm_biquad_cascade_df1_f32(&Sequ, in, out, blockSize);
 
-        y = ((1 + G * beta) * x - 2 * cosWc * filter[i].x[0] + (1 - G * beta) * filter[i].x[1] + 2 * cosWc * filter[i].y[0] - (1 - beta) * filter[i].y[1]) / (1 + beta);
-
-        // update filter input taps
-        filter[i].x[1] = filter[i].x[0];
-        filter[i].x[0] = x;
-
-        // update filter output taps
-        x = filter[i].y[1];
-        filter[i].y[1] = filter[i].y[0];
-        filter[i].y[0] = y;
-
-        output = y; // At the end of loop we have the last filter output
-    }
-
-    return output;
+    return;
 }
+
 
 void resetFilters()
 {
 
     for (int i = 0; i < BANDS; i++)
     {
-    	for (int j = 0; j < 2; j++)
-    	{
-    		filter[i].y[j] = 0;
-    		filter[i].x[j] = 0;
-    	}
+        for (int j = 0; j < 2; j++)
+        {
+            filter[i].y[j] = 0;
+            filter[i].x[j] = 0;
+        }
     }
 }
 
 void setGain(int8_t value[]) // value in dB
 {
 
-	for (int i = 0; i < BANDS; i++)
-	{
-		t[i] = value[i];
-	}
+    for (int i = 0; i < BANDS; i++)
+    {
+        t[i] = value[i];
+    }
 
     // Recalculamos el vector g resolviendo A*g = t
     solveLinear(A, g, t, BANDS);
@@ -164,11 +156,19 @@ void setGain(int8_t value[]) // value in dB
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
         filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2);
+
+        pCoeffs[i * 5] = (1 + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
+        pCoeffs[i * 5 + 1] = (-2 * filter[i].cosWc) / (1 + filter[i].beta);             // b1
+        pCoeffs[i * 5 + 2] = (1 - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
+
+        pCoeffs[i * 5 + 3] = -(2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
+        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
     }
 }
 
-float getGain(int8_t filterID){
-	return t[filterID];
+float getGain(int8_t filterID)
+{
+    return t[filterID];
 }
 
 /*******************************************************************************

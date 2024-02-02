@@ -21,12 +21,15 @@
 #define DECREASE (0)
 #define INCREASE (1)
 
-
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-enum{rock, pop};
+enum
+{
+  rock,
+  pop
+};
 
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
@@ -45,14 +48,13 @@ void initEqualizer();
 
 void changeGain(uint8_t filterID, bool direction);
 
-float processEqualizer(float sample);
+void processEqualizer(float *in, float *out, uint32_t blockSize);
 
 void changePreset(uint8_t preset);
 
 /* TODO: POR AHI FALTA HACER UNA FUNCION PARA BORRAR LOS DATOS DEL EQUALIZADOR DE LA CANCION ANTERIOR POR UN TEMA DE CAUSALIDAD*/
 
-
-void analizeBlock(float * data, uint32_t datalen);
+void analizeBlock(float *data, uint32_t datalen);
 
 void analisis2vumeter(uint8_t vumeterDataout[8]);
 /*******************************************************************************

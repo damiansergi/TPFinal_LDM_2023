@@ -19,7 +19,7 @@
 #define NOTCHGAIN (-12) // in dB
 #define GAINSTEP (3)	// in dB
 // TODO: ajustar valor de MAX_POWER_VALUE
-#define MAX_POWER_VALUE (32768/4)
+#define MAX_POWER_VALUE (32768 / 4)
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
@@ -36,6 +36,11 @@ static int8_t flatConfig[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0};
 static int8_t bassConfig[BANDS] = {4, 3, 2, 0, 0, 0, 0, 0};
 static int8_t rockConfig[BANDS] = {5, 4, 2, 0, -1, 1, 3, 4};
 static int8_t popConfig[BANDS] = {-2, -1, 2, 4, 4, 2, -1, -2};
+
+static const float filterQ[BANDS] = {1.23f, 1.23f, 1.3f, 1.3f, 1.23f, 1.4f, 1.39f, 1.49f};
+
+// Filter parameters
+static const uint16_t centerFreqs[BANDS] = {34, 80, 190, 450, 1100, 2500, 6000, 14200}; // In Hz
 
 static float bandPower[BANDS] = {0};
 /*******************************************************************************
@@ -124,10 +129,42 @@ void analizeBlock(float *data, uint32_t datalen)
 
 	memset(bandPower, 0, sizeof(bandPower));
 
-	for (int i = 0; i < power / 2; i++)
+	uint32_t j = 0;
+
+	for (size_t i = 0; i < power / 2; i++)
 	{
+		if (11025.0f / power * (i + 1) > 8158.27f)
+		{
+			j = 7;
+		}
+		else if (11025.0f / power * (i + 1) > 3392.86f)
+		{
+			j = 6;
+		}
+		else if (11025.0f / power * (i + 1) > 1547.15f)
+		{
+			j = 5;
+		}
+		else if (11025.0f / power * (i + 1) > 623.0f)
+		{
+			j = 4;
+		}
+		else if (11025.0f / power * (i + 1) > 263.0f)
+		{
+			j = 3;
+		}
+		else if (11025.0f / power * (i + 1) > 112.52f)
+		{
+			j = 2;
+		}
+		else if (11025.0f / power * (i + 1) > 47.8f)
+		{
+			j = 1;
+		}
+
 		bandPower[i / (power / 16)] += pOutMod[i];
 	}
+
 	for (int i = 0; i < BANDS; i++)
 	{
 		bandPower[i] /= (power / 16) * MAX_POWER_VALUE;

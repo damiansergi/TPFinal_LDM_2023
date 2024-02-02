@@ -27,6 +27,7 @@
 #include "pin_mux.h"
 #include "equalizer.h"
 #include "vumeter.h"
+#include "eventQueue.h"
 #include <stdio.h>
 #include <string.h>
 /*******************************************************************************
@@ -91,6 +92,8 @@ static FATFS g_fileSystem; /* File system object */
 static PlayerStates_t state = STARTING;
 static PlayerStates_t pausePrevState = WAITING_TO_DECODE;
 static FRESULT error;
+
+static float volumePlayer = 1;
 
 static song_node_t *currentSong = NULL;
 
@@ -218,7 +221,10 @@ bool prevSong()
     return false;
 }
 
-bool adjustVolume(float vol);
+bool adjustVolume(float vol)
+{
+    volumePlayer = vol;
+}
 
 song_node_t *getSongList()
 {
@@ -314,6 +320,7 @@ player_msg_t updatePlayer()
             if (decodedSamples == 0)
             {
                 nextSong();
+                putEvent(AutoNextSong);
                 return 0;
             }
 
@@ -328,6 +335,7 @@ player_msg_t updatePlayer()
             if (decodedSamples == 0)
             {
                 nextSong();
+                putEvent(AutoNextSong);
                 return 0;
             }
 
@@ -357,6 +365,11 @@ player_msg_t updatePlayer()
         break;
     }
     return false;
+}
+
+char *getCurrentSongName()
+{
+    return currentSong->data->filename;
 }
 
 /*******************************************************************************
@@ -446,7 +459,7 @@ void processSamples(int16_t *buff, uint32_t buffSize)
     for (size_t i = 0; i < buffSize; i++)
     {
 
-        floatSamplesaux[i] = (float)buff[i] / 16.0f + 2048.0f;
+        floatSamplesaux[i] = (float)buff[i] / 16.0f * volumePlayer;
     }
 
     processEqualizer(floatSamplesaux, floatSamples, buffSize);
@@ -454,7 +467,7 @@ void processSamples(int16_t *buff, uint32_t buffSize)
     for (size_t i = 0; i < buffSize; i++)
     {
 
-        // floatSamples[i] = floatSamples[i] / 16.0f + 2048.0f;
+        floatSamples[i] = floatSamples[i] + 2048.0f;
 
         if (floatSamples[i] < 0)
         {
@@ -473,9 +486,9 @@ void processSamples(int16_t *buff, uint32_t buffSize)
     analizeBlock(floatSamples, buffSize);
     analisis2vumeter(vumeterDataout);
 
-	for (size_t i = 0; i < 8; i++)
-	{
-		selectBar(i);
-		setLevel(vumeterDataout[i]);
-	}
+    for (size_t i = 0; i < 8; i++)
+    {
+        selectBar(i);
+        setLevel(vumeterDataout[i]);
+    }
 }

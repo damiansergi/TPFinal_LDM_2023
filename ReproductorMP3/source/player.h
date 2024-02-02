@@ -51,11 +51,10 @@ bool pausePlayer();
 bool nextSong();
 bool prevSong();
 bool adjustVolume(float vol);
+char *getCurrentSongName();
 
 song_node_t *getSongList();
 bool selectSong(song_node_t *song);
-
-void getSongInfo(song_node_t *node);
 
 player_msg_t updatePlayer();
 

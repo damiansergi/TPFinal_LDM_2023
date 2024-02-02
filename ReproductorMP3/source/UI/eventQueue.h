@@ -21,13 +21,14 @@
 
 typedef enum event_type
 {
-    None,
-    EncoderLeft,
-    EncoderRight,
-    EncoderClick,
-	ButtonCross,
-	ButtonPoint,
-	ButtonLine
+  None,
+  EncoderLeft,
+  EncoderRight,
+  EncoderClick,
+  ButtonCross,
+  ButtonPoint,
+  ButtonLine,
+  AutoNextSong
 } event_t;
 
 /*******************************************************************************

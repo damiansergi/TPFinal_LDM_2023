@@ -165,12 +165,7 @@ static void toggle()
 
 static void refresh()
 {
-	FTM_StartClock(FTM0);
-}
-
-static void onRefreshEnded()
-{
-	FTM_StopClock(FTM0);
+	PWM_burst();
 }
 
 static void updateSingle(uint8_t row, uint8_t col)

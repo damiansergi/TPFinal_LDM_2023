@@ -22,6 +22,10 @@ extern STATE st_rep[];
 extern STATE st_vol[];
 extern STATE st_eq[];
 
+#define EQCANT 4
+const char *eqBands[EQCANT] = {"Flat", "Rock", "Pop", "Bass"};
+
+
 // prototipos
 
 static void do_nothing(void);

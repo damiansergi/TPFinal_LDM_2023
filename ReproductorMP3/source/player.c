@@ -191,33 +191,91 @@ bool pausePlayer()
 
 bool nextSong()
 {
-    stopPlayer();
-    if (getListTail() == currentSong->next)
+    switch (state)
     {
-        currentSong = getListHead()->next;
-    }
-    else
-    {
-        currentSong = currentSong->next;
+    case DECODING:
+    case WAITING_TO_DECODE:
+        stopPlayer();
+        if (getListTail() == currentSong->next)
+        {
+            currentSong = getListHead()->next;
+        }
+        else
+        {
+            currentSong = currentSong->next;
+        }
+
+        playPlayer();
+        break;
+    case STOPPED:
+    case PAUSED:
+        stopPlayer();
+        if (getListTail() == currentSong->next)
+        {
+            currentSong = getListHead()->next;
+        }
+        else
+        {
+            currentSong = currentSong->next;
+        }
+    default:
+        stopPlayer();
+        if (getListTail() == currentSong->next)
+        {
+            currentSong = getListHead()->next;
+        }
+        else
+        {
+            currentSong = currentSong->next;
+        }
+        break;
     }
 
-    playPlayer();
     return false;
 }
 
 bool prevSong()
 {
-    stopPlayer();
-    if (getListHead() == currentSong->prev)
-    {
-        currentSong = getListTail()->prev;
-    }
-    else
-    {
-        currentSong = currentSong->prev;
-    }
 
-    playPlayer();
+    switch (state)
+    {
+    case DECODING:
+    case WAITING_TO_DECODE:
+        stopPlayer();
+        if (getListHead() == currentSong->prev)
+        {
+            currentSong = getListTail()->prev;
+        }
+        else
+        {
+            currentSong = currentSong->prev;
+        }
+
+        playPlayer();
+        break;
+    case STOPPED:
+    case PAUSED:
+        stopPlayer();
+        if (getListHead() == currentSong->prev)
+        {
+            currentSong = getListTail()->prev;
+        }
+        else
+        {
+            currentSong = currentSong->prev;
+        }
+    default:
+        stopPlayer();
+        if (getListHead() == currentSong->prev)
+        {
+            currentSong = getListTail()->prev;
+        }
+        else
+        {
+            currentSong = currentSong->prev;
+        }
+        break;
+    }
     return false;
 }
 

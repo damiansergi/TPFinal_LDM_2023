@@ -637,7 +637,7 @@
                                     <setting name="tcdID" value="CH0_TRANSFER"/>
                                     <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
                                     <setting name="saddr_expr" value="(uint32_t *)waveform"/>
-                                    <setting name="saddr_def" value="extern uint16_t *waveform"/>
+                                    <setting name="saddr_def" value="extern uint16_t *waveform;"/>
                                     <setting name="soff" value="2"/>
                                     <setting name="soff_def" value=""/>
                                     <setting name="dsize" value="kEDMA_TransferSize2Bytes"/>

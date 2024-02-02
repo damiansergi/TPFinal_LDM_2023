@@ -164,7 +164,7 @@ instance:
             - tcdID: 'CH0_TRANSFER'
             - ssize: 'kEDMA_TransferSize2Bytes'
             - saddr_expr: '(uint32_t *)waveform'
-            - saddr_def: 'extern uint16_t *waveform'
+            - saddr_def: 'extern uint16_t *waveform;'
             - soff: '2'
             - soff_def: ''
             - dsize: 'kEDMA_TransferSize2Bytes'

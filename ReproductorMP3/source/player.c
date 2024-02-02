@@ -210,7 +210,7 @@ bool prevSong()
     stopPlayer();
     if (getListHead() == currentSong->prev)
     {
-        currentSong = getListTail();
+        currentSong = getListTail()->prev;
     }
     else
     {

@@ -70,10 +70,10 @@ typedef enum
  *******************************************************************************
  ******************************************************************************/
 static uint16_t dummyTable[1] = {0};
-static uint16_t ticksPerPeriod = 100;
-static uint16_t *waveform = dummyTable;
-static uint32_t waveform_lenght = 0;
-static uint32_t waveform_offset = 0;
+uint16_t ticksPerPeriod = 100;
+uint16_t *waveform = dummyTable;
+uint32_t waveform_lenght = 0;
+uint32_t waveform_offset = 0;
 static void (*Table_end_cb)(void) = NULL;
 
 void PWM_Init(void)

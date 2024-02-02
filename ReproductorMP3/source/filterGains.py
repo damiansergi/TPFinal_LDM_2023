@@ -5,14 +5,17 @@ from scipy import signal
 # Filter specifications
 fs = 44100
 fc = [34, 80, 190, 450, 1100, 2500, 6000, 14200]
-wc = [2*np.pi*x/fs for x in fc]   # Cutoff frequency in normalized frequency (0 to 1)
+# Cutoff frequency in normalized frequency (0 to 1)
+wc = [2*np.pi*x/fs for x in fc]
 
-G = [-10.9216137, -9.9373455, -9.89989376, -9.94664478, -9.80478573, -9.56591415, -8.81575108, -9.74333096] #Use 3.16227766 to get values in each for the C code
-G = [10**(x/20) for x in G] #If G was created in dB, convert it into times
-Q = 1.40845 #1.23
+G = [-10.9216137, -9.9373455, -9.89989376, -9.94664478, -9.80478573, -9.56591415, -
+     8.81575108, -9.74333096]  # Use 3.16227766 to get values in each for the C code
+G = [10**(x/20) for x in G]  # If G was created in dB, convert it into times
+Q = 1.23  # 1.23
 B = [x/Q for x in wc]
 Gb = [x/2 for x in G]
-b = [np.sqrt(np.abs(Gb[i]**2-1)/np.abs(G[i]**2-Gb[i]**2)) * np.tan(B[i]/2) for i in range(len(B))] 
+b = [np.sqrt(np.abs(Gb[i]**2-1)/np.abs(G[i]**2-Gb[i]**2))
+     * np.tan(B[i]/2) for i in range(len(B))]
 
 n = 65536
 result = [0]*n
@@ -29,7 +32,7 @@ for i in range(len(fc)):
     filter_system = signal.TransferFunction(numerator, denominator, dt=1/fs)
 
     # Generate frequency response
-    frequency, response = signal.freqz(numerator, denominator, worN = 65536)
+    frequency, response = signal.freqz(numerator, denominator, worN=65536)
 
     # Evaluate the filter response at a specific frequency
     evaluate = [x * 2*np.pi/fs for x in fc]  # Radians per sample
@@ -37,7 +40,8 @@ for i in range(len(fc)):
 
     # Print the magnitude and phase at the target frequency
     magnitude_at_target = np.abs(resp[1][0])
-    formatted_list = [f'{num:.6f}f' for num in 20 * np.log10(np.abs(magnitude_at_target)) / (20*np.log10(np.abs(G)))]
+    formatted_list = [f'{num:.6f}f' for num in 20 *
+                      np.log10(np.abs(magnitude_at_target)) / (20*np.log10(np.abs(G)))]
 
     print("[", end='')
     for formatted_num in formatted_list:

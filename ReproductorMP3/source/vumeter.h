@@ -24,7 +24,17 @@
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-typedef enum {b34Hz, b80Hz, b190Hz, b450Hz, b1K1Hz, b2K5Hz, b6KHz, b14K2Hz} bar;
+typedef enum
+{
+  b34Hz,
+  b80Hz,
+  b190Hz,
+  b450Hz,
+  b1K1Hz,
+  b2K5Hz,
+  b6KHz,
+  b14K2Hz
+} bar;
 
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
@@ -73,6 +83,7 @@ void setLevel(uint8_t level);
  */
 void selectBar(bar barID);
 
+void turnOffVumeter(void);
 /*******************************************************************************
  ******************************************************************************/
 

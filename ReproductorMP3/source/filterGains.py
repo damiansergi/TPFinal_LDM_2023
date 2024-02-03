@@ -57,7 +57,13 @@ for i in range(len(fc)):
     result += 20 * np.log10(np.abs(response))
 
 matpiola = np.matrix(mat)
-print(matpiola ** (-1))
+matpiolaenserio = matpiola ** (-1)
+
+for i in range(8):
+    for j in range(8):
+        print(f'{matpiolaenserio[i, j]:.6f}f', end='')
+        print(', ', end='')
+    print()
 
 # plt.semilogx(frequency*fs/(np.pi*2), result)
 # plt.title('Filter Frequency Response')

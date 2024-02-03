@@ -43,19 +43,19 @@ typedef struct
 static const float filterQ[BANDS] = {1.23f, 1.23f, 1.3f, 1.3f, 1.23f, 1.4f, 1.39f, 1.49f};
 
 // Filter parameters
-static const uint16_t centerFreqs[BANDS] = {34, 80, 190, 450, 1100, 2500, 6000, 14200}; // In Hz
+static const float centerFreqs[BANDS] = {34.0f, 80.0f, 190.0f, 450.0f, 1100.0f, 2500.0f, 6000.0f, 14200.0f}; // In Hz
 
 // Target amplitud of each filter, equation g = A^-1 . t
 static float g[BANDS];                            // In dB
 static float t[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0}; // In dB
-static const float A[BANDS][BANDS] = {{1.000000f, 0.116971f, 0.017231f, 0.002969f, 0.000492f, 0.000094f, 0.000015f, 0.000001f},
-                                      {0.116976f, 1.000000f, 0.114335f, 0.016989f, 0.002740f, 0.000519f, 0.000081f, 0.000007f},
-                                      {0.015469f, 0.104019f, 1.000000f, 0.104674f, 0.014312f, 0.002637f, 0.000409f, 0.000033f},
-                                      {0.002664f, 0.015272f, 0.104806f, 1.000000f, 0.096643f, 0.015350f, 0.002312f, 0.000187f},
-                                      {0.000498f, 0.002770f, 0.016116f, 0.107201f, 1.000000f, 0.125835f, 0.016116f, 0.001265f},
-                                      {0.000076f, 0.000422f, 0.002398f, 0.013963f, 0.104705f, 1.000000f, 0.081895f, 0.005435f},
-                                      {0.000016f, 0.000087f, 0.000490f, 0.002762f, 0.017069f, 0.104253f, 1.000000f, 0.049675f},
-                                      {0.000006f, 0.000032f, 0.000181f, 0.001013f, 0.006055f, 0.031334f, 0.183376f, 1.000000f}}; // In dB
+static const float Ainv[BANDS][BANDS] = {{1.013886f, -0.118181f, -0.003896f, -0.000588f, -0.000062f, -0.000006f, -0.000001f, -0.000000f},
+                                         {-0.118210f, 1.025838f, -0.114718f, -0.005001f, -0.000621f, -0.000063f, -0.000008f, -0.000000f},
+                                         {-0.003330f, -0.104414f, 1.023053f, -0.104850f, -0.004168f, -0.000503f, -0.000059f, -0.000003f},
+                                         {-0.000540f, -0.004347f, -0.104983f, 1.021494f, -0.096866f, -0.003159f, -0.000494f, -0.000023f},
+                                         {-0.000065f, -0.000628f, -0.004859f, -0.107450f, 1.023807f, -0.126551f, -0.005831f, -0.000298f},
+                                         {-0.000005f, -0.000047f, -0.000424f, -0.002705f, -0.105323f, 1.021859f, -0.081732f, -0.001360f},
+                                         {-0.000001f, -0.000008f, -0.000073f, -0.000646f, -0.006142f, -0.103756f, 1.017764f, -0.049986f},
+                                         {-0.000000f, -0.000002f, -0.000019f, -0.000162f, -0.001674f, -0.012223f, -0.184037f, 1.009211f}}; // In dB
 
 static float pState[4 * BANDS] = {0};
 static float pCoeffs[BANDS * 5];
@@ -67,9 +67,6 @@ static biquad_t filter[BANDS];
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
 
-static void choleskyDecomposition(float A[][BANDS], float L[][BANDS], int n);
-static void forwardSubstitution(float L[][BANDS], float B[], float Y[], int n);
-static void backwardSubstitution(float L[][BANDS], float Y[], float X[], int n);
 static void solveLinear(float A[][BANDS], float b[], float x[], int n);
 
 /*******************************************************************************
@@ -88,12 +85,15 @@ static void solveLinear(float A[][BANDS], float b[], float x[], int n);
 
 void initFilters()
 {
-    solveLinear(A, t, g, BANDS);
+    solveLinear(Ainv, t, g, BANDS);
 
     resetFilters();
 
     for (int i = 0; i < BANDS; i++)
     {
+        filter[i].cosWc = cos(2 * PI * centerFreqs[i] / FS);
+        filter[i].B = 2.0f * PI * centerFreqs[i] / (filterQ[i] * FS);
+
         if (g[i] == 0.0f)
         {
             pCoeffs[i * 5] = 1;
@@ -104,18 +104,16 @@ void initFilters()
             continue;
         }
 
-        filter[i].cosWc = cos(2 * PI * centerFreqs[i] / FS);
-        filter[i].B = 2 * PI * centerFreqs[i] / (filterQ[i] * FS);
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
-        filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1.0f) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2.0f);
+        filter[i].beta = sqrtf(fabsf(powf(filter[i].Gb, 2) - 1.0f) / fabsf(powf(filter[i].G, 2) - powf(filter[i].Gb, 2))) * tanf(filter[i].B / 2.0f);
 
         pCoeffs[i * 5] = (1.0f + filter[i].G * filter[i].beta) / (1.0f + filter[i].beta);     // b0
         pCoeffs[i * 5 + 1] = (-2.0f * filter[i].cosWc) / (1.0f + filter[i].beta);             // b1
         pCoeffs[i * 5 + 2] = (1.0f - filter[i].G * filter[i].beta) / (1.0f + filter[i].beta); // b2
 
-        pCoeffs[i * 5 + 3] = -(2.0f * filter[i].cosWc / (1.0f + filter[i].beta)); // -a1.
-        pCoeffs[i * 5 + 4] = (1.0f - filter[i].beta) / (1.0f + filter[i].beta);   // -a2.
+        pCoeffs[i * 5 + 3] = (2.0f * filter[i].cosWc / (1.0f + filter[i].beta)); // -a1.
+        pCoeffs[i * 5 + 4] = -(1.0f - filter[i].beta) / (1.0f + filter[i].beta); // -a2.
     }
 
     arm_biquad_cascade_df1_init_f32(&Sequ, 8, pCoeffs, pState);
@@ -149,7 +147,7 @@ void setGain(float value[BANDS]) // value in dB
     }
 
     // Recalculamos el vector g resolviendo A*g = t
-    solveLinear(A, t, g, BANDS);
+    solveLinear(Ainv, t, g, BANDS);
     resetFilters();
     for (int i = 0; i < BANDS; i++)
     {
@@ -164,14 +162,14 @@ void setGain(float value[BANDS]) // value in dB
         }
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
-        filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1.0f) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2.0f);
+        filter[i].beta = sqrtf(fabsf(powf(filter[i].Gb, 2) - 1.0f) / fabsf(powf(filter[i].G, 2) - powf(filter[i].Gb, 2))) * tanf(filter[i].B / 2.0f);
 
         pCoeffs[i * 5] = (1.0f + filter[i].G * filter[i].beta) / (1.0f + filter[i].beta);     // b0
         pCoeffs[i * 5 + 1] = (-2.0f * filter[i].cosWc) / (1.0f + filter[i].beta);             // b1
         pCoeffs[i * 5 + 2] = (1.0f - filter[i].G * filter[i].beta) / (1.0f + filter[i].beta); // b2
 
-        pCoeffs[i * 5 + 3] = -(2.0f * filter[i].cosWc / (1.0f + filter[i].beta)); // -a1.
-        pCoeffs[i * 5 + 4] = (1.0f - filter[i].beta) / (1.0f + filter[i].beta);   // -a2.
+        pCoeffs[i * 5 + 3] = (2.0f * filter[i].cosWc / (1.0f + filter[i].beta)); // -a1.
+        pCoeffs[i * 5 + 4] = -(1.0f - filter[i].beta) / (1.0f + filter[i].beta); // -a2.
     }
 }
 
@@ -186,75 +184,16 @@ float getGain(int8_t filterID)
  *******************************************************************************
  ******************************************************************************/
 
-static void solveLinear(float A[][BANDS], float b[], float x[], int n)
+void solveLinear(float Ainv[][BANDS], float b[], float x[], int n)
 {
-
-    float L[][BANDS] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}};
-    float y[BANDS] = {0};
-
-    choleskyDecomposition(A, L, n);
-
-    // Solve Ly = b for Y using forward substitution
-    forwardSubstitution(L, b, y, n);
-
-    // Solve L^Tx = y for x using backward substitution
-    backwardSubstitution(L, y, x, n);
-}
-
-static void forwardSubstitution(float L[][BANDS], float B[], float Y[], int n)
-{
+    float sum;
     for (int i = 0; i < n; i++)
     {
-        float sum = 0.0;
-        for (int j = 0; j < i; j++)
+        sum = 0;
+        for (int j = 0; j < n; j++)
         {
-            sum += L[i][j] * Y[j];
+            sum += Ainv[i][j] * b[j];
         }
-        Y[i] = (B[i] - sum) / L[i][i];
-    }
-}
-
-static void backwardSubstitution(float L[][BANDS], float Y[], float X[], int n)
-{
-    for (int i = n - 1; i >= 0; i--)
-    {
-        float sum = 0.0;
-        for (int j = i + 1; j < n; j++)
-        {
-            sum += L[j][i] * X[j];
-        }
-        X[i] = (Y[i] - sum) / L[i][i];
-    }
-}
-
-static void choleskyDecomposition(float A[][BANDS], float L[][BANDS], int n)
-{
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j <= i; j++)
-        {
-            float sum = 0.0;
-
-            // Si estas en la diagonal principal
-            if (j == i)
-            {
-                for (int k = 0; k < j; k++)
-                {
-                    sum += L[j][k] * L[j][k];
-                }
-
-                L[j][j] = sqrt(A[j][j] - sum);
-            }
-            else
-            {
-                for (int k = 0; k < j; k++)
-                {
-                    sum += L[i][k] * L[j][k];
-                }
-
-                L[i][j] = (A[i][j] - sum) / L[j][j];
-            }
-        }
+        x[i] = sum;
     }
 }

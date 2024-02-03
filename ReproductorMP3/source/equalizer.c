@@ -176,7 +176,7 @@ void analisis2vumeter(uint8_t vumeterDataout[8])
 {
 	for (int i = 0; i < BANDS; i++)
 	{
-		vumeterDataout[i] = (uint8_t)((bandPower[i] > -60.0f) ? (bandPower[i] + 60.0f) / 100.0f * 8.0f : 0);
+		vumeterDataout[i] = (uint8_t)((bandPower[i] > -15.0f) ? (bandPower[i] + 15.0f) / 50.0f * 8.0f : 0);
 	}
 }
 /*******************************************************************************

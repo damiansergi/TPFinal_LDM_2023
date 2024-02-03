@@ -8,10 +8,9 @@ fc = [34, 80, 190, 450, 1100, 2500, 6000, 14200]
 # Cutoff frequency in normalized frequency (0 to 1)
 wc = [2*np.pi*x/fs for x in fc]
 
-G = [-10.9216137, -9.9373455, -9.89989376, -9.94664478, -9.80478573, -9.56591415, -
-     8.81575108, -9.74333096]  # Use 3.16227766 to get values in each for the C code
+G = [0.1] * 8  # Use 3.16227766 to get values in each for the C code
 G = [10**(x/20) for x in G]  # If G was created in dB, convert it into times
-Q = 1.23  # 1.23
+Q = 1.40845  # 1.23
 B = [x/Q for x in wc]
 Gb = [x/2 for x in G]
 b = [np.sqrt(np.abs(Gb[i]**2-1)/np.abs(G[i]**2-Gb[i]**2))

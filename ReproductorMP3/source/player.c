@@ -546,7 +546,7 @@ void processSamples(int16_t *buff, uint32_t buffSize)
 
     for (size_t i = 7; i < 0; i--)
     {
-        selectBar(i);
+        selectBar(7 - i);
         setLevel(vumeterDataout[i]);
     }
 }

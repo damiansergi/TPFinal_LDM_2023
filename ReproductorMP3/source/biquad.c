@@ -114,7 +114,7 @@ void initFilters()
         pCoeffs[i * 5 + 1] = (-2 * filter[i].Gb * filter[i].cosWc) / (1 + filter[i].beta);         // b1
         pCoeffs[i * 5 + 2] = (filter[i].Gb - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
 
-        pCoeffs[i * 5 + 3] = -(2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
+        pCoeffs[i * 5 + 3] = (2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
         pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
     }
 
@@ -182,7 +182,7 @@ void setGain(float value[BANDS]) // value in dB
         pCoeffs[i * 5 + 1] = (-2 * filter[i].Gb * filter[i].cosWc) / (1 + filter[i].beta);         // b1
         pCoeffs[i * 5 + 2] = (filter[i].Gb - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
 
-        pCoeffs[i * 5 + 3] = -(2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
+        pCoeffs[i * 5 + 3] = (2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
         pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
     }
 }

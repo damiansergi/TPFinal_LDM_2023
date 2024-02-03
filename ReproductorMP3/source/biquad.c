@@ -94,18 +94,28 @@ void initFilters()
 
     for (int i = 0; i < BANDS; i++)
     {
+        if (g[i] == 0)
+        {
+            pCoeffs[i * 5] = 1;
+            pCoeffs[i * 5 + 1] = 0;
+            pCoeffs[i * 5 + 2] = 0;
+            pCoeffs[i * 5 + 3] = 0;
+            pCoeffs[i * 5 + 4] = 0;
+            continue;
+        }
+
         filter[i].cosWc = cos(2 * PI * centerFreqs[i] / FS);
         filter[i].B = 2 * PI * centerFreqs[i] / (filterQ[i] * FS);
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
         filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2);
 
-        pCoeffs[i * 5] = (1 + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
-        pCoeffs[i * 5 + 1] = (-2 * filter[i].cosWc) / (1 + filter[i].beta);             // b1
-        pCoeffs[i * 5 + 2] = (1 - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
+        pCoeffs[i * 5] = (filter[i].Gb + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
+        pCoeffs[i * 5 + 1] = (-2 * filter[i].Gb * filter[i].cosWc) / (1 + filter[i].beta);         // b1
+        pCoeffs[i * 5 + 2] = (filter[i].Gb - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
 
-        pCoeffs[i * 5 + 3] = (2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
-        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta); // a2.
+        pCoeffs[i * 5 + 3] = -(2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
+        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
     }
 
     arm_biquad_cascade_df1_init_f32(&Sequ, 8, pCoeffs, pState);
@@ -155,13 +165,22 @@ void setGain(float value[BANDS]) // value in dB
 
     for (int i = 0; i < BANDS; i++)
     {
+        if (g[i] == 0)
+        {
+            pCoeffs[i * 5] = 1;
+            pCoeffs[i * 5 + 1] = 0;
+            pCoeffs[i * 5 + 2] = 0;
+            pCoeffs[i * 5 + 3] = 0;
+            pCoeffs[i * 5 + 4] = 0;
+            continue;
+        }
         filter[i].G = DB2TIMES(g[i]);
         filter[i].Gb = filter[i].G / 2;
         filter[i].beta = sqrt(fabs(pow(filter[i].Gb, 2) - 1) / fabs(pow(filter[i].G, 2) - pow(filter[i].Gb, 2))) * tan(filter[i].B / 2);
 
-        pCoeffs[i * 5] = (1 + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
-        pCoeffs[i * 5 + 1] = (-2 * filter[i].cosWc) / (1 + filter[i].beta);             // b1
-        pCoeffs[i * 5 + 2] = (1 - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
+        pCoeffs[i * 5] = (filter[i].Gb + filter[i].G * filter[i].beta) / (1 + filter[i].beta);     // b0
+        pCoeffs[i * 5 + 1] = (-2 * filter[i].Gb * filter[i].cosWc) / (1 + filter[i].beta);         // b1
+        pCoeffs[i * 5 + 2] = (filter[i].Gb - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
 
         pCoeffs[i * 5 + 3] = -(2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
         pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.

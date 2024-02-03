@@ -46,7 +46,7 @@ static const float filterQ[BANDS] = {1.23f, 1.23f, 1.3f, 1.3f, 1.23f, 1.4f, 1.39
 static const uint16_t centerFreqs[BANDS] = {34, 80, 190, 450, 1100, 2500, 6000, 14200}; // In Hz
 
 // Target amplitud of each filter, equation g = A^-1 . t
-static float g[BANDS]; // In dB
+static float g[BANDS];                            // In dB
 static float t[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0}; // In dB
 static const float A[BANDS][BANDS] = {{1.000000f, 0.116971f, 0.017231f, 0.002969f, 0.000492f, 0.000094f, 0.000015f, 0.000001f},
                                       {0.116976f, 1.000000f, 0.114335f, 0.016989f, 0.002740f, 0.000519f, 0.000081f, 0.000007f},
@@ -56,7 +56,6 @@ static const float A[BANDS][BANDS] = {{1.000000f, 0.116971f, 0.017231f, 0.002969
                                       {0.000076f, 0.000422f, 0.002398f, 0.013963f, 0.104705f, 1.000000f, 0.081895f, 0.005435f},
                                       {0.000016f, 0.000087f, 0.000490f, 0.002762f, 0.017069f, 0.104253f, 1.000000f, 0.049675f},
                                       {0.000006f, 0.000032f, 0.000181f, 0.001013f, 0.006055f, 0.031334f, 0.183376f, 1.000000f}}; // In dB
-
 
 static float pState[4 * BANDS] = {0};
 static float pCoeffs[BANDS * 5];
@@ -106,7 +105,7 @@ void initFilters()
         pCoeffs[i * 5 + 2] = (1 - filter[i].G * filter[i].beta) / (1 + filter[i].beta); // b2
 
         pCoeffs[i * 5 + 3] = (2 * filter[i].cosWc / (1 + filter[i].beta)); // a1.
-        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta);  // a2.
+        pCoeffs[i * 5 + 4] = -(1 - filter[i].beta) / (1 + filter[i].beta); // a2.
     }
 
     arm_biquad_cascade_df1_init_f32(&Sequ, 8, pCoeffs, pState);
@@ -126,7 +125,6 @@ void computeFilters(float *in, float *out, uint32_t blockSize)
     return;
 }
 
-
 void resetFilters()
 {
 
@@ -143,13 +141,17 @@ void resetFilters()
 void setGain(int8_t value[]) // value in dB
 {
 
+    // for (int i = 0; i < BANDS; i++)
+    // {
+    //     t[i] = value[i];
+    // }
+
+    // // Recalculamos el vector g resolviendo A*g = t
+    // solveLinear(A, g, t, BANDS);
     for (int i = 0; i < BANDS; i++)
     {
-        t[i] = value[i];
+        g[i] = value[i];
     }
-
-    // Recalculamos el vector g resolviendo A*g = t
-    solveLinear(A, g, t, BANDS);
 
     for (int i = 0; i < BANDS; i++)
     {

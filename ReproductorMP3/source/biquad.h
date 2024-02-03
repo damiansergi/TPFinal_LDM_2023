@@ -56,7 +56,7 @@ void computeFilters(float *in, float *out, uint32_t blockSize);
  * @param value target value in dB of filters gain
  * @return void
  */
-void setGain(int8_t value[]);
+void setGain(float value[]);
 
 /**
  * @brief Return the current gain of the filter

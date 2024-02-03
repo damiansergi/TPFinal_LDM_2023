@@ -140,9 +140,8 @@ void resetFilters()
     }
 }
 
-void setGain(int8_t value[]) // value in dB
+void setGain(float value[BANDS]) // value in dB
 {
-
     for (int i = 0; i < BANDS; i++)
     {
         t[i] = value[i];

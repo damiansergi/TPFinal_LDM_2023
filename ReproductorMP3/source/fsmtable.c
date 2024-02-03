@@ -237,6 +237,7 @@ static void turnOff(void)
 	bufferClean(buffer);
 	DisplayWrite(buffer, 16, 1);
 	stopPlayer();
+	pause = true;
 }
 
 static void autoPlayNextSong(void)

@@ -29,13 +29,13 @@
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
 
-static int8_t currentGains[BANDS];
+static float currentGains[BANDS];
 
-static int8_t *presetSelected;
-static int8_t flatConfig[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0};
-static int8_t bassConfig[BANDS] = {4, 3, 2, 0, 0, 0, 0, 0};
-static int8_t rockConfig[BANDS] = {5, 4, 2, 0, -1, 1, 3, 4};
-static int8_t popConfig[BANDS] = {-2, -1, 2, 4, 4, 2, -1, -2};
+static float *presetSelected;
+static float flatConfig[BANDS] = {0, 0, 0, 0, 0, 0, 0, 0};
+static float bassConfig[BANDS] = {4, 3, 2, 0, 0, 0, 0, 0};
+static float rockConfig[BANDS] = {5, 4, 2, 0, -1, 1, 3, 4};
+static float popConfig[BANDS] = {-2, -1, 2, 4, 4, 2, -1, -2};
 
 static const float filterQ[BANDS] = {1.23f, 1.23f, 1.3f, 1.3f, 1.23f, 1.4f, 1.39f, 1.49f};
 

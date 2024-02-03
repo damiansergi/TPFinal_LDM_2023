@@ -7,10 +7,10 @@ fs = 44100
 fc = [34, 80, 190, 450, 1100, 2500, 6000, 14200]
 wc = [2*np.pi*x/fs for x in fc]   # Cutoff frequency in normalized frequency (0 to 1)
 
-G = [-10.9216137, -9.9373455, -9.89989376, -9.94664478, -9.80478573, -9.56591415, -8.81575108, -9.74333096] #Use 3.16227766 to get values in each for the C code
+G = [10]*8 #[-10.7004194, -9.56619167, -9.64782619, -9.62021923, -9.56385994, -9.58788967, -8.97402763, -9.98418045] #Use 3.16227766 to get values in each for the C code
 G = [10**(x/20) for x in G] #If G was created in dB, convert it into times
-Q = 1.40845 #1.23
-B = [x/Q for x in wc]
+Q = [1.23, 1.23, 1.3, 1.3, 1.23, 1.4, 1.39, 1.49] #1.23
+B = [wc[i]/Q[i] for i in range(len(wc))]
 Gb = [x/2 for x in G]
 b = [np.sqrt(np.abs(Gb[i]**2-1)/np.abs(G[i]**2-Gb[i]**2)) * np.tan(B[i]/2) for i in range(len(B))] 
 
@@ -46,8 +46,9 @@ for i in range(len(fc)):
     print("]")
 
     # Plot the frequency response
-    plt.semilogx(frequency*fs/(np.pi*2), 20 * np.log10(np.abs(response)))
-    result += 20 * np.log10(np.abs(response))
+    plt.semilogx(frequency*fs/(np.pi*2), 20 * np.log10(np.abs(response))) 
+
+    result += 20 * np.log10(np.abs(response)) #Esto esta mal, tengo que cambiarlo
 
 plt.semilogx(frequency*fs/(np.pi*2), result)
 plt.title('Filter Frequency Response')

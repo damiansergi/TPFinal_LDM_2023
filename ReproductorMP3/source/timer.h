@@ -25,14 +25,14 @@
  ******************************************************************************/
 
 typedef enum TimerMode_SYS{
-	ONESHOT,
-	PERIODIC
+	SYS_ONESHOT,
+	SYS_PERIODIC
 } timerModesSYS_t;
 
 enum states_SYS{
-	FREE,
-	IDLE,
-	RUNNING
+	SYS_FREE,
+	SYS_IDLE,
+	SYS_RUNNING
 };
 
 /*******************************************************************************

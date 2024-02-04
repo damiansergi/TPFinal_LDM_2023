@@ -19,6 +19,7 @@ uint8_t eqLevel = 0;
 /*Foward Declarations*/
 
 extern STATE st_off[];
+extern STATE st_noSD[];
 extern STATE st_rep[];
 extern STATE st_vol[];
 extern STATE st_eq[];
@@ -43,9 +44,9 @@ static void changeEqRight(void);
 static void changeEqLeft(void);
 static void turnOff(void);
 static void autoPlayNextSong(void);
-static void goToRepFromNoSD();
-static void NOSDcard();
-static void YESSDcard();
+static void goToRepFromNoSD(void);
+static void NOSDcard(void);
+static void YESSDcard(void);
 
 /*** tablas de estado ***/
 

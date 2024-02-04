@@ -78,7 +78,7 @@ void initButtons(void){
 	initbutton2();
 	initbutton3();
 	initButtonEncoder();
-	buttonTimer = createTimer_SYS(100, buttonManagement_ISR, PERIODIC);
+	buttonTimer = createTimer_SYS(100, buttonManagement_ISR, SYS_PERIODIC);
 	startTimer_SYS(buttonTimer);
 
 }

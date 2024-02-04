@@ -58,6 +58,8 @@ BOARD_InitPins:
   - {pin_num: '26', peripheral: DAC0, signal: REF_1, pin_signal: VREF_OUT/CMP1_IN5/CMP0_IN5/ADC1_SE18}
   - {pin_num: '22', peripheral: DAC0, signal: REF_2, pin_signal: VDDA}
   - {peripheral: DAC0, signal: TRG, pin_signal: PDB0_DAC0_Trigger}
+  - {pin_num: '31', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE17/PTE24/UART4_TX/I2C0_SCL/EWM_OUT_b}
+  - {pin_num: '32', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE18/PTE25/UART4_RX/I2C0_SDA/EWM_IN}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -131,6 +133,12 @@ void BOARD_InitPins(void)
                                           kPORT_UnlockRegister};
     /* PORTE2 (pin 3) is configured as SDHC0_DCLK */
     PORT_SetPinConfig(BOARD_INITPINS_SDHC0_DCLK_PORT, BOARD_INITPINS_SDHC0_DCLK_PIN, &SDHC0_DCLK);
+
+    /* PORTE24 (pin 31) is configured as I2C0_SCL */
+    PORT_SetPinMux(BOARD_INITPINS_ACCEL_SCL_PORT, BOARD_INITPINS_ACCEL_SCL_PIN, kPORT_MuxAlt5);
+
+    /* PORTE25 (pin 32) is configured as I2C0_SDA */
+    PORT_SetPinMux(BOARD_INITPINS_ACCEL_SDA_PORT, BOARD_INITPINS_ACCEL_SDA_PIN, kPORT_MuxAlt5);
 
     const port_pin_config_t SDHC0_CMD = {/* Internal pull-up resistor is enabled */
                                          kPORT_PullUp,

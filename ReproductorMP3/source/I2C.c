@@ -270,212 +270,212 @@ uint8_t i2cIsRxMsg(uint8_t id)
 /*
  * 								IRQ SECTION
  */
-void I2C0_IRQHandler(void)
-{
-	static uint8_t id = 0;
+// void I2C0_IRQHandler(void)
+// {
+// 	static uint8_t id = 0;
 
-	BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
+// 	BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
 
-	if (I2Cs[id]->C1 & I2C_C1_MST_MASK) // If on master Mode
-	{
-		if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // If Tx
-		{
-			if ((TxQueues[id]->isEmpty && I2Cmode[id] == MTX) || (I2Cs[id]->S & I2C_S_RXAK_MASK) != 0) // Ya se mandaron todos los datos en modo Tx o fallo el ack
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_MST_SHIFT) = 0;
-				return;
-			}
+// 	if (I2Cs[id]->C1 & I2C_C1_MST_MASK) // If on master Mode
+// 	{
+// 		if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // If Tx
+// 		{
+// 			if ((TxQueues[id]->isEmpty && I2Cmode[id] == MTX) || (I2Cs[id]->S & I2C_S_RXAK_MASK) != 0) // Ya se mandaron todos los datos en modo Tx o fallo el ack
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_MST_SHIFT) = 0;
+// 				return;
+// 			}
 
-			if (TxQueues[id]->isEmpty) // Se mando el address, ya sea para el caso de Rx o TxRx (para este ultimo se corresponde con el segundo envio del address)
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Cambio a modo Rx para quedar ahi.
-				if (I2CRxCants[id] == 1)
-					BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 1;
-				else
-					BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 0;
-				uint8_t dummyRead = I2Cs[id]->D;
-				return;
-			}
+// 			if (TxQueues[id]->isEmpty) // Se mando el address, ya sea para el caso de Rx o TxRx (para este ultimo se corresponde con el segundo envio del address)
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Cambio a modo Rx para quedar ahi.
+// 				if (I2CRxCants[id] == 1)
+// 					BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 1;
+// 				else
+// 					BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 0;
+// 				uint8_t dummyRead = I2Cs[id]->D;
+// 				return;
+// 			}
 
-			if (I2Cmode[id] == MTXRX && getFillLevel(TxQueues[id]) == 1) // Si quiero hacer repeated start tengo que mandarlo cuando vaya a pasar nuevamente el address del slvae
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_RSTA_SHIFT) = 1;
-			}
-			I2Cs[id]->D = getNext(TxQueues[id]); // Mando el datazo
-			return;
-		}
-		else // If Rx
-		{
-			if (I2CRxCants[id] == 1) // If last byte to read
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_MST_SHIFT) = 0;
-			}
-			else if (I2CRxCants[id] == 2) // Si todavia faltan bytes para leer
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 1;
-			}
-			uint8_t aux = I2Cs[id]->D;
-			put(RxQueues[id], aux);
-			I2CRxCants[id]--;
-			return;
-		}
-	}
-	else // If not on master Mode
-	{
-		if (I2Cs[id]->S & I2C_S_ARBL_MASK) // Se perdio control del Bus
-		{
-			BITBAND_REG8(I2Cs[id]->S, I2C_S_ARBL_SHIFT) = 1;
-			if (!(I2Cs[id]->S & I2C_S_IAAS_MASK)) // No me ablaron );
-			{
-				return;
-			}
-		}
-		if (I2Cs[id]->S & I2C_S_IAAS_MASK) // Me hablaron
-		{
-			if (I2Cs[id]->S & I2C_S_SRW_MASK) // Me pidieron transmitir
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 1; // Modo Tx
-				I2Cs[id]->D = 1;								 // Mando 1nos algun dia aca habra algo
-			}
-			else // Me pidieron recibir
-			{
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Modo Rx
-				uint8_t dummyRead = I2Cs[id]->D;
-			}
-			return; // Espero a la proxima
-		}
-		else
-		{
-			if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // Si estoy para mandar
-			{
-				if (I2Cs[id]->S & I2C_S_RXAK_MASK) // Recibi el ACK para seguir mandando datos
-				{
-					I2Cs[id]->D = 1; // Mando 1nos algun dia aca habra algo
-					return;
-				}
-				// Se pincho todo, volvemos a estar en Rx.
-				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Modo Rx
-				uint8_t dummyRead = I2Cs[id]->D;
-			}
-			else // Estoy para recibir
-			{
-				uint8_t aux = I2Cs[id]->D;
-				put(RxQueues[id], aux); // Guardo y sigo
-				return;
-			}
-		}
-	}
-}
+// 			if (I2Cmode[id] == MTXRX && getFillLevel(TxQueues[id]) == 1) // Si quiero hacer repeated start tengo que mandarlo cuando vaya a pasar nuevamente el address del slvae
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_RSTA_SHIFT) = 1;
+// 			}
+// 			I2Cs[id]->D = getNext(TxQueues[id]); // Mando el datazo
+// 			return;
+// 		}
+// 		else // If Rx
+// 		{
+// 			if (I2CRxCants[id] == 1) // If last byte to read
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_MST_SHIFT) = 0;
+// 			}
+// 			else if (I2CRxCants[id] == 2) // Si todavia faltan bytes para leer
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TXAK_SHIFT) = 1;
+// 			}
+// 			uint8_t aux = I2Cs[id]->D;
+// 			put(RxQueues[id], aux);
+// 			I2CRxCants[id]--;
+// 			return;
+// 		}
+// 	}
+// 	else // If not on master Mode
+// 	{
+// 		if (I2Cs[id]->S & I2C_S_ARBL_MASK) // Se perdio control del Bus
+// 		{
+// 			BITBAND_REG8(I2Cs[id]->S, I2C_S_ARBL_SHIFT) = 1;
+// 			if (!(I2Cs[id]->S & I2C_S_IAAS_MASK)) // No me ablaron );
+// 			{
+// 				return;
+// 			}
+// 		}
+// 		if (I2Cs[id]->S & I2C_S_IAAS_MASK) // Me hablaron
+// 		{
+// 			if (I2Cs[id]->S & I2C_S_SRW_MASK) // Me pidieron transmitir
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 1; // Modo Tx
+// 				I2Cs[id]->D = 1;								 // Mando 1nos algun dia aca habra algo
+// 			}
+// 			else // Me pidieron recibir
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Modo Rx
+// 				uint8_t dummyRead = I2Cs[id]->D;
+// 			}
+// 			return; // Espero a la proxima
+// 		}
+// 		else
+// 		{
+// 			if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // Si estoy para mandar
+// 			{
+// 				if (I2Cs[id]->S & I2C_S_RXAK_MASK) // Recibi el ACK para seguir mandando datos
+// 				{
+// 					I2Cs[id]->D = 1; // Mando 1nos algun dia aca habra algo
+// 					return;
+// 				}
+// 				// Se pincho todo, volvemos a estar en Rx.
+// 				BITBAND_REG8(I2Cs[id]->C1, I2C_C1_TX_SHIFT) = 0; // Modo Rx
+// 				uint8_t dummyRead = I2Cs[id]->D;
+// 			}
+// 			else // Estoy para recibir
+// 			{
+// 				uint8_t aux = I2Cs[id]->D;
+// 				put(RxQueues[id], aux); // Guardo y sigo
+// 				return;
+// 			}
+// 		}
+// 	}
+// }
 
-void I2C1_IRQHandler(void)
-{
-	static uint8_t id = 1;
-	static uint32_t startCount = 0;
+// void I2C1_IRQHandler(void)
+// {
+// 	static uint8_t id = 1;
+// 	static uint32_t startCount = 0;
 
-	if (I2Cs[id]->FLT & I2C_FLT_STOPF_MASK) // StopFlag up
-	{
-		startCount = 0;
-		I2Cs[id]->FLT &= ~I2C_FLT_STOPF_MASK;
-		BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
-	}
-	else // StopFlag down
-	{
-		if (I2Cs[id]->FLT & I2C_FLT_STARTF_MASK) // StartFlag up
-		{
-			I2Cs[id]->FLT &= ~I2C_FLT_STARTF_MASK;
+// 	if (I2Cs[id]->FLT & I2C_FLT_STOPF_MASK) // StopFlag up
+// 	{
+// 		startCount = 0;
+// 		I2Cs[id]->FLT &= ~I2C_FLT_STOPF_MASK;
+// 		BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
+// 	}
+// 	else // StopFlag down
+// 	{
+// 		if (I2Cs[id]->FLT & I2C_FLT_STARTF_MASK) // StartFlag up
+// 		{
+// 			I2Cs[id]->FLT &= ~I2C_FLT_STARTF_MASK;
 
-			startCount++;
-			if (startCount > 1)
-			{
-				BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
-				return;
-			}
-		}
-		BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
-		if (I2Cs[id]->C1 & I2C_C1_MST_MASK)				  // If on master Mode
-		{
-			if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // If Tx
-			{
-				if ((TxQueues[id]->isEmpty && I2Cmode[id] == MTX) || (I2Cs[id]->S & I2C_S_RXAK_MASK)) // Ya se mandaron todos los datos en modo Tx o fallo el ack
-				{
-					I2Cs[id]->C1 &= ~I2C_C1_MST_MASK;
-					return;
-				}
+// 			startCount++;
+// 			if (startCount > 1)
+// 			{
+// 				BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
+// 				return;
+// 			}
+// 		}
+// 		BITBAND_REG8(I2Cs[id]->S, I2C_S_IICIF_SHIFT) = 1; // Clear interrupt
+// 		if (I2Cs[id]->C1 & I2C_C1_MST_MASK)				  // If on master Mode
+// 		{
+// 			if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // If Tx
+// 			{
+// 				if ((TxQueues[id]->isEmpty && I2Cmode[id] == MTX) || (I2Cs[id]->S & I2C_S_RXAK_MASK)) // Ya se mandaron todos los datos en modo Tx o fallo el ack
+// 				{
+// 					I2Cs[id]->C1 &= ~I2C_C1_MST_MASK;
+// 					return;
+// 				}
 
-				if (TxQueues[id]->isEmpty) // Se mando el address, ya sea para el caso de Rx o TxRx (para este ultimo se corresponde con el segundo envio del address)
-				{
-					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Cambio a modo Rx para quedar ahi.
-					uint8_t dummyRead = I2Cs[id]->D;
-				}
+// 				if (TxQueues[id]->isEmpty) // Se mando el address, ya sea para el caso de Rx o TxRx (para este ultimo se corresponde con el segundo envio del address)
+// 				{
+// 					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Cambio a modo Rx para quedar ahi.
+// 					uint8_t dummyRead = I2Cs[id]->D;
+// 				}
 
-				if (I2Cmode[id] == MTXRX && getFillLevel(TxQueues[id]) == 1) // Si quiero hacer repeated start tengo que mandarlo cuando vaya a pasar nuevamente el address del slvae
-				{
-					I2Cs[id]->C1 |= I2C_C1_RSTA_MASK;
-				}
+// 				if (I2Cmode[id] == MTXRX && getFillLevel(TxQueues[id]) == 1) // Si quiero hacer repeated start tengo que mandarlo cuando vaya a pasar nuevamente el address del slvae
+// 				{
+// 					I2Cs[id]->C1 |= I2C_C1_RSTA_MASK;
+// 				}
 
-				I2Cs[id]->D = getNext(TxQueues[id]); // Mando el datazo
-			}
-			else // If Rx
-			{
-				if (I2CRxCants[id] == 1) // If last byte to read
-				{
-					I2Cs[id]->C1 &= ~I2C_C1_MST_MASK;
-				}
-				else if (I2CRxCants[id] > 1) // Si todavia faltan bytes para leer
-				{
-					I2Cs[id]->C1 |= I2C_C1_TXAK_MASK;
-				}
+// 				I2Cs[id]->D = getNext(TxQueues[id]); // Mando el datazo
+// 			}
+// 			else // If Rx
+// 			{
+// 				if (I2CRxCants[id] == 1) // If last byte to read
+// 				{
+// 					I2Cs[id]->C1 &= ~I2C_C1_MST_MASK;
+// 				}
+// 				else if (I2CRxCants[id] > 1) // Si todavia faltan bytes para leer
+// 				{
+// 					I2Cs[id]->C1 |= I2C_C1_TXAK_MASK;
+// 				}
 
-				put(RxQueues[id], I2Cs[id]->D);
-				I2CRxCants[id]--;
-			}
-		}
-		else // If not on master Mode
-		{
-			if (I2Cs[id]->S & I2C_S_ARBL_MASK) // Se perdio control del Bus
-			{
-				I2Cs[id]->S |= I2C_S_ARBL_MASK;
-				if (!(I2Cs[id]->S & I2C_S_IAAS_MASK)) // No me ablaron );
-				{
-					return;
-				}
-			}
-			if (I2Cs[id]->S & I2C_S_IAAS_MASK) // Me hablaron
-			{
-				if (I2Cs[id]->S & I2C_S_SRW_MASK) // Me pidieron transmitir
-				{
-					I2Cs[id]->C1 |= I2C_C1_TX_MASK; // Modo Tx
-					I2Cs[id]->D = 1;				// Mando 1nos algun dia aca habra algo
-				}
-				else // Me pidieron recibir
-				{
-					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Modo Rx
-					uint8_t dummyRead = I2Cs[id]->D;
-				}
-				return; // Espero a la proxima
-			}
-			else
-			{
-				if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // Si estoy para mandar
-				{
-					if (I2Cs[id]->S & I2C_S_RXAK_MASK) // Recibi el ACK para seguir mandando datos
-					{
-						I2Cs[id]->D = 1; // Mando 1nos algun dia aca habra algo
-						return;
-					}
-					// Se pincho todo, volvemos a estar en Rx.
-					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Modo Rx
-					uint8_t dummyRead = I2Cs[id]->D;
-				}
-				else // Estoy para recibir
-				{
-					put(RxQueues[id], I2Cs[id]->D); // Guardo y sigo
-					return;
-				}
-			}
-		}
-	}
-}
+// 				put(RxQueues[id], I2Cs[id]->D);
+// 				I2CRxCants[id]--;
+// 			}
+// 		}
+// 		else // If not on master Mode
+// 		{
+// 			if (I2Cs[id]->S & I2C_S_ARBL_MASK) // Se perdio control del Bus
+// 			{
+// 				I2Cs[id]->S |= I2C_S_ARBL_MASK;
+// 				if (!(I2Cs[id]->S & I2C_S_IAAS_MASK)) // No me ablaron );
+// 				{
+// 					return;
+// 				}
+// 			}
+// 			if (I2Cs[id]->S & I2C_S_IAAS_MASK) // Me hablaron
+// 			{
+// 				if (I2Cs[id]->S & I2C_S_SRW_MASK) // Me pidieron transmitir
+// 				{
+// 					I2Cs[id]->C1 |= I2C_C1_TX_MASK; // Modo Tx
+// 					I2Cs[id]->D = 1;				// Mando 1nos algun dia aca habra algo
+// 				}
+// 				else // Me pidieron recibir
+// 				{
+// 					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Modo Rx
+// 					uint8_t dummyRead = I2Cs[id]->D;
+// 				}
+// 				return; // Espero a la proxima
+// 			}
+// 			else
+// 			{
+// 				if (I2Cs[id]->C1 & I2C_C1_TX_MASK) // Si estoy para mandar
+// 				{
+// 					if (I2Cs[id]->S & I2C_S_RXAK_MASK) // Recibi el ACK para seguir mandando datos
+// 					{
+// 						I2Cs[id]->D = 1; // Mando 1nos algun dia aca habra algo
+// 						return;
+// 					}
+// 					// Se pincho todo, volvemos a estar en Rx.
+// 					I2Cs[id]->C1 &= ~I2C_C1_TX_MASK; // Modo Rx
+// 					uint8_t dummyRead = I2Cs[id]->D;
+// 				}
+// 				else // Estoy para recibir
+// 				{
+// 					put(RxQueues[id], I2Cs[id]->D); // Guardo y sigo
+// 					return;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 
 /*******************************************************************************
  *******************************************************************************

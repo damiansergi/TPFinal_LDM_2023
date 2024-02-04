@@ -17,6 +17,7 @@
 #include "fsl_pit.h"
 #include "fsl_uart.h"
 #include "fsl_clock.h"
+#include "fsl_i2c.h"
 #include "ff.h"
 #include "diskio.h"
 
@@ -69,6 +70,17 @@ extern "C" {
 #define UART0_PERIPHERAL UART0
 /* Definition of the clock source frequency */
 #define UART0_CLOCK_SOURCE CLOCK_GetFreq(UART0_CLK_SRC)
+/* BOARD_InitPeripherals defines for I2C0 */
+/* Definition of peripheral ID */
+#define I2C0_PERIPHERAL I2C0
+/* Definition of the clock source */
+#define I2C0_CLOCK_SOURCE I2C0_CLK_SRC
+/* Definition of the clock source frequency */
+#define I2C0_CLK_FREQ CLOCK_GetFreq(I2C0_CLOCK_SOURCE)
+/* I2C0 interrupt vector ID (number). */
+#define I2C0_IRQN I2C0_IRQn
+/* I2C0 interrupt handler identifier. */
+#define I2C0_IRQHANDLER I2C0_IRQHandler
 /* Debug console is initialized in the peripheral tool */
 #define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
 
@@ -89,6 +101,7 @@ extern edma_handle_t DMA_CH0_Handle;
 extern const dac_config_t DAC0_config;
 extern const pit_config_t PIT_config;
 extern const uart_config_t UART0_config;
+extern const i2c_master_config_t I2C0_config;
 
 /***********************************************************************************************************************
  * Callback functions

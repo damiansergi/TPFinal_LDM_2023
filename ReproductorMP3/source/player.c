@@ -503,7 +503,9 @@ static void readMP3Files(const char *path)
     FRESULT result = f_opendir(&directory, path); // Open the directory
     if (result != FR_OK)
     {
+#if DEBUG==1
         printf("Error opening directory: %d\n", result);
+#endif
         return;
     }
 
@@ -536,7 +538,9 @@ static void readMP3Files(const char *path)
             // If it's a file, check for ".mp3" extension
             if (strstr(fileInfo.fname, ".mp3") != NULL)
             {
+#if DEBUG==1
                 printf("MP3 File: %s/%s\n", path, fileInfo.fname);
+#endif
                 // Add the file to the list
                 pushtoBack(newSong(path, fileInfo.fname));
             }

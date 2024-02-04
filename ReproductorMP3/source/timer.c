@@ -36,9 +36,9 @@ uint8_t createTimer_SYS(uint32_t time, void (*funcallback)(void), timerModesSYS_
 	bool found = false;
 
 	while(i < MAXTIMERS_SYS && !found){
-		if(timer[i].state == FREE){
+		if(timer[i].state == SYS_FREE){
 			timer[i].mode = mode;
-			timer[i].state = IDLE;
+			timer[i].state = SYS_IDLE;
 			timer[i].topCont = time;
 			timer[i].callback = funcallback;
 			resetTimer_SYS(i);
@@ -66,7 +66,7 @@ void configTimerMode_SYS(uint8_t id, uint8_t mode){
 
 void destroyTimer_SYS(uint8_t id){
 	timer[id].currCont = 0;
-	timer[id].state = FREE;
+	timer[id].state = SYS_FREE;
 }
 
 void resetTimer_SYS(uint8_t id){
@@ -75,13 +75,13 @@ void resetTimer_SYS(uint8_t id){
 
 void startTimer_SYS(uint8_t id){
 	timer[id].currCont = 0;
-	if (timer[id].state != FREE)
-		timer[id].state = RUNNING;
+	if (timer[id].state != SYS_FREE)
+		timer[id].state = SYS_RUNNING;
 }
 
 void stopTimer_SYS(uint8_t id){
-	if (timer[id].state != FREE)
-		timer[id].state = IDLE;
+	if (timer[id].state != SYS_FREE)
+		timer[id].state = SYS_IDLE;
 	timer[id].currCont = 0;
 }
 
@@ -96,12 +96,12 @@ uint8_t getTimerState_SYS(uint8_t id){
 void SysTick_Handler(void){
 
 	for(int i = 0; i < MAXTIMERS_SYS; i++){
-		if(timer[i].state == RUNNING){
+		if(timer[i].state == SYS_RUNNING){
 			timer[i].currCont++;
 			if(timer[i].currCont >= timer[i].topCont){
 				timer[i].callback();
 				resetTimer_SYS(i);
-				if(timer[i].mode == ONESHOT){
+				if(timer[i].mode == SYS_ONESHOT){
 					stopTimer_SYS(i);
 				}
 			}

@@ -12,6 +12,14 @@
         "hardware.h": "c",
         "display.h": "c",
         "encoder.h": "c",
-        "equalizer.h": "c"
+        "equalizer.h": "c",
+        "cstdint": "c",
+        "thread": "c",
+        "queue.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c",
+        "fsl_i2c.h": "c"
     }
 }

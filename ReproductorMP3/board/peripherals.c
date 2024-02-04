@@ -82,7 +82,7 @@ instance:
         - apiMode: 'trans'
         - edma_channel:
           - channel_prefix_id: 'CH3'
-          - uid: '1706581251721'
+          - uid: '1707071590408'
           - eDMAn: '3'
           - eDMA_source: 'kDmaRequestMux0AlwaysOn58'
           - enableTriggerPIT: 'true'
@@ -99,7 +99,7 @@ instance:
           - tcd_memory_custom_id: 'false'
         - transfer_config:
           - 0:
-            - uid: '1706581251724'
+            - uid: '1707071590400'
             - tcdID: 'CH0_PING'
             - ssize: 'kEDMA_TransferSize2Bytes'
             - saddr_expr: 'pingBuffer'
@@ -115,7 +115,7 @@ instance:
             - transferBytes: '2304'
             - submitTransfer: 'false'
           - 1:
-            - uid: '1706581251726'
+            - uid: '1707071590402'
             - tcdID: 'CH0_PONG'
             - ssize: 'kEDMA_TransferSize2Bytes'
             - saddr_expr: 'pongBuffer'
@@ -130,7 +130,7 @@ instance:
             - nbytes: '2'
             - transferBytes: '2304'
             - submitTransfer: 'false'
-        - no_init_uid: '1706581251728'
+        - no_init_uid: '1707071590404'
         - init_callback: 'true'
         - callback_function: 'DMA_callback'
         - callback_user_data: ''
@@ -143,7 +143,7 @@ instance:
         - apiMode: 'trans'
         - edma_channel:
           - channel_prefix_id: 'CH0'
-          - uid: '1706585616750'
+          - uid: '1707071590406'
           - eDMAn: '0'
           - eDMA_source: 'kDmaRequestMux0FTM0Channel0'
           - enableTriggerPIT: 'false'
@@ -159,7 +159,7 @@ instance:
           - tcd_size: '1'
           - tcd_memory_custom_id: 'false'
         - transfer_config: []
-        - no_init_uid: '1706585616758'
+        - no_init_uid: '1707071590410'
         - init_callback: 'true'
         - callback_function: 'DMA_callback_CH0'
         - callback_user_data: ''
@@ -247,6 +247,7 @@ instance:
     - interrupt_table:
       - 0: []
       - 1: []
+      - 2: []
     - interrupts: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -386,6 +387,57 @@ const uart_config_t UART0_config = {
 
 static void UART0_init(void) {
   UART_Init(UART0_PERIPHERAL, &UART0_config, UART0_CLOCK_SOURCE);
+}
+
+/***********************************************************************************************************************
+ * I2C0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'I2C0'
+- type: 'i2c'
+- mode: 'I2C_Interrupt'
+- custom_name_enabled: 'false'
+- type_id: 'i2c_2566d7363e7e9aaedabb432110e372d7'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'I2C0'
+- config_sets:
+  - interrupt:
+    - interrupt_sel: 'kI2C_GlobalInterruptEnable'
+    - interrupt:
+      - IRQn: 'I2C0_IRQn'
+      - enable_interrrupt: 'enabled'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - quick_selection: 'QS_IRQ_priority1'
+  - fsl_i2c:
+    - i2c_mode: 'kI2C_Master'
+    - clockSource: 'BusInterfaceClock'
+    - clockSourceFreq: 'GetFreq'
+    - i2c_master_config:
+      - enableMaster: 'true'
+      - enableStopHold: 'false'
+      - baudRate_Bps: '100000'
+      - glitchFilterWidth: '0'
+    - quick_selection: 'QS_I2C_1'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const i2c_master_config_t I2C0_config = {
+  .enableMaster = true,
+  .enableStopHold = false,
+  .baudRate_Bps = 100000UL,
+  .glitchFilterWidth = 0U
+};
+
+static void I2C0_init(void) {
+  /* Initialization function */
+  I2C_MasterInit(I2C0_PERIPHERAL, &I2C0_config, I2C0_CLK_FREQ);
+  /* Enable interrupts */
+  I2C_EnableInterrupts(I2C0_PERIPHERAL, (kI2C_GlobalInterruptEnable));
+  /* Enable interrupt I2C0_IRQn request in the NVIC. */
+  EnableIRQ(I2C0_IRQN);
 }
 
 /***********************************************************************************************************************
@@ -541,6 +593,7 @@ void BOARD_InitPeripherals(void)
   DAC0_init();
   PIT_init();
   UART0_init();
+  I2C0_init();
 }
 
 /***********************************************************************************************************************

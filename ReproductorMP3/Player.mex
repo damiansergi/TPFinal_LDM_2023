@@ -50,6 +50,11 @@
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="Peripheral" resourceId="I2C0" description="Peripheral I2C0 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -138,6 +143,8 @@
                   <pin peripheral="DAC0" signal="REF_1" pin_num="26" pin_signal="VREF_OUT/CMP1_IN5/CMP0_IN5/ADC1_SE18"/>
                   <pin peripheral="DAC0" signal="REF_2" pin_num="22" pin_signal="VDDA"/>
                   <pin peripheral="DAC0" signal="TRG" pin_num="" pin_signal="PDB0_DAC0_Trigger"/>
+                  <pin peripheral="I2C0" signal="SCL" pin_num="31" pin_signal="ADC0_SE17/PTE24/UART4_TX/I2C0_SCL/EWM_OUT_b"/>
+                  <pin peripheral="I2C0" signal="SDA" pin_num="32" pin_signal="ADC0_SE18/PTE25/UART4_RX/I2C0_SDA/EWM_IN"/>
                </pins>
             </function>
          </functions_list>
@@ -331,6 +338,16 @@
                   <data type="Version">2.5.1</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.i2c" description="I2C Driver is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.i2c" description="An unsupported version of the I2C Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.0.5</data>
+               </feature>
+            </dependency>
             <dependency resourceType="Tool" resourceId="Clocks" description="The Clocks tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data>true</data>
@@ -400,6 +417,21 @@
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="I2C0.i2c_scl" description="Signal serial clock is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="I2C0.i2c_sda" description="Signal serial data is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="Bus_clock" description="Bus clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
                </dependencies>
                <instances>
                   <instance name="NVIC" uuid="d98da378-cbd6-4379-a610-c77216b19caa" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
@@ -407,6 +439,7 @@
                         <array name="interrupt_table">
                            <struct name="0"/>
                            <struct name="1"/>
+                           <struct name="2"/>
                         </array>
                         <array name="interrupts"/>
                      </config_set>
@@ -542,7 +575,7 @@
                               <setting name="apiMode" value="trans"/>
                               <struct name="edma_channel">
                                  <setting name="channel_prefix_id" value="CH3"/>
-                                 <setting name="uid" value="1706581251721"/>
+                                 <setting name="uid" value="1707071590408"/>
                                  <setting name="eDMAn" value="3"/>
                                  <setting name="eDMA_source" value="kDmaRequestMux0AlwaysOn58"/>
                                  <setting name="enableTriggerPIT" value="true"/>
@@ -562,7 +595,7 @@
                               </struct>
                               <array name="transfer_config">
                                  <struct name="0">
-                                    <setting name="uid" value="1706581251724"/>
+                                    <setting name="uid" value="1707071590400"/>
                                     <setting name="tcdID" value="CH0_PING"/>
                                     <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
                                     <setting name="saddr_expr" value="pingBuffer"/>
@@ -579,7 +612,7 @@
                                     <setting name="submitTransfer" value="false"/>
                                  </struct>
                                  <struct name="1">
-                                    <setting name="uid" value="1706581251726"/>
+                                    <setting name="uid" value="1707071590402"/>
                                     <setting name="tcdID" value="CH0_PONG"/>
                                     <setting name="ssize" value="kEDMA_TransferSize2Bytes"/>
                                     <setting name="saddr_expr" value="pongBuffer"/>
@@ -596,7 +629,7 @@
                                     <setting name="submitTransfer" value="false"/>
                                  </struct>
                               </array>
-                              <setting name="no_init_uid" value="1706581251728"/>
+                              <setting name="no_init_uid" value="1707071590404"/>
                               <setting name="init_callback" value="true"/>
                               <setting name="callback_function" value="DMA_callback"/>
                               <setting name="callback_user_data" value=""/>
@@ -613,7 +646,7 @@
                               <setting name="apiMode" value="trans"/>
                               <struct name="edma_channel">
                                  <setting name="channel_prefix_id" value="CH0"/>
-                                 <setting name="uid" value="1706585616750"/>
+                                 <setting name="uid" value="1707071590406"/>
                                  <setting name="eDMAn" value="0"/>
                                  <setting name="eDMA_source" value="kDmaRequestMux0FTM0Channel0"/>
                                  <setting name="enableTriggerPIT" value="false"/>
@@ -632,7 +665,7 @@
                                  <setting name="tcd_memory_custom_id" value="false"/>
                               </struct>
                               <array name="transfer_config"/>
-                              <setting name="no_init_uid" value="1706585616758"/>
+                              <setting name="no_init_uid" value="1707071590410"/>
                               <setting name="init_callback" value="true"/>
                               <setting name="callback_function" value="DMA_callback_CH0"/>
                               <setting name="callback_user_data" value=""/>
@@ -724,6 +757,33 @@
                            <setting name="idleType" value="kUART_IdleTypeStartBit"/>
                            <setting name="enableTx" value="true"/>
                            <setting name="enableRx" value="true"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="I2C0" uuid="f2ba76d9-0e1b-4030-9b9f-b0b38023017d" type="i2c" type_id="i2c_2566d7363e7e9aaedabb432110e372d7" mode="I2C_Interrupt" peripheral="I2C0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="interrupt" quick_selection="QS_IRQ_priority1">
+                        <set name="interrupt_sel">
+                           <selected>
+                              <id>kI2C_GlobalInterruptEnable</id>
+                           </selected>
+                        </set>
+                        <struct name="interrupt">
+                           <setting name="IRQn" value="I2C0_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
+                           <setting name="enable_priority" value="false"/>
+                           <setting name="priority" value="0"/>
+                           <setting name="enable_custom_name" value="false"/>
+                        </struct>
+                     </config_set>
+                     <config_set name="fsl_i2c" quick_selection="QS_I2C_1">
+                        <setting name="i2c_mode" value="kI2C_Master"/>
+                        <setting name="clockSource" value="BusInterfaceClock"/>
+                        <setting name="clockSourceFreq" value="GetFreq"/>
+                        <struct name="i2c_master_config">
+                           <setting name="enableMaster" value="true"/>
+                           <setting name="enableStopHold" value="false"/>
+                           <setting name="baudRate_Bps" value="100000"/>
+                           <setting name="glitchFilterWidth" value="0"/>
                         </struct>
                      </config_set>
                   </instance>

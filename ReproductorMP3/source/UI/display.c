@@ -9,7 +9,8 @@
  ******************************************************************************/
 
 #include "config.h"
-#include "I2C.h"
+#include "fsl_i2c.h"
+#include "peripherals.h"
 #include "Queue.h"
 #include "display.h"
 #include "timer.h"
@@ -20,7 +21,7 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 
-#define WriteDriverByteIIC(args) i2cWriteSlave(0, DISPLAY_ADDR, (args), 1)
+// #define WriteDriverByteIIC(args) i2cWriteSlave(0, DISPLAY_ADDR, (args), 1)
 #define NOCHARACTER 32
 #define SENDINGTIME 100 // us
 
@@ -44,6 +45,7 @@ void write4bits(uint8_t *value);
 void DelayInit(uint32_t delay);
 void DisplayPeriodicISR();
 void displaySendPeriodicISR();
+uint32_t WriteDriverByteIIC(uint8_t *data);
 
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
@@ -57,6 +59,7 @@ static uint8_t _backlightval = LCD_BACKLIGHT;
 static uint8_t _displayfunction;
 static uint8_t _displaycontrol;
 static uint8_t _displaymode;
+static i2c_master_handle_t i2chandle;
 
 static char upperLine[MAXLETTERS] = {' ', ' ', ' ', ' ', 'A', 'P', 'A', 'G', 'A', 'D', 'O', ' ', ' ', ' ', ' ', ' ', '\0', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 									 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -82,10 +85,10 @@ static queue_t displayDataBuffer = {{0}, 0, 0, false, true};
 
 void initDisplay()
 {
-
+	I2C_MasterTransferCreateHandle(I2C0_PERIPHERAL, &i2chandle, NULL, NULL);
 	// Empiezo a usar send por eso ya arranco el timer displayDataTimer
 	displayDataTimer = createTimer(SENDINGTIME, displaySendPeriodicISR);
-	startTimer_SYS(displayDataTimer);
+	startTimer(displayDataTimer);
 
 	_displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
 	uint8_t zero = 0;
@@ -101,55 +104,72 @@ void initDisplay()
 
 	// we start in 8bit mode, try to set 4 bit mode
 	uint8_t word_msg = 0x03 << 4;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
+
 	DelayInit(59000UL); // wait more than 4.1ms
 
-	WriteDriverByteIIC(&zero);
-	DelayInit(2000UL); // wait more than 100us
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
 	DelayInit(2000UL); // wait more than 100us
 
-	WriteDriverByteIIC(&zero);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(2000UL); // wait more than 100us
-	WriteDriverByteIIC(&word_msg);
+
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
+	DelayInit(2000UL); // wait more than 100us
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(1500UL);
 
 	// finally, set to 4-bit interface
 	word_msg = 0x02 << 4;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
-	WriteDriverByteIIC(&zero);
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
 	DelayInit(58572UL);
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
 	word_msg = LCD_FUNCTIONSET | _displayfunction;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
-	WriteDriverByteIIC(&zero);
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
 	word_msg = 0x08 << 4;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
-	WriteDriverByteIIC(&zero);
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
 	word_msg = 0x01 << 4;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
-	WriteDriverByteIIC(&zero);
+	while (WriteDriverByteIIC(&zero) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
 	word_msg = LCD_ENTRYMODESET | _displaymode | _backlightval;
-	WriteDriverByteIIC(&word_msg);
+	while (WriteDriverByteIIC(&word_msg) != kStatus_Success)
+		;
 	DelayInit(58572UL);
 
-	displayTimer = createTimer_SYS(REFRESHTIME, DisplayPeriodicISR, PERIODIC);
+	displayTimer = createTimer_SYS(REFRESHTIME, DisplayPeriodicISR, SYS_PERIODIC);
 	startTimer_SYS(displayTimer);
 }
 
@@ -353,6 +373,7 @@ void displaySendPeriodicISR()
 
 	static int sendingState = 0;
 	static uint8_t wordSend;
+	static uint32_t result = 0;
 
 	// Primero lo mando sin el enable, y después pulseando el enable. No sé porque... la libreria lo hace asi
 
@@ -362,19 +383,32 @@ void displaySendPeriodicISR()
 		if (getFillLevel(&displayDataBuffer) != 0)
 		{
 			wordSend = getNext(&displayDataBuffer);
-			WriteDriverByteIIC(&wordSend);
-			sendingState = 1;
+			result = WriteDriverByteIIC(&wordSend);
+			if (result != kStatus_Success)
+			{
+				put(&displayDataBuffer, wordSend);
+			}
+			else
+			{
+				sendingState = 1;
+			}
 		}
 		break;
 	case 1:
 		wordSend |= En;
 		WriteDriverByteIIC(&wordSend);
-		sendingState = 2;
+		if (result == kStatus_Success)
+		{
+			sendingState = 2;
+		}
 		break;
 	case 2:
 		wordSend &= ~En;
 		WriteDriverByteIIC(&wordSend);
-		sendingState = 0;
+		if (result == kStatus_Success)
+		{
+			sendingState = 0;
+		}
 		break;
 	default:
 
@@ -440,4 +474,21 @@ void DelayInit(uint32_t delay)
 
 	while (delay--)
 		;
+}
+
+uint32_t WriteDriverByteIIC(uint8_t *data)
+{
+	static uint8_t i2cData = 0;
+	static i2c_master_transfer_t masterXfer = {
+		.flags = kI2C_TransferDefaultFlag,
+		.slaveAddress = DISPLAY_ADDR,
+		.direction = kI2C_Write,
+		.subaddress = 0,
+		.subaddressSize = 0,
+		.data = &i2cData,
+		.dataSize = 1,
+	};
+
+	i2cData = *data;
+	return I2C_MasterTransferNonBlocking(I2C0_PERIPHERAL, &i2chandle, &masterXfer);
 }

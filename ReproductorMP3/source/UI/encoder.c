@@ -40,7 +40,7 @@ bool initEncoder(void)
 	if (gpioIRQ(RCHB_PIN, GPIO_IRQ_MODE_FALLING_EDGE, &RCHB_CB))
 		return 1;
 
-	encTimerID = createTimer_SYS(ENCODER_ROT_TIME, &activate_CHAIRQ_CB, ONESHOT);
+	encTimerID = createTimer_SYS(ENCODER_ROT_TIME, &activate_CHAIRQ_CB, SYS_ONESHOT);
 	return 0;
 }
 

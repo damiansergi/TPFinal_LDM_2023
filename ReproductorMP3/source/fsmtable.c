@@ -12,6 +12,7 @@
 //  haciendo los cambios necesarios, y si lo precisasen guardando el numero al cual cambió la variable
 uint8_t volumeLevel = 30;
 uint8_t songSelected = 1;
+uint8_t sdCardON = 0;
 bool pause = true;
 uint8_t eqLevel = 0;
 
@@ -24,7 +25,6 @@ extern STATE st_eq[];
 
 #define EQCANT 4
 const char *eqBands[EQCANT] = {"Flat", "Rock", "Pop", "Bass"};
-
 
 // prototipos
 
@@ -43,6 +43,9 @@ static void changeEqRight(void);
 static void changeEqLeft(void);
 static void turnOff(void);
 static void autoPlayNextSong(void);
+static void goToRepFromNoSD();
+static void NOSDcard();
+static void YESSDcard();
 
 /*** tablas de estado ***/
 
@@ -50,8 +53,19 @@ static void autoPlayNextSong(void);
 
 STATE st_off[] =
 	{
+		{SDCardRemoved, st_noSD, NOSDcard},
+		{SDCardInserted, st_off, YESSDcard},
 		{EncoderClick, st_rep, goToRepFromOff},
+		{FIN_TABLA, st_off, do_nothing} // FIN_TABLA sirve como el default de un switch(event),
+										// por si llega a venir un evento que no queremos handlear
+};
 
+/*** estado no hay SD card ***/
+
+STATE st_noSD[] =
+	{
+		{SDCardInserted, st_rep, goToRepFromNoSD},
+		{EncoderClick, st_off, turnOff},
 		{FIN_TABLA, st_off, do_nothing} // FIN_TABLA sirve como el default de un switch(event),
 										// por si llega a venir un evento que no queremos handlear
 };
@@ -67,6 +81,7 @@ STATE st_rep[] =
 		{ButtonLine, st_eq, goToEq},
 		{EncoderClick, st_off, turnOff},
 		{AutoNextSong, st_rep, autoPlayNextSong},
+		{SDCardRemoved, st_noSD, NOSDcard},
 		{FIN_TABLA, st_rep, do_nothing}};
 
 /*** estado volumen ***/
@@ -77,6 +92,7 @@ STATE st_vol[] =
 		{EncoderRight, st_vol, changeVolumeRight},
 		{ButtonPoint, st_rep, goToRepFromVol},
 		{EncoderClick, st_off, turnOff},
+		{SDCardRemoved, st_noSD, NOSDcard},
 		{FIN_TABLA, st_vol, do_nothing}};
 
 /*** estado ecualizador ***/
@@ -87,6 +103,7 @@ STATE st_eq[] =
 		{EncoderRight, st_eq, changeEqRight},
 		{ButtonLine, st_rep, goToRepFromEq},
 		{EncoderClick, st_off, turnOff},
+		{SDCardRemoved, st_noSD, NOSDcard},
 		{FIN_TABLA, st_eq, do_nothing}};
 
 //========interfaz=================
@@ -245,4 +262,28 @@ static void autoPlayNextSong(void)
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
 	DisplayWrite(name, len + 1, 0);
+}
+
+static void goToRepFromNoSD(void)
+{
+	sdCardON = true;
+
+	DisplayBacklight();
+	char *name = getCurrentSongName();
+	uint8_t len = strlen(name);
+	DisplayWrite(name, len + 1, 0);
+
+	char buffer2[17] = "                ";
+	repDisplayPrinter(buffer2, pause, volumeLevel, eqBands[eqLevel]);
+	DisplayWrite(buffer2, 16, 1);
+}
+
+static void NOSDcard()
+{
+	sdCardON = false;
+}
+
+static void YESSDcard()
+{
+	sdCardON = true;
 }

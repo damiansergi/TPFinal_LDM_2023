@@ -1,8 +1,8 @@
-/***************************************************************************//**
-  @file     display.h
-  @brief    El control del display se basa en la libreria de LiquidCrystal_I2C para Arduino. link: https://github.com/johnrickman/LiquidCrystal_I2C
-  @author	Grupo 3
- ******************************************************************************/
+/***************************************************************************/ /**
+   @file     display.h
+   @brief    El control del display se basa en la libreria de LiquidCrystal_I2C para Arduino. link: https://github.com/johnrickman/LiquidCrystal_I2C
+   @author	Grupo 3
+  ******************************************************************************/
 
 #ifndef _DISPLAY_H_
 #define _DISPLAY_H_
@@ -10,8 +10,6 @@
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
-
-
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -60,9 +58,9 @@
 #define LCD_NOBACKLIGHT 0x00
 
 // send "modes"
-#define En 0b00000100  // Enable bit
-#define Rw 0b00000010  // Read/Write bit
-#define DATA_Rs 0b00000001  // Register select bit
+#define En 0b00000100      // Enable bit
+#define Rw 0b00000010      // Read/Write bit
+#define DATA_Rs 0b00000001 // Register select bit
 #define COMMAND 0
 
 // display hardware features
@@ -70,15 +68,12 @@
 #define DISPLAY_ROWS 2
 #define DISPLAY_ADDR 0x27
 
-
 #define MAXLETTERS 64
-#define REFRESHTIME 500 //in miliseconds
+#define REFRESHTIME 50 // in miliseconds
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
-
-
 
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
@@ -86,25 +81,22 @@
 
 // +ej: extern unsigned int anio_actual;+
 
-
 /*******************************************************************************
  * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
 
-//Funciones principales
+// Funciones principales
 
 void initDisplay();
 
-uint8_t DisplayWrite(char * msg, uint8_t cant, uint8_t line);
-//Acá se escribe lo que querés que ponga en la pantalla
-//Y cada REFRESHTIME por una interrupcion de systick periodica se escribe el display
-//Line=0 escribe en la linea de arriba y Line=1 escribe en la de abajo
-//Automaticamente si la cantidad es mayor a 16 entonces va a activar la marquesina movible
-//La cual solo está activa en la parte de arriba de momento
+uint8_t DisplayWrite(char *msg, uint8_t cant, uint8_t line);
+// Acá se escribe lo que querés que ponga en la pantalla
+// Y cada REFRESHTIME por una interrupcion de systick periodica se escribe el display
+// Line=0 escribe en la linea de arriba y Line=1 escribe en la de abajo
+// Automaticamente si la cantidad es mayor a 16 entonces va a activar la marquesina movible
+// La cual solo está activa en la parte de arriba de momento
 
-
-
-//Funciones secundarias
+// Funciones secundarias
 void DisplayClear();
 
 void DisplayHome();

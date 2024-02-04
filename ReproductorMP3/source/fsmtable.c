@@ -122,6 +122,11 @@ static void do_nothing(void)
 }
 static void goToRepFromOff(void)
 {
+	if (sdCardON == false)
+	{
+		putEvent(SDCardRemoved);
+	}
+
 	DisplayBacklight();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);

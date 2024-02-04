@@ -1,15 +1,18 @@
 /***************************************************************************/ /**
-   @file     +Nombre del archivo (ej: template.h)+
-   @brief    +Descripcion del archivo+
-   @author   +Nombre del autor (ej: Salvador Allende)+
+   @file		deepSleep.h
+   @brief 		Put MCU into low power mode and wake up
+   @author		Grupo 3
   ******************************************************************************/
 
-#ifndef _EVENTQUEUE_H_
-#define _EVENTQUEUE_H_
+#ifndef _DEEPSLEEP_H_
+#define _DEEPSLEEP_H_
 
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
+
+#include <stdint.h>
+#include <stdbool.h>
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -19,39 +22,44 @@
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-typedef enum event_type
-{
-  None,
-  EncoderLeft,
-  EncoderRight,
-  EncoderClick,
-  ButtonCross,
-  ButtonPoint,
-  ButtonLine,
-  AutoNextSong,
-  SDCardRemoved,
-  SDCardInserted,
-} event_t;
-
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
-
-// +ej: extern unsigned int anio_actual;+
 
 /*******************************************************************************
  * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
 
 /**
- * @brief FSM Principal del proyecto
- * @param parametro utilizado dentro de la FSM para guardar los datos que se van escribiendo
+ * @brief Init peak notch filters
+ * @return void
+ */
+void deepSleep_init(void);
+
+/**
+ * @brief Reset filters to avoiding causality problems. Call it every time you want to restart processing
+ * @return void
+ */
+void deepSleep(void);
+/**
+ * @brief Compute cascade filters to current sample
+ * @param x The next sample to be processed
+ * @return Returns the sample processed
  */
 
-event_t getNextEvent(void);
-void putEvent(event_t event);
-event_t popEvent(void);
+/**
+ * @brief Change the dB gain/atten of filters. Recompute the filters coeffiencients.
+ * @param value target value in dB of filters gain
+ * @return void
+ */
+
+/**
+ * @brief Return the current gain of the filter
+ * @param filterID filter to get the gain
+ * @return gain in dB of the filter
+ */
+
 /*******************************************************************************
  ******************************************************************************/
 
-#endif // _EVENTQUEUE_H_
+#endif // _DEEPSLEEP_H_

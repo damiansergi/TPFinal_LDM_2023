@@ -6,6 +6,12 @@
         "stdbool.h": "c",
         "random": "c",
         "algorithm": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "mk64f12.h": "c",
+        "gpio.h": "c",
+        "hardware.h": "c",
+        "display.h": "c",
+        "encoder.h": "c",
+        "equalizer.h": "c"
     }
 }

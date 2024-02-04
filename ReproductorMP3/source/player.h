@@ -50,7 +50,7 @@ bool stopPlayer();
 bool pausePlayer();
 bool nextSong();
 bool prevSong();
-bool adjustVolume(float vol);
+void adjustVolume(float vol);
 char *getCurrentSongName();
 
 song_node_t *getSongList();

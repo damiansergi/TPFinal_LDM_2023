@@ -89,11 +89,14 @@ void processSamples(int16_t *buff, uint32_t buffSize);
 
 static FATFS g_fileSystem; /* File system object */
 
+static SDStates_t SDstate = no_SDCard;
 static PlayerStates_t state = STARTING;
 static PlayerStates_t pausePrevState = WAITING_TO_DECODE;
 static FRESULT error;
 
 static float volumePlayer = 1;
+
+static bool decodelag = false;
 
 static song_node_t *currentSong = NULL;
 
@@ -128,9 +131,19 @@ bool playerInit()
     SYSMPU_Enable(SYSMPU, false);
     initList();
     MP3DecInit();
-    PORT_SetPinMux(PORTB, 20, kPORT_MuxAsGpio);
-    GPIO_PinInit(GPIOB, 20, &config);
+    PORT_SetPinMux(PORTC, 3, kPORT_MuxAsGpio);
+    GPIO_PinInit(GPIOC, 3, &config);
 
+    BOARD_SD_Config(&g_sd, NULL, BOARD_SDMMC_SD_HOST_IRQ_PRIORITY, NULL);
+
+    /* SD host init function */
+    if (SD_HostInit(&g_sd) != kStatus_Success)
+    {
+        printf("\r\nSD host init fail\r\n");
+        return false;
+    }
+
+    state = STARTING;
     return true;
 }
 
@@ -153,7 +166,6 @@ bool playPlayer()
         DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
         EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         currBuffPlaying = pingBuffer;
-
         EDMA_StartTransfer(&DMA_CH3_Handle);
         PIT_StartTimer(PIT, kPIT_Chnl_3);
 
@@ -186,6 +198,7 @@ bool pausePlayer()
     DAC0->DAT[0].DATH = 0x8U; // Pull to middle
     DAC0->DAT[0].DATL = 0x00U;
     pausePrevState = state;
+    turnOffVumeter();
     state = PAUSED;
     return false;
 }
@@ -219,6 +232,7 @@ bool nextSong()
         {
             currentSong = currentSong->next;
         }
+        break;
     default:
         stopPlayer();
         if (getListTail() == currentSong->next)
@@ -265,6 +279,7 @@ bool prevSong()
         {
             currentSong = currentSong->prev;
         }
+        break;
     default:
         stopPlayer();
         if (getListHead() == currentSong->prev)
@@ -280,7 +295,7 @@ bool prevSong()
     return false;
 }
 
-bool adjustVolume(float vol)
+void adjustVolume(float vol)
 {
     volumePlayer = vol;
 }
@@ -315,21 +330,21 @@ void getSongInfo(song_node_t *node);
 player_msg_t updatePlayer()
 {
     static uint32_t decodedSamples = 0;
-    static uint32_t tickCount = 0;
+
+    if (SDstate == SDCard_ready && SD_IsCardPresent(&g_sd) == false)
+    {
+        stopPlayer();
+        putEvent(SDCardRemoved);
+        SDstate = no_SDCard;
+        state = STARTING;
+    }
+
     switch (state)
     {
     case STARTING:
-        BOARD_SD_Config(&g_sd, NULL, BOARD_SDMMC_SD_HOST_IRQ_PRIORITY, NULL);
-
-        /* SD host init function */
-        if (SD_HostInit(&g_sd) != kStatus_Success)
-        {
-            printf("\r\nSD host init fail\r\n");
-            break;
-        }
 
         /* wait card insert */
-        if (SD_IsCardPresent(&g_sd) == true)
+        if (SD_IsCardPresent(&g_sd) == true && SDstate == no_SDCard)
         {
             printf("\r\nCard inserted.\r\n");
             /* power off card */
@@ -337,12 +352,10 @@ player_msg_t updatePlayer()
             /* power on the card */
             SD_SetCardPower(&g_sd, true);
 
+            putEvent(SDCardInserted);
+
+            SDstate = SDCard_ready;
             state = SD_DETECTED;
-        }
-        else
-        {
-            printf("\r\nCard detect fail.\r\n");
-            break;
         }
         break;
 
@@ -371,7 +384,7 @@ player_msg_t updatePlayer()
         break;
 
     case DECODING:
-        GPIO_PinWrite(GPIOB, 20, 1);
+        GPIO_PinWrite(GPIOC, 3, 1);
 
         if (currBuffPlaying == pingBuffer)
         {
@@ -386,6 +399,10 @@ player_msg_t updatePlayer()
             // Filtrado, casteo a 12 bits y correccion de offset
             processSamples(pongBuffer, decodedSamples);
             DMA_CH0_PONG_config.majorLoopCounts = decodedSamples;
+            if (EDMA_GetChannelStatusFlags(DMA_CH3_Handle.base, DMA_CH3_Handle.channel) & kEDMA_DoneFlag)
+			{
+				decodelag = true;
+			}
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PONG_config);
         }
         else
@@ -401,11 +418,30 @@ player_msg_t updatePlayer()
             // Filtrado, casteo a 12 bits y correccion de offset
             processSamples(pingBuffer, decodedSamples);
             DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
+            if (EDMA_GetChannelStatusFlags(DMA_CH3_Handle.base, DMA_CH3_Handle.channel) & kEDMA_DoneFlag)
+            {
+            	decodelag = true;
+            }
             EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         }
+        if (!decodelag)
+        {
+            state = WAITING_TO_DECODE;
+        }
+        else
+        {
+        	decodelag = false;
+        	if (currBuffPlaying == pingBuffer)
+			{
+				currBuffPlaying = pongBuffer;
+			}
+			else
+			{
+				currBuffPlaying = pingBuffer;
+			}
+        }
 
-        state = WAITING_TO_DECODE;
-        GPIO_PinWrite(GPIOB, 20, 0);
+        GPIO_PinWrite(GPIOC, 3, 0);
         break;
 
     case WAITING_TO_DECODE:
@@ -438,7 +474,7 @@ char *getCurrentSongName()
  ******************************************************************************/
 
 /* DMA channel DMA_CH3 callback function */
-void DMA_callback(edma_handle_t *handle, void *data, bool, uint32_t)
+void DMA_callback(edma_handle_t *handle, void *data, bool transferDone, uint32_t tcdNum)
 {
 
     if (currBuffPlaying == pingBuffer)
@@ -449,6 +485,7 @@ void DMA_callback(edma_handle_t *handle, void *data, bool, uint32_t)
     {
         currBuffPlaying = pingBuffer;
     }
+
     state = DECODING;
 }
 
@@ -544,7 +581,7 @@ void processSamples(int16_t *buff, uint32_t buffSize)
     analizeBlock(floatSamplesaux, buffSize);
     analisis2vumeter(vumeterDataout);
 
-    for (size_t i = 7; i < 0; i--)
+    for (size_t i = 0; i < 7; i++)
     {
         selectBar(7 - i);
         setLevel(vumeterDataout[i]);

@@ -1,15 +1,18 @@
 /***************************************************************************/ /**
-   @file     +Nombre del archivo (ej: template.h)+
-   @brief    +Descripcion del archivo+
-   @author   +Nombre del autor (ej: Salvador Allende)+
+   @file		biquad.h
+   @brief 		Generate cascade peak notch filters to be used as equalizers
+   @author		Grupo 3
   ******************************************************************************/
 
-#ifndef _EVENTQUEUE_H_
-#define _EVENTQUEUE_H_
+#ifndef _BIQUAD_H_
+#define _BIQUAD_H_
 
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
+
+#include <stdint.h>
+#include <stdbool.h>
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -19,39 +22,17 @@
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  ******************************************************************************/
 
-typedef enum event_type
-{
-  None,
-  EncoderLeft,
-  EncoderRight,
-  EncoderClick,
-  ButtonCross,
-  ButtonPoint,
-  ButtonLine,
-  AutoNextSong,
-  SDCardRemoved,
-  SDCardInserted,
-} event_t;
-
 /*******************************************************************************
  * VARIABLE PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
 
-// +ej: extern unsigned int anio_actual;+
-
 /*******************************************************************************
  * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
+void App_Init(void);
+void App_Run(void);
 
-/**
- * @brief FSM Principal del proyecto
- * @param parametro utilizado dentro de la FSM para guardar los datos que se van escribiendo
- */
-
-event_t getNextEvent(void);
-void putEvent(event_t event);
-event_t popEvent(void);
 /*******************************************************************************
  ******************************************************************************/
 
-#endif // _EVENTQUEUE_H_
+#endif // _BIQUAD_H_

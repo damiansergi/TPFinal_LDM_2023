@@ -4,11 +4,11 @@
   @author   Grupo 3
   ******************************************************************************/
 
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 
+#include "App.h"
 #include "hardware.h"
 
 #include "player.h"
@@ -25,6 +25,7 @@
 #include "display.h"
 #include "vumeter.h"
 #include "equalizer.h"
+#include "deepSleep.h"
 #include "eventQueue.h"
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -33,20 +34,6 @@ STATE *p2state = NULL; /*Used to store FSM state*/
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
-
-void App_Init(void);
-void App_Run(void);
-
-int main(void)
- {
-	hw_Init();
-	hw_DisableInterrupts();
-	App_Init(); /* Program-specific setup */
-	hw_EnableInterrupts();
-
-	__FOREVER__
-	App_Run(); /* Program-specific loop  */
-}
 
 /* Función que se llama 1 vez, al comienzo del programa */
 void App_Init(void)
@@ -69,7 +56,9 @@ void App_Init(void)
 	initVumeter();
 	initEqualizer();
 
-	p2state=FSM_GetInitState();// Inicializo la FSM con el estado inicial
+	deepSleep_init();
+
+	p2state = FSM_GetInitState(); // Inicializo la FSM con el estado inicial
 }
 
 /* Función que se llama constantemente en un ciclo infinito */
@@ -78,9 +67,10 @@ void App_Run(void)
 	static event_t nextEvent;
 
 	nextEvent = getNextEvent();
-	if (nextEvent != None){
+	if (nextEvent != None)
+	{
 
-		p2state = fsm(p2state,nextEvent);      //Se lo paso a la maquina de estados
+		p2state = fsm(p2state, nextEvent); // Se lo paso a la maquina de estados
 	}
 	updatePlayer();
 }

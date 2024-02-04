@@ -32,8 +32,8 @@ static void activate_CHAIRQ_CB(void);
 
 bool initEncoder(void)
 {
-	gpioMode(RCHA_PIN, INPUT);
-	gpioMode(RCHB_PIN, INPUT);
+	gpioMode(RCHA_PIN, INPUT_PULLUP);
+	gpioMode(RCHB_PIN, INPUT_PULLUP);
 
 	if (gpioIRQ(RCHA_PIN, GPIO_IRQ_MODE_FALLING_EDGE, &RCHA_CB))
 		return 1;

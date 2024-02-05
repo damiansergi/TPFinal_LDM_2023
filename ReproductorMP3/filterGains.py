@@ -44,14 +44,13 @@ for i in range(len(fc)):
                       np.log10(np.abs(magnitude_at_target)) / (20*np.log10(np.abs(G)))]
     mat[i, ...] = 20 * \
         np.log10(np.abs(magnitude_at_target)) / (20*np.log10(np.abs(G)))
-    # print("[", end='')
-    # for formatted_num in formatted_list:
-    #     print(formatted_num, end='')
-    #     print(', ', end='')
-    # print("]")
+    print("[", end='')
+    for formatted_num in formatted_list:
+        print(formatted_num, end='')
+        print(', ', end='')
+    print("]")
 
-    # Plot the frequency response
-    # plt.semilogx(frequency*fs/(np.pi*2), 20 * np.log10(np.abs(response)))
+    plt.semilogx(frequency*fs/(np.pi*2), 20 * np.log10(np.abs(response)))
 
     # Esto esta mal, tengo que cambiarlo
     result += 20 * np.log10(np.abs(response))
@@ -59,15 +58,15 @@ for i in range(len(fc)):
 matpiola = np.matrix(mat)
 matpiolaenserio = matpiola ** (-1)
 
-for i in range(8):
-    for j in range(8):
-        print(f'{matpiolaenserio[i, j]:.6f}f', end='')
-        print(', ', end='')
-    print()
+# for i in range(8):
+#     for j in range(8):
+#         print(f'{matpiolaenserio[i, j]:.6f}f', end='')
+#         print(', ', end='')
+#     print()
 
-# plt.semilogx(frequency*fs/(np.pi*2), result)
-# plt.title('Filter Frequency Response')
-# plt.xlabel('Frequency (rad/sample)')
-# plt.ylabel('Gain (dB)')
-# plt.grid(True)
-# plt.show()
+plt.semilogx(frequency*fs/(np.pi*2), result)
+plt.title('Filter Frequency Response')
+plt.xlabel('Frequency (rad/sample)')
+plt.ylabel('Gain (dB)')
+plt.grid(True)
+plt.show()

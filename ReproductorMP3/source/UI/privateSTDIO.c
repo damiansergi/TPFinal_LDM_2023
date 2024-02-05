@@ -68,7 +68,7 @@ void volNumPrinter (char * buffer, uint8_t numVol){
 	{
 		buffer[7] = '1';
 		buffer[8] = '0';
-		buffer[8] = '0';
+		buffer[9] = '0';
 	}
 	else{
 		buffer[7] = '0' + numVol/10;
@@ -118,7 +118,7 @@ void repDisplayPrinter ( char * buffer, bool pause, uint8_t numVol, char * eqBan
 	int i = 0;
 	while(eqBand[i] != '\0'){
 
-		buffer[i+9] = eqBand[i];
+		buffer[i+10] = eqBand[i];
 		i++;
 	}
 }

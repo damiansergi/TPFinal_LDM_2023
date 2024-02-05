@@ -64,6 +64,12 @@ void volNumPrinter (char * buffer, uint8_t numVol){
 		buffer[7] = '0';
 		buffer[8] = '0' + numVol;
 	}
+	else if(numVol == 100)
+	{
+		buffer[7] = '1';
+		buffer[8] = '0';
+		buffer[8] = '0';
+	}
 	else{
 		buffer[7] = '0' + numVol/10;
 		buffer[8] = '0' + numVol%10;
@@ -97,6 +103,12 @@ void repDisplayPrinter ( char * buffer, bool pause, uint8_t numVol, char * eqBan
 	if (numVol < 10){
 		buffer[6] = '0';
 		buffer[7] = '0' + numVol;
+	}
+	else if (numVol == 100)
+	{
+		buffer[6] = '1';
+		buffer[7] = '0';
+		buffer[8] = '0';
 	}
 	else{
 		buffer[6] = '0' + numVol/10;

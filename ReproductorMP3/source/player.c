@@ -78,7 +78,7 @@ static void readMP3Files();
 
 void doNothing(void);
 
-void processSamples(int16_t *buff, uint32_t buffSize);
+void processSamples(int16_t *buff, uint32_t buffSize, float samprate);
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
  ******************************************************************************/
@@ -573,7 +573,7 @@ static void readMP3Files(const char *path)
     f_closedir(&directory); // Close the directory
 }
 
-void processSamples(int16_t *buff, uint32_t buffSize)
+void processSamples(int16_t *buff, uint32_t buffSize, float samprate)
 {
     static float floatSamples[1152];
     static float floatSamplesaux[1152];
@@ -605,7 +605,7 @@ void processSamples(int16_t *buff, uint32_t buffSize)
             buff[i] = (uint16_t)floatSamples[i];
         }
     }
-    analizeBlock(floatSamplesaux, buffSize);
+    analizeBlock(floatSamplesaux, buffSize, samprate);
     analisis2vumeter(vumeterDataout);
 
     for (size_t i = 0; i < 8; i++)

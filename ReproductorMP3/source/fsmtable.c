@@ -10,7 +10,7 @@
 // En estas variables voy a guardar lo seleccionado por la UI en cada caso, y en cada rutina
 //  de accion al cambiar a alguna de estas voy a llamar a una funcion de ustedes que tiene que responder
 //  haciendo los cambios necesarios, y si lo precisasen guardando el numero al cual cambió la variable
-uint8_t volumeLevel = 30;
+uint8_t volumeLevel = 50;
 uint8_t songSelected = 1;
 uint8_t sdCardON = 0;
 bool pause = true;
@@ -199,13 +199,13 @@ static void goToVolume(void)
 static void changeVolumeRight(void)
 {
 
-	if (volumeLevel < 30)
+	if (volumeLevel < 100)
 	{
-		volumeLevel++;
+		volumeLevel += 5;
 		char buffer2[17] = "                ";
 		volNumPrinter(buffer2, volumeLevel);
 		DisplayWrite(buffer2, 16, 1);
-		adjustVolume((float)volumeLevel / 30.0f);
+		adjustVolume((float)volumeLevel / 100.0f);
 	}
 }
 static void changeVolumeLeft(void)
@@ -213,11 +213,11 @@ static void changeVolumeLeft(void)
 
 	if (volumeLevel > 0)
 	{
-		volumeLevel--;
+		volumeLevel -= 5;
 		char buffer2[17] = "                ";
 		volNumPrinter(buffer2, volumeLevel);
 		DisplayWrite(buffer2, 16, 1);
-		adjustVolume((float)volumeLevel / 30.0f);
+		adjustVolume((float)volumeLevel / 100.0f);
 	}
 }
 static void goToEq(void)

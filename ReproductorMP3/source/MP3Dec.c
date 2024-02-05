@@ -140,7 +140,7 @@ int MP3SelectSong(song_t *song)
     return 1;
 }
 
-int MP3DecDecode(int16_t *buffer)
+int MP3DecDecode(int16_t *buffer, uint32_t *samprate)
 {
     static BYTE readBuff[MAINBUF_SIZE];                 // Buffer to store file content
     static int16_t stereoOutBuff[DEC_BUFFER_SIZE * 2]; // Buffer to store stereo samples
@@ -186,6 +186,7 @@ int MP3DecDecode(int16_t *buffer)
 
                 // Decode
         err = MP3GetNextFrameInfo(mp3Dec, &mp3Info, readBuffPtr);
+        *samprate = mp3Info.samprate;
 
         if (!err)
         {

@@ -104,6 +104,9 @@ int16_t pingBuffer[1152] = {[0 ... 1151] = 2048};
 int16_t pongBuffer[1152] = {[0 ... 1151] = 2048};
 static int16_t *currBuffPlaying = pingBuffer;
 
+static uint32_t pingSampleRate = 44100;
+static uint32_t pongSampleRate = 44100;
+
 static const TCHAR driverNumberBuffer[4U] = {SDDISK + '0', ':', '/', '\0'};
 bool failedFlag = false;
 bool playingMusic = false;
@@ -163,9 +166,10 @@ bool playPlayer()
         MP3SelectSong(currentSong->data);
 
         EDMA_AbortTransfer(&DMA_CH3_Handle);
-        uint32_t decodedSamples = MP3DecDecode(pingBuffer);
+        uint32_t decodedSamples = MP3DecDecode(pingBuffer, &pingSampleRate);
+        PIT_SetTimerPeriod(PIT, kPIT_Chnl_3, PIT_CLK_FREQ / pingSampleRate);
         // Filtrado, casteo a 12 bits y correccion de offset
-        processSamples(pingBuffer, decodedSamples);
+        processSamples(pingBuffer, decodedSamples, pingSampleRate);
         DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
         EDMA_SubmitTransfer(&DMA_CH3_Handle, &DMA_CH0_PING_config);
         currBuffPlaying = pingBuffer;
@@ -405,7 +409,7 @@ player_msg_t updatePlayer()
 
         if (currBuffPlaying == pingBuffer)
         {
-            decodedSamples = MP3DecDecode(pongBuffer);
+            decodedSamples = MP3DecDecode(pongBuffer, &pongSampleRate);
             if (decodedSamples == 0)
             {
                 nextSong();
@@ -414,7 +418,7 @@ player_msg_t updatePlayer()
             }
 
             // Filtrado, casteo a 12 bits y correccion de offset
-            processSamples(pongBuffer, decodedSamples);
+            processSamples(pongBuffer, decodedSamples, pongSampleRate);
             DMA_CH0_PONG_config.majorLoopCounts = decodedSamples;
             if (EDMA_GetChannelStatusFlags(DMA_CH3_Handle.base, DMA_CH3_Handle.channel) & kEDMA_DoneFlag)
 			{
@@ -424,7 +428,7 @@ player_msg_t updatePlayer()
         }
         else
         {
-            decodedSamples = MP3DecDecode(pingBuffer);
+            decodedSamples = MP3DecDecode(pingBuffer, &pingSampleRate);
             if (decodedSamples == 0)
             {
                 nextSong();
@@ -433,7 +437,7 @@ player_msg_t updatePlayer()
             }
 
             // Filtrado, casteo a 12 bits y correccion de offset
-            processSamples(pingBuffer, decodedSamples);
+            processSamples(pingBuffer, decodedSamples, pingSampleRate);
             DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
             if (EDMA_GetChannelStatusFlags(DMA_CH3_Handle.base, DMA_CH3_Handle.channel) & kEDMA_DoneFlag)
             {
@@ -497,10 +501,12 @@ void DMA_callback(edma_handle_t *handle, void *data, bool transferDone, uint32_t
     if (currBuffPlaying == pingBuffer)
     {
         currBuffPlaying = pongBuffer;
+        PIT_SetTimerPeriod(PIT, kPIT_Chnl_3, PIT_CLK_FREQ / pongSampleRate);
     }
     else
     {
         currBuffPlaying = pingBuffer;
+        PIT_SetTimerPeriod(PIT, kPIT_Chnl_3, PIT_CLK_FREQ / pingSampleRate);
     }
 
     state = DECODING;

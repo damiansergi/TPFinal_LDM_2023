@@ -20,6 +20,8 @@
         "string": "c",
         "string_view": "c",
         "span": "c",
-        "fsl_i2c.h": "c"
+        "fsl_i2c.h": "c",
+        "fsl_llwu.h": "c",
+        "fsl_pmc.h": "c"
     }
 }

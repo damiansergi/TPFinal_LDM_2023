@@ -41,7 +41,6 @@ static const float blinkTime = 500000; // 0.5s
 
 static bool state = ON;
 static bar bandSelected = 0;
-static uint8_t bandLevel[COLS] = {0};
 
 /*******************************************************************************
  *******************************************************************************

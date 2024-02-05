@@ -11,8 +11,13 @@
 #include "deepSleep.h"
 
 #include "MK64F12.h"
+#include "fsl_smc.h"
+#include "fsl_llwu.h"
+#include "fsl_pmc.h"
 
 #include "config.h"
+#include "eventQueue.h"
+#include "gpio.h"
 #include "App.h"
 
 #define WAKEUP_PIN BUTTON_ENCODER_PIN
@@ -27,11 +32,11 @@
 /*******************************************************************************
  * VARIABLES WITH GLOBAL SCOPE
  ******************************************************************************/
-
+static llwu_external_pin_filter_mode_t filter_mode = {9, kLLWU_PinFilterFallingEdge};
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
-
+void dummyCB();
 /*******************************************************************************
  * ROM CONST VARIABLES WITH FILE LEVEL SCOPE
  ******************************************************************************/
@@ -47,64 +52,51 @@
  ******************************************************************************/
 void deepSleep_init(void)
 {
+    gpioIRQ(WAKEUP_PIN, GPIO_IRQ_MODE_RISING_EDGE, &dummyCB);
 
-    LLWU->PE4 |= LLWU_PE3_WUPE9(1); // Rising edge detection
+    SMC_SetPowerModeProtection(SMC, kSMC_AllowPowerModeLls);
 
-    // Clear the wake-up flag in the LLWU-write one to clear the flag
-    if (LLWU->F2 & LLWU_F2_WUF12_MASK)
-    {
-        LLWU->F2 |= LLWU_F2_WUF12_MASK;
-    }
+    LLWU_SetExternalWakeupPinMode(LLWU, 9, kLLWU_ExternalPinFallingEdge);
+
+    LLWU_SetPinFilterMode(LLWU, 1, filter_mode);
+
+    LLWU_SetResetPinMode(LLWU, false, false);
+
+    NVIC_EnableIRQ(LLWU_IRQn);
+
 }
 
 void deepSleep(void)
 {
     volatile unsigned int dummyread;
 
-    /* Write to PMPROT to allow LLS power modes this write-once
-    bit allows the MCU to enter the LLS low power mode*/
-    SMC->PMPROT = SMC_PMPROT_ALLS_MASK;
+    SMC_PreEnterStopModes();
 
-    /* Set the (for MC1) LPLLSM or (for MC2)STOPM field to 0b011 for LLS mode
-    Retains LPWUI and RUNM values */
-    SMC->PMCTRL &= ~SMC_PMCTRL_STOPM_MASK;
-    SMC->PMCTRL |= SMC_PMCTRL_STOPM(0x3);
+    SMC_SetPowerModeLls(SMC);
 
-    // Wait for write to complete to SMC before stopping core
-    dummyread = SMC->PMCTRL;
-
-    // Now execute the stop instruction to go into LLS
-
-    // Set the SLEEPDEEP bit to enable deep sleep mode (STOP)
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-
-    __DSB();
-
-    // Enters sleep mode
     __WFI();
 
-    // wait for write to complete to SMC before stopping core
-    dummyread = SMC->PMCTRL;
-
-    SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
-
-    // Interrupt can take place here
-    __ISB();
+    SMC_PostExitStopModes();
 }
 /*******************************************************************************
  *******************************************************************************
             LOCAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
-
-void LLW_IRQHandler(void)
+void dummyCB()
 {
-    if ((LLWU->F2 & LLWU_F2_WUF12_MASK))
-    {
-        LLWU->F2 |= LLWU_F2_WUF12_MASK;
-    }
-    hw_Init();
-    hw_DisableInterrupts();
-    App_Init(); /* Program-specific setup */
-    hw_EnableInterrupts();
+    return;
+}
+
+void LLWU_IRQHandler(void)
+{
+    LLWU_ClearExternalWakeupPinFlag(LLWU, 9);
+    SMC_PostExitStopModes();
+
+    SDK_DelayAtLeastUs(100000U, CLOCK_GetCoreSysClkFreq());
+
+    putEvent(EncoderClick);
+
+    //initDisplay();
+    //App_Init(); /* Program-specific setup */
 }

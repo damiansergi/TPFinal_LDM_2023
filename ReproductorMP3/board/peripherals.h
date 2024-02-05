@@ -59,13 +59,13 @@ extern "C" {
 /* Definition of clock source. */
 #define PIT_CLOCK_SOURCE kCLOCK_BusClk
 /* Definition of clock source frequency. */
-#define PIT_CLK_FREQ 50000000UL
+#define PIT_CLK_FREQ CLOCK_GetFreq(PIT_CLOCK_SOURCE)
 /* Definition of ticks count for channel 3 - deprecated. */
-#define PIT_3_TICKS 1134U
+#define PIT_3_TICKS USEC_TO_COUNT(23U, PIT_CLK_FREQ)
 /* Definition of channel number for channel 3. */
 #define PIT_CHANNEL_3 kPIT_Chnl_3
 /* Definition of ticks count for channel 3. */
-#define PIT_CHANNEL_3_TICKS 1134U
+#define PIT_CHANNEL_3_TICKS USEC_TO_COUNT(23U, PIT_CLK_FREQ)
 /* Definition of peripheral ID */
 #define UART0_PERIPHERAL UART0
 /* Definition of the clock source frequency */

@@ -17,7 +17,7 @@
 #include "fsmtable.h" /*FSM Table*/
 
 #include "gpio.h"
-#include "I2C.h"
+// #include "I2C.h"
 #include "board.h"
 
 #include "button.h"

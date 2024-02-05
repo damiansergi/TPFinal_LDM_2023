@@ -126,7 +126,8 @@ static void goToRepFromOff(void)
 	{
 		putEvent(SDCardRemoved);
 	}
-
+	DisplayOnTimers();
+	DisplayDisplay();
 	DisplayBacklight();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
@@ -255,12 +256,16 @@ static void changeEqLeft(void)
 static void turnOff(void)
 {
 	DisplayNoBacklight();
-	char buffer[17] = "    APAGADO     ";
+	char buffer[17] = "                ";
 	DisplayWrite(buffer, 16, 0);
 	bufferClean(buffer);
 	DisplayWrite(buffer, 16, 1);
+	DisplayNoDisplay();
 	stopPlayer();
 	pause = true;
+	SDK_DelayAtLeastUs(1000000U, CLOCK_GetCoreSysClkFreq());
+	DisplayOffTimers();
+	// deepSleep();
 }
 
 static void autoPlayNextSong(void)
@@ -273,7 +278,7 @@ static void autoPlayNextSong(void)
 static void goToRepFromNoSD(void)
 {
 	sdCardON = true;
-
+	pause = true;
 	DisplayBacklight();
 	char *name = getCurrentSongName();
 	uint8_t len = strlen(name);
@@ -287,6 +292,11 @@ static void goToRepFromNoSD(void)
 static void NOSDcard()
 {
 	sdCardON = false;
+	DisplayBacklight();
+    char buffer[17] = "   INSERTAR SD  ";
+    DisplayWrite(buffer, 16, 0);
+    bufferClean(buffer);
+    DisplayWrite(buffer, 16, 1);
 }
 
 static void YESSDcard()

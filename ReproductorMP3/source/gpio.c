@@ -207,56 +207,56 @@ void PORTB_IRQHandler(void){
 	}
 
 }
-//void PORTC_IRQHandler(void){
-//	uint32_t IRQreg = PORT2ADDR(PC)->ISFR;
-//	PORT2ADDR(PC)->ISFR = 0xFFFFFFFFU;
-//
-//	switch (IRQreg){
-//	case PIN0:
-//		PORTC_CBs[0]();
-//		break;
-//	case PIN1:
-//		PORTC_CBs[1]();
-//		break;
-//	case PIN2:
-//		PORTC_CBs[2]();
-//		break;
-//	case PIN3:
-//		PORTC_CBs[3]();
-//		break;
-//	case PIN4:
-//		PORTC_CBs[4]();
-//		break;
-//	case PIN5:
-//		PORTC_CBs[5]();
-//		break;
-//	case PIN6:
-//		PORTC_CBs[6]();
-//		break;
-//	case PIN7:
-//		PORTC_CBs[7]();
-//		break;
-//	case PIN8:
-//		PORTC_CBs[8]();
-//		break;
-//	case PIN9:
-//		PORTC_CBs[9]();
-//		break;
-//	case PIN10:
-//		PORTC_CBs[10]();
-//		break;
-//	case PIN11:
-//		PORTC_CBs[11]();
-//		break;
-//	case PIN12:
-//		PORTC_CBs[12]();
-//		break;
-//	default:
-//		break;
-//
-//	}
-//
-//}
+void PORTC_IRQHandler(void){
+	uint32_t IRQreg = PORT2ADDR(PC)->ISFR;
+	PORT2ADDR(PC)->ISFR = 0xFFFFFFFFU;
+
+	switch (IRQreg){
+	case PIN0:
+		PORTC_CBs[0]();
+		break;
+	case PIN1:
+		PORTC_CBs[1]();
+		break;
+	case PIN2:
+		PORTC_CBs[2]();
+		break;
+	case PIN3:
+		PORTC_CBs[3]();
+		break;
+	case PIN4:
+		PORTC_CBs[4]();
+		break;
+	case PIN5:
+		PORTC_CBs[5]();
+		break;
+	case PIN6:
+		PORTC_CBs[6]();
+		break;
+	case PIN7:
+		PORTC_CBs[7]();
+		break;
+	case PIN8:
+		PORTC_CBs[8]();
+		break;
+	case PIN9:
+		PORTC_CBs[9]();
+		break;
+	case PIN10:
+		PORTC_CBs[10]();
+		break;
+	case PIN11:
+		PORTC_CBs[11]();
+		break;
+	case PIN12:
+		PORTC_CBs[12]();
+		break;
+	default:
+		break;
+
+	}
+
+}
 //void PORTD_IRQHandler(void){
 //	uint32_t IRQreg = PORT2ADDR(PD)->ISFR;
 //	PORT2ADDR(PD)->ISFR = 0xFFFFFFFFU;

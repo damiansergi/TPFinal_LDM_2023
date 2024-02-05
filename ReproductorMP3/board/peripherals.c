@@ -312,7 +312,7 @@ instance:
     - enableRunInDebug: 'false'
     - timingConfig:
       - clockSource: 'BusInterfaceClock'
-      - clockSourceFreq: 'ClocksTool_DefaultInit'
+      - clockSourceFreq: 'GetFreq'
     - channels:
       - 0:
         - channel_id: 'CHANNEL_3'
@@ -336,7 +336,7 @@ const pit_config_t PIT_config = {
 static void PIT_init(void) {
   /* Initialize the PIT. */
   PIT_Init(PIT_PERIPHERAL, &PIT_config);
-  /* Set channel 3 period to 22.68 µs (1134 ticks). */
+  /* Set channel 3 period to N/A. */
   PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_CHANNEL_3, PIT_CHANNEL_3_TICKS);
 }
 

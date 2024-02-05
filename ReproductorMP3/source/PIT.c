@@ -2,9 +2,10 @@
 #include "MK64F12.h"
 #include "hardware.h"
 #include "PIT.h"
+#include "peripherals.h"
 
 
-#define REFERENCE ((float)(0.02))
+#define REFERENCECLK (PIT_CLK_FREQ/1000000U)
 
 typedef struct
 {
@@ -42,7 +43,7 @@ uint8_t createTimer(float time, void (*funcallback)(void))
 		{
 			timer[i].state = IDLE;
 			timer[i].callback = funcallback;
-			PIT->CHANNEL[i].LDVAL = (int)(time / REFERENCE);
+			PIT->CHANNEL[i].LDVAL = (uint32_t)(time * REFERENCECLK);
 			PIT->CHANNEL[i].TCTRL |= PIT_TCTRL_TIE_MASK;
 			found = true;
 		}
@@ -58,7 +59,7 @@ uint8_t createTimer(float time, void (*funcallback)(void))
 void configTimerTime(uint8_t id, float time)
 {
 	PIT->CHANNEL[id].TCTRL &= ~PIT_TCTRL_TEN_MASK;
-	PIT->CHANNEL[id].LDVAL = (int)(time / REFERENCE);
+	PIT->CHANNEL[id].LDVAL = (int)(time * REFERENCECLK);
 	PIT->CHANNEL[id].TCTRL |= PIT_TCTRL_TEN_MASK;
 }
 

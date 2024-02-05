@@ -89,7 +89,7 @@ void processSamples(int16_t *buff, uint32_t buffSize);
 
 static FATFS g_fileSystem; /* File system object */
 
-static SDStates_t SDstate = no_SDCard;
+static SDStates_t SDstate = SDCard_ready;
 static PlayerStates_t state = STARTING;
 static PlayerStates_t pausePrevState = WAITING_TO_DECODE;
 static FRESULT error;
@@ -149,6 +149,10 @@ bool playerInit()
 
 bool playPlayer()
 {
+	if (SDstate != SDCard_ready)
+	{
+		return false;
+	}
     switch (state)
     {
     case STOPPED:
@@ -160,7 +164,6 @@ bool playPlayer()
 
         EDMA_AbortTransfer(&DMA_CH3_Handle);
         uint32_t decodedSamples = MP3DecDecode(pingBuffer);
-        float sample = 0.0f;
         // Filtrado, casteo a 12 bits y correccion de offset
         processSamples(pingBuffer, decodedSamples);
         DMA_CH0_PING_config.majorLoopCounts = decodedSamples;
@@ -184,6 +187,10 @@ bool playPlayer()
 
 bool stopPlayer()
 {
+	if (SDstate != SDCard_ready)
+	{
+		return false;
+	}
     PIT_StopTimer(PIT, kPIT_Chnl_3);
     DAC0->DAT[0].DATH = 0x8U; // Pull to middle
     DAC0->DAT[0].DATL = 0x00U;
@@ -194,6 +201,10 @@ bool stopPlayer()
 
 bool pausePlayer()
 {
+	if (SDstate != SDCard_ready)
+	{
+		return false;
+	}
     PIT_StopTimer(PIT, kPIT_Chnl_3);
     DAC0->DAT[0].DATH = 0x8U; // Pull to middle
     DAC0->DAT[0].DATL = 0x00U;
@@ -205,6 +216,10 @@ bool pausePlayer()
 
 bool nextSong()
 {
+	if (SDstate != SDCard_ready)
+	{
+		return false;
+	}
     switch (state)
     {
     case DECODING:
@@ -251,7 +266,10 @@ bool nextSong()
 
 bool prevSong()
 {
-
+	if (SDstate != SDCard_ready)
+	{
+		return false;
+	}
     switch (state)
     {
     case DECODING:
@@ -344,15 +362,13 @@ player_msg_t updatePlayer()
     case STARTING:
 
         /* wait card insert */
-        if (SD_IsCardPresent(&g_sd) == true && SDstate == no_SDCard)
+        if (SD_IsCardPresent(&g_sd) == true)
         {
             printf("\r\nCard inserted.\r\n");
             /* power off card */
             SD_SetCardPower(&g_sd, false);
             /* power on the card */
             SD_SetCardPower(&g_sd, true);
-
-            putEvent(SDCardInserted);
 
             SDstate = SDCard_ready;
             state = SD_DETECTED;
@@ -380,6 +396,7 @@ player_msg_t updatePlayer()
         // Read MP· files on SD
         readMP3Files("/");
         selectSong(getListHead()->next);
+        putEvent(SDCardInserted);
         state = STOPPED;
         break;
 
